@@ -1,0 +1,3672 @@
+<!DOCTYPE html>
+<html lang="en" class="cy-loading">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Munia</title>
+
+    <!-- Google Roboto (includes real 600/700 for crisp bold) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Square+Peg&family=Fredoka:wght@300..600&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Motion stack: Lenis smooth scroll + GSAP ScrollTrigger (chungiyoo-style) -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <!-- Mark doc as animation-capable ASAP so reveal targets hide before paint -->
+    <script>document.documentElement.classList.add('anim');</script>
+    <!-- Show the "Munia." intro only on the FIRST load of the session -->
+    <script>
+        try {
+            if (sessionStorage.getItem('cyIntroSeen')) {
+                document.documentElement.classList.remove('cy-loading');
+                document.documentElement.classList.add('cy-seen');
+            }
+        } catch (e) {}
+    </script>
+
+    <style>
+
+        /* =============================================
+           RESET & BASE
+        ============================================= */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            display: block;
+        }
+
+        /* prevent sideways scroll (big "Munia" / overflowing pills)
+           without clipping vertical overflow like the hero pills */
+        html, body {
+            overflow-x: clip;
+        }
+
+        /* =============================================
+           FONT FACES
+        ============================================= */
+        @font-face {
+            font-family: afteris;
+            src: url(fonts/afteris.otf);
+        }
+        @font-face {
+            font-family: dahlia;
+            src: url(fonts/DahliaRegictik-lgjdX.otf);
+        }
+        @font-face {
+            font-family: wedding;
+            src: url(fonts/wedding.ttf);
+        }
+        @font-face {
+            font-family: adriana;
+            src: url(fonts/AdrianagabrielleRegular-5yXXG.otf);
+        }
+        @font-face {
+            font-family: role;
+            src: url(fonts/role.otf);
+        }
+        @font-face {
+            font-family: myFont;
+            src: url(fonts/Vaselia.ttf);
+        }
+        @font-face {
+            font-family: adrin;
+            src: url(fonts/adrin.otf);
+        }
+        @font-face {
+            font-family: gofak;
+            src: url(fonts/GofakClassyRegular-lxB1y.otf);
+        }
+        @font-face {
+            font-family: caveat;
+            src: url(fonts/Caveat-VariableFont_wght.ttf);
+        }
+        @font-face {
+            font-family: kingsman;
+            src: url(fonts/KingsmanDemo-1GVgg.ttf);
+        }
+        @font-face {
+            font-family: amoria;
+            src: url(fonts/amoria.otf);
+        }
+        @font-face {
+            font-family: voyager;
+            src: url(fonts/MADEVoyagerPERSONAL_USE-Bold.otf);
+            font-display: swap;
+        }
+        @font-face {
+            font-family: beckan;
+            src: url("fonts/Beckan-Personal Use.otf");
+            font-display: swap;
+        }
+        @font-face {
+            font-family: felixtowe;
+            src: url("fonts/Felixtowe.otf");
+            font-display: swap;
+        }
+
+        /* =============================================
+           NAV
+        ============================================= */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 28px;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 500;
+        }
+
+        .logo img {
+            max-height: 72px;
+            width: auto;
+        }
+
+        .menu img {
+            max-height: 48px;
+            cursor: pointer;
+        }
+
+        /* =============================================
+           FULLSCREEN MENU
+        ============================================= */
+        .fullscreen-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: background-color 0.6s ease, opacity 0.4s ease;
+            z-index: 1000;
+            font-family: afteris;
+        }
+
+        .fullscreen-menu.active {
+            background-color: #dfd1a2;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .fullscreen-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+        }
+
+        .fullscreen-menu.active ul {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .fullscreen-menu ul li a {
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+        }
+
+        .fullscreen-menu ul li a:hover {
+            color: #7d9179;
+            transition: color 0.3s ease;
+        }
+
+        .fullscreen-menu li {
+            font-size: 4.5rem;
+            margin: 20px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+        }
+
+        .fullscreen-menu li span {
+            display: inline-block;
+            transition: transform 0.2s ease, color 0.2s ease;
+            transform-origin: bottom left;
+        }
+
+        .fullscreen-menu li:hover span {
+            animation: dominoTilt 0.5s forwards;
+        }
+
+        .fullscreen-menu li span:nth-child(1) { animation-delay: 0s; }
+        .fullscreen-menu li span:nth-child(2) { animation-delay: 0.05s; }
+        .fullscreen-menu li span:nth-child(3) { animation-delay: 0.1s; }
+        .fullscreen-menu li span:nth-child(4) { animation-delay: 0.15s; }
+        .fullscreen-menu li span:nth-child(5) { animation-delay: 0.2s; }
+
+        @keyframes dominoTilt {
+            0%   { transform: rotate(0deg); }
+            25%  { transform: rotate(10deg); }
+            50%  { transform: rotate(20deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .close-btn {
+            font-size: 4rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.2);
+        }
+
+
+        /* =============================================
+           SECTION 1 — HERO
+        ============================================= */
+        .hero-section {
+            background-color: #F5F5EC;
+            padding: 0 0 0 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Top row: typography + bio --- */
+        .hero-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            position: relative;
+            padding: 60px 70px 30px 36px;
+            min-height: 500px;
+            gap: 40px;
+        }
+
+        /* Left: editorial typography column.
+           Sizes mirror figma 1440 reference (DESIGNING ≈ 593px,
+           CODING ≈ 390px, Exploring ≈ 500px). SVGs include
+           generous vertical padding inside their viewBox, so gap
+           is negative to pull lines into the tight figma stack. */
+        .hero-typography {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            flex: 0 0 auto;
+            min-width: 0;
+            width: auto;
+            max-width: none;
+            z-index: 1;
+        }
+
+        /* Single combined hero typography SVG (800×449 viewBox) */
+        .hero-left-img {
+            width: clamp(520px, 60vw, 880px);
+            height: auto;
+            display: block;
+        }
+
+        /* Floating badges — hidden on hero per Figma reference */
+        .hero-badges {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .badge {
+            position: absolute;
+            pointer-events: auto;
+        }
+
+        .badge-frontend { top: 5%;  left: 40%; }
+        .badge-ai       { top: 28%; left: 54%; }
+        .badge-uiux     { top: 52%; left: 38%; }
+
+        .badge img {
+            width: clamp(140px, 14vw, 200px);
+            height: auto;
+            display: block;
+        }
+
+        /* =============================================
+           BADGE — lerp mouse-parallax only (no CSS keyframes)
+        ============================================= */
+        .badge {
+            will-change: transform;
+            cursor: pointer;
+        }
+
+        .badge:hover {
+            z-index: 5;
+        }
+
+        /* Right: bio + button. Figma: paragraph ~465px wide,
+           starts roughly aligned to the bottom of "DESIGNING". */
+        .hero-bio {
+            flex: 0 0 auto;
+            width: clamp(360px, 33vw, 480px);
+            padding-top: 100px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .hero-sub-svg {
+            width: 100%;
+            max-width: 480px;
+            height: auto;
+            display: block;
+            margin-bottom: 22px;
+            clip-path: inset(0 100% 0 0);
+            animation: bioCurtain 1.2s cubic-bezier(0.77, 0, 0.175, 1) 0.35s forwards;
+        }
+
+        .hero-bio .oval-btn {
+            align-self: center;
+            margin-right: 40px;
+            background-color: #B6DDD8;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: btnRise 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s forwards;
+        }
+
+        .hero-bio .oval-btn:hover {
+            background-color: #A0CFC9;
+        }
+
+        @keyframes bioCurtain {
+            from { clip-path: inset(0 100% 0 0); }
+            to   { clip-path: inset(0 0 0 0); }
+        }
+        @keyframes btnRise {
+            to { opacity: 1; transform: none; }
+        }
+
+        /* --- Name row --- */
+        .hero-name {
+            position: relative;
+            padding: 0 70px 60px 70px;
+        }
+
+        .munia-wrap {
+            position: relative;
+            width: clamp(720px, 78vw, 1140px);
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .hero-greeting {
+            position: absolute;
+            top: -9%;
+            left: 21%;
+            width: clamp(90px, 8.5vw, 150px);
+            height: auto;
+            transform: rotate(-22deg);
+            transform-origin: right bottom;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .munia-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            position: relative;
+            z-index: 1;
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        /* =============================================
+           OVAL / CIRCLE BUTTON (double-bordered, tilted)
+        ============================================= */
+        .oval-btn {
+            position: relative;
+            display: inline-block;
+            border: none;
+            background: transparent;
+            padding: 0;
+            width: 158px;
+            height: 56px;
+            color: #2a2a2a;
+            /* Roboto 600 has a real bold cut — no synthetic bold = no blur */
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 56px;
+            cursor: pointer;
+            white-space: nowrap;
+            background: transparent;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, color 0.25s ease;
+        }
+
+        .oval-btn::before,
+        .oval-btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1.5px solid currentColor;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+        }
+
+        .oval-btn::before { transform: rotate(5deg); }
+        .oval-btn::after  { transform: rotate(-5deg); }
+
+        .oval-btn:hover {
+            background-color: rgba(116, 196, 205, 0.33);
+        }
+        .oval-btn:hover::before { transform: rotate(0deg); }
+        .oval-btn:hover::after  { transform: rotate(0deg); }
+
+        .oval-btn--dark  { color: #2a2a2a; }
+        .oval-btn--light { color: #FFEDC2; }
+
+
+        /* =============================================
+           BOUNDARY TAB (rectangle w/ rounded top only,
+           colour-matches the section BELOW it, sits at the
+           section boundary so it appears as a tab sticking up)
+        ============================================= */
+        .boundary-pill-wrap {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            height: 0;
+        }
+
+        .boundary-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 420px;
+            max-width: 92vw;
+            height: 54px;
+            border-radius: 439px;
+            /* straddle the boundary via position offset (not transform):
+               a static transform promotes the text to a GPU layer that lands
+               on half-device-pixels under fractional display scaling (125%/150%),
+               which makes the label render blurry. 'top' keeps it crisp. */
+            position: relative;
+            top: -27px;
+            font-family: amoria, 'Roboto', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            letter-spacing: 0.3px;
+            letter-spacing: 0.15px;
+            white-space: nowrap;
+            cursor: pointer;
+            background: var(--pill-bg);
+            color: #1a1a1a;
+            transition: top 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+        }
+
+        .boundary-pill:hover {
+            /* Pill slides up slightly — bg/brightness unchanged */
+            top: -29px;
+        }
+
+
+        /* =============================================
+           SECTION 2 — WORK
+        ============================================= */
+        .work-section {
+            background-color: #AAC6AA;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .work-inner {
+            padding: 80px 56px 80px 120px; /* extra left pad pushes writings right */
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* "Check out" SVG */
+        .checkout-svg {
+            width: clamp(320px, 48vw, 720px);
+            height: auto;
+            display: block;
+            margin-bottom: 6px;
+            margin-left: 0;
+        }
+
+        /* Row: "my selected" + Discover button */
+        .work-row2 {
+            display: flex;
+            align-items: center;
+            gap: 56px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+
+        /* Push the Discover button down + further right per figma */
+        .work-row2 .oval-btn {
+            margin-top: 22px;
+            margin-left: 40px;
+        }
+
+        .myselected-svg {
+            width: clamp(220px, 38vw, 560px);
+            height: auto;
+            display: block;
+        }
+
+        /* Work section oval btn uses .oval-btn--dark */
+
+        /* "Work" big SVG + sun-ray burst (real SVG, not CSS) */
+        .work-main {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0;
+            margin-top: 28px;        /* small gap under "my selected" */
+        }
+
+        .work-svg {
+            width: clamp(520px, 78vw, 1180px);
+            height: auto;
+            display: block;
+            margin-left: -40px;   /* starts a touch before "Check out" / "my" */
+        }
+
+        /* Sun-ray SVG, overlaid on the "k" of Work */
+        /* Sun-ray positioned beside the "k" of Work.
+           The SVG asset has transparent padding in its viewBox, so we
+           shift left with a big negative margin to pull the visible
+           rays flush against the letter. */
+        /* Sun-ray now lives in the flex row right after Work, so it
+           always sits flush against the "k" regardless of viewport. */
+        .burst-svg {
+            position: relative;
+            margin-left: -110px;  /* tuck visible rays right against "k" */
+            width: clamp(260px, 32vw, 480px);
+            height: auto;
+            pointer-events: none;
+            transform-origin: left center;
+            animation: burstPulse 3.2s ease-in-out infinite;
+            flex: 0 0 auto;
+            z-index: 2;
+        }
+
+        @keyframes burstPulse {
+            0%, 100% { transform: translate(0, -50%) scale(1)    rotate(0deg);   opacity: 0.95; }
+            50%      { transform: translate(0, -50%) scale(1.08) rotate(4deg);   opacity: 1; }
+        }
+
+        /* (work-bottom-bar replaced by boundary-pill between work & stack) */
+
+
+        /* =============================================
+           SECTION 3 — FRONTEND STACK
+        ============================================= */
+        .stack-section {
+            background-color: #779292;
+            padding: 100px 60px 80px 60px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header row: title + pill button */
+        .stack-header {
+            display: flex;
+            flex-direction: column;     /* button sits below the heading */
+            align-items: center;
+            gap: 22px;
+            margin-bottom: 48px;
+        }
+
+        /* Constrain by HEIGHT so all 3 copies (Frontend Stack / UI/UX /
+           Programming & AI) render at the same visual size regardless
+           of how wide their viewBox is. */
+        .stack-title-svg {
+            width: auto;
+            height: clamp(60px, 8.5vw, 130px);
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Stack section oval btn uses .oval-btn--light */
+
+        /* Body: copy on top, skill card below (no overlap) */
+        .stack-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 36px;
+            flex: 1;
+        }
+
+        .stack-left {
+            width: 100%;
+            min-width: 0;
+            position: relative;
+            min-height: auto;
+            text-align: center;
+        }
+
+        /* Pixel-art arrow removed from layout to avoid overlapping the copy */
+        .pixel-art-img {
+            display: none;
+        }
+
+        /* Frontend Stack image shown in the left area where the
+           subtext used to be — sized to match the removed text. */
+        .stack-inline-title {
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: clamp(260px, 30vw, 420px);
+            height: auto;
+            display: block;
+            z-index: 2;
+        }
+
+        /* Right: dark card with skill badges (scattered, fall-in animation) */
+        .stack-card {
+            flex: 0 0 auto;
+            align-self: center;
+            margin: 0 auto;
+            width: 551px;
+            max-width: 100%;
+            height: 480px;
+            background-color: #EFEAD8;
+            border: 1.6px solid #1B1814;
+            border-radius: 33px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* retro-pill look (matches the hero pills) */
+        .skill-tag {
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            transform: translate(-50%, -120vh) rotate(0deg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--pc, #A8D0A0);
+            color: #1B1814;
+            border: 1.6px solid #1B1814;
+            border-radius: 100px;
+            padding: 11px 22px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(13px, 1.1vw, 17px);
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+            box-shadow: -3px 5px 0 rgba(27,24,20,0.85);
+            opacity: 0;
+            will-change: transform, opacity;
+            text-rendering: geometricPrecision;
+            -webkit-font-smoothing: antialiased;
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
+        }
+        /* cycle the three hero pill colours */
+        .stack-card .skill-tag:nth-child(3n+1) { --pc: #A8D0A0; }
+        .stack-card .skill-tag:nth-child(3n+2) { --pc: #F0B89B; }
+        .stack-card .skill-tag:nth-child(3n+3) { --pc: #F0DC8A; }
+
+        .stack-card.in-view .skill-tag {
+            animation: skillFall 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .stack-card .skill-tag:nth-child(1) { animation-delay: 0.05s; }
+        .stack-card .skill-tag:nth-child(2) { animation-delay: 0.20s; }
+        .stack-card .skill-tag:nth-child(3) { animation-delay: 0.35s; }
+        .stack-card .skill-tag:nth-child(4) { animation-delay: 0.50s; }
+        .stack-card .skill-tag:nth-child(5) { animation-delay: 0.65s; }
+        .stack-card .skill-tag:nth-child(6) { animation-delay: 0.80s; }
+
+        @keyframes skillFall {
+            0%   { transform: translate(-50%, -120vh) rotate(-20deg); opacity: 0; }
+            70%  { transform: translate(-50%, 8px)   rotate(var(--rot)); opacity: 1; }
+            85%  { transform: translate(-50%, -6px)  rotate(var(--rot)); }
+            100% { transform: translate(-50%, 0)     rotate(var(--rot)); opacity: 1; }
+        }
+
+        .skill-tag:hover {
+            transform: translate(-50%, 0) rotate(0deg) scale(1.08);
+            z-index: 2;
+            transition: transform 0.25s ease;
+        }
+
+
+        /* =============================================
+           SECTION 4 — CONTACT / FOOTER
+        ============================================= */
+        /* =============================================
+           FOOTER v2 — dark close, ambient blobs + big email CTA
+        ============================================= */
+        .footer2 {
+            position: relative;
+            background: #292623;          /* soft black, not pitch black */
+            color: #F6F6E7;
+            padding: 64px 60px 0;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        /* ambient floating glow blobs — removed */
+        .footer2-blob {
+            display: none;
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.38;
+            pointer-events: none;
+            z-index: 0;
+            will-change: transform;
+        }
+        .footer2-blob--1 {
+            width: 420px; height: 420px;
+            background: #FF93CB;
+            top: -130px; left: -90px;
+            animation: footBlob1 16s ease-in-out infinite;
+        }
+        .footer2-blob--2 {
+            width: 460px; height: 460px;
+            background: #7D9179;
+            bottom: -180px; right: -110px;
+            animation: footBlob2 20s ease-in-out infinite;
+        }
+        @keyframes footBlob1 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50%     { transform: translate(70px,46px) scale(1.18); }
+        }
+        @keyframes footBlob2 {
+            0%,100% { transform: translate(0,0) scale(1); }
+            50%     { transform: translate(-60px,-36px) scale(1.12); }
+        }
+
+        /* "now" status cards */
+        .footer2-now {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 48px;
+        }
+        .now-card {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 300px;
+            max-width: 100%;
+            padding: 18px 22px;
+            border-radius: 18px;
+            background: rgba(246,246,231,0.05);
+            border: 1px solid rgba(246,246,231,0.15);
+            transition: transform 0.45s cubic-bezier(0.22,1,0.36,1),
+                        background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .now-card:hover {
+            transform: translateY(-7px);
+            background: rgba(246,246,231,0.09);
+            border-color: rgba(255,147,203,0.5);
+        }
+        .now-label {
+            align-self: flex-end;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(246,246,231,0.6);
+        }
+        .now-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #FF93CB;
+            animation: footPulse 2.2s ease-in-out infinite;
+        }
+        .now-body { display: flex; align-items: center; gap: 16px; }
+        .now-icon {
+            flex: 0 0 auto;
+            width: 52px; height: 52px;
+            border-radius: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #1B1814;
+        }
+        .now-icon--music { background: #C9B6E4; }
+        .now-icon--book  { background: #A8D0A0; }
+        .now-icon--build { background: #F0B89B; }
+        .now-text { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .now-title {
+            font-family: 'Newsreader', serif;
+            font-size: 19px;
+            font-weight: 500;
+            color: #F6F6E7;
+            line-height: 1.1;
+        }
+        .now-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: rgba(246,246,231,0.6);
+        }
+        .now-meta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: rgba(246,246,231,0.55);
+        }
+        /* equalizer bars */
+        .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+        .eq i {
+            width: 3px; height: 5px;
+            background: #FF93CB;
+            border-radius: 1px;
+            animation: eqBar 0.9s ease-in-out infinite;
+        }
+        .eq i:nth-child(2) { animation-delay: 0.18s; }
+        .eq i:nth-child(3) { animation-delay: 0.36s; }
+        .eq i:nth-child(4) { animation-delay: 0.54s; }
+        @keyframes eqBar { 0%,100% { height: 4px; } 50% { height: 14px; } }
+
+        .footer2-main {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 44px;
+        }
+        .footer2-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #FF93CB;
+            margin: 0 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer2-eyebrow .dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: #FF93CB;
+            animation: footPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes footPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.5} }
+        .footer2-heading {
+            font-family: afteris, 'Newsreader', serif;
+            font-weight: 400;
+            font-size: clamp(34px, 5vw, 76px);
+            line-height: 1.05;
+            color: #F6F6E7;
+            margin: 0 0 16px;
+        }
+
+        /* playful "get in touch" annotation */
+        .footer2-touch {
+            font-family: adriana, cursive;
+            font-size: clamp(26px, 2.6vw, 40px);
+            color: #FF93CB;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .footer2-touch-arrow {
+            display: inline-block;
+            font-family: 'Newsreader', serif;
+            animation: footTouchBob 1.5s ease-in-out infinite;
+        }
+        @keyframes footTouchBob {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(7px); }
+        }
+        .footer2-heading em {
+            font-style: normal;
+            color: #FF93CB;
+            position: relative;
+            display: inline-block;
+            animation: footWiggle 5s ease-in-out infinite;
+            transform-origin: center bottom;
+        }
+        @keyframes footWiggle {
+            0%, 100% { transform: rotate(-2deg); }
+            50%      { transform: rotate(2deg); }
+        }
+
+        /* big animated email CTA */
+        .footer2-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            font-family: 'Newsreader', serif;
+            font-style: italic;
+            font-size: clamp(22px, 3vw, 44px);
+            color: #F6F6E7;
+            margin: 0 0 48px;
+            position: relative;
+            transition: color 0.35s ease, gap 0.4s cubic-bezier(0.22,1,0.36,1);
+        }
+        /* underline that wipes in on hover */
+        .footer2-email-text { position: relative; }
+        .footer2-email-text::after {
+            content: "";
+            position: absolute;
+            left: 0; bottom: -4px;
+            width: 100%; height: 2px;
+            background: #FF93CB;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+        .footer2-email:hover { color: #FF93CB; gap: 26px; }
+        .footer2-email:hover .footer2-email-text::after { transform: scaleX(1); }
+        .footer2-email-arrow {
+            display: inline-block;
+            animation: footArrow 1.8s ease-in-out infinite;
+        }
+        @keyframes footArrow {
+            0%, 100% { transform: translateX(0); }
+            50%      { transform: translateX(8px); }
+        }
+
+        /* social icon circles */
+        .footer2-socials { display: flex; gap: 22px; }
+        .fsoc {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(246,246,231,0.45);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #F6F6E7;
+            background: transparent;
+            transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1),
+                        background-color 0.3s ease,
+                        border-color 0.3s ease,
+                        color 0.3s ease;
+            will-change: transform;
+        }
+        .fsoc svg { width: 24px; height: 24px; fill: currentColor; }
+        .fsoc:hover {
+            background: #FF93CB;
+            border-color: #FF93CB;
+            color: #1B1814;
+            transform: translateY(-9px) rotate(8deg);
+        }
+
+        /* bottom row */
+        .footer2-bottom {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 24px 0 32px;
+            border-top: 1px solid rgba(246,246,231,0.18);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(246,246,231,0.6);
+        }
+        .footer2-bottom a { border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+        .footer2-bottom a:hover { border-color: rgba(246,246,231,0.7); }
+
+        @media (max-width: 768px) {
+            .footer2 { padding: 64px 20px 0; }
+            .footer2-main { padding-bottom: 44px; }
+            .fsoc { width: 54px; height: 54px; }
+            .footer2-bottom { flex-direction: column; gap: 8px; text-align: center; }
+        }
+
+
+        /* =============================================
+           RESPONSIVE — TABLET (≤1024px)
+        ============================================= */
+        @media (max-width: 1024px) {
+
+            .hero-top {
+                padding: 90px 32px 0 32px;
+                min-height: 440px;
+            }
+
+            .hero-typography { width: 42%; gap: 36px; }
+
+            .hero-bio {
+                width: 36%;
+                padding-top: 90px;
+            }
+
+            .badge-decor1 { top: 2%;  left: 40%; }
+            .badge-decor2 { top: 28%; left: 34%; }
+            .badge-decor3 { top: 52%; left: 38%; }
+
+            .hero-name { padding: 0 32px 8px 32px; }
+
+            .work-inner { padding: 40px 32px 0 32px; }
+
+            .stack-section { padding: 40px 32px 48px 32px; }
+
+            .contact-section { padding: 48px 32px 40px 32px; }
+
+            .fullscreen-menu li { font-size: 3.7rem; }
+
+            .logo img  { max-height: 60px; }
+            .menu img  { max-height: 40px; }
+        }
+
+
+        /* =============================================
+           RESPONSIVE — MOBILE (≤768px)
+        ============================================= */
+        @media (max-width: 768px) {
+
+            /* Nav */
+            .nav-container { padding: 10px 16px; }
+
+            /* Hero top becomes single column */
+            .hero-top {
+                flex-direction: column;
+                padding: 24px 20px 0 20px;
+                min-height: unset;
+            }
+
+            .hero-typography {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .hero-bio {
+                width: 100%;
+                padding-top: 0;
+            }
+
+            /* Hide decorative marks on mobile — too cluttered at small sizes */
+            .hero-badges { display: none; }
+
+            .hero-name { padding: 40px 20px 8px 20px; }
+
+            .hero-greeting { left: 4%; font-size: clamp(18px, 4.5vw, 32px); }
+
+            .hero-bio .oval-btn { align-self: center; margin-right: 0; }
+
+            /* Work section */
+            .work-inner { padding: 32px 20px 0 20px; }
+
+            .checkout-svg { width: 90vw; }
+            .myselected-svg { width: 60vw; }
+            .work-svg { width: 95vw; }
+
+            /* Stack section */
+            .stack-section { padding: 32px 20px 40px 20px; }
+
+            .stack-header { gap: 16px; }
+            .stack-title-svg { width: 80vw; }
+
+            .stack-body {
+                flex-direction: column;
+                gap: 28px;
+            }
+
+            .stack-left { width: 100%; }
+
+            .stack-card { padding: 24px 20px; }
+
+            /* Contact */
+            .contact-section { padding: 40px 20px 36px 20px; }
+
+            .contact-inner {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .contact-img { width: clamp(100px, 40vw, 180px); margin-top: 20px; }
+
+            /* Menu */
+            .fullscreen-menu li { font-size: 3rem; }
+        }
+
+
+        /* =============================================
+           RESPONSIVE — SMALL MOBILE (≤480px)
+        ============================================= */
+        @media (max-width: 480px) {
+
+            .hero-top { padding: 18px 14px 0 14px; }
+            .hero-name { padding: 0 14px 6px 14px; }
+
+            .hero-greeting { font-size: clamp(16px, 5vw, 26px); }
+
+            .work-inner { padding: 24px 14px 0 14px; }
+
+            .stack-section { padding: 24px 14px 32px 14px; }
+
+            .contact-section { padding: 32px 14px 28px 14px; }
+
+            .contact-heading { font-size: clamp(18px, 5.5vw, 32px); }
+
+            .skill-tag { padding: 8px 18px; font-size: 13px; }
+
+            .fullscreen-menu li { font-size: 2.5rem; }
+        }
+
+
+        /* =============================================
+           MOTION — chungiyoo-style reveal initial states
+           Only applied when JS/animation is active (html.anim).
+           GSAP animates these to their natural state. If JS
+           fails, nothing is hidden (graceful fallback).
+        ============================================= */
+        html.anim .reveal-mask {
+            clip-path: inset(0 0 100% 0);
+            will-change: clip-path, transform;
+        }
+        html.anim .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            will-change: transform, opacity;
+        }
+        html.anim .reveal-fade {
+            opacity: 0;
+            will-change: opacity;
+        }
+
+        /* Magnetic targets need a transform origin + smoothing */
+        .magnetic { will-change: transform; }
+
+        /* Lenis recommended base */
+        html.lenis, html.lenis body { height: auto; }
+        .lenis.lenis-smooth { scroll-behavior: auto !important; }
+        .lenis.lenis-stopped { overflow: hidden; }
+
+        @media (prefers-reduced-motion: reduce) {
+            html.anim .reveal-mask,
+            html.anim .reveal-up,
+            html.anim .reveal-fade {
+                clip-path: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+
+
+        /* =============================================
+           PAGE-LOAD CURTAIN ("Munia." holds, sweeps up)
+        ============================================= */
+        html.cy-loading body { overflow: hidden; }
+
+        /* already seen this session → never paint the curtain */
+        html.cy-seen .cy-curtain { display: none !important; }
+
+        .cy-curtain {
+            position: fixed;
+            inset: 0;
+            background: #1a1a1a;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #F5F5EC;
+            font-family: afteris, serif;
+            font-size: clamp(28px, 5vw, 64px);
+            letter-spacing: 0.02em;
+            pointer-events: none;
+            transform: translateY(0);
+            transition: transform 0.9s cubic-bezier(0.83, 0, 0.17, 1);
+        }
+        .cy-curtain__inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 26px;
+        }
+        .cy-curtain__text {
+            display: inline-flex;
+            transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        /* each letter focuses + rises in (cream), then warms to yellow; the dot is pink */
+        .cyl {
+            display: inline-block;
+            opacity: 0;
+            color: #F5F5EC;
+            will-change: transform, opacity, filter, color;
+        }
+        .cyl--dot { color: #FF93CB; }
+        @keyframes cylIn {
+            0%   { opacity: 0; transform: translateY(36px) scale(0.94); filter: blur(7px); color: #F5F5EC; }
+            55%  { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0);   color: #F5F5EC; }
+            100% { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0);   color: #F8F39C; }
+        }
+        @keyframes cylInDot {
+            0%   { opacity: 0; transform: translateY(36px) scale(0.4); filter: blur(7px); }
+            60%  { opacity: 1; transform: translateY(0)    scale(1.14); filter: blur(0); }
+            100% { opacity: 1; transform: translateY(0)    scale(1); }
+        }
+        html.cy-curtain-shown .cyl      { animation: cylIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        html.cy-curtain-shown .cyl:nth-child(1) { animation-delay: 0.04s; }
+        html.cy-curtain-shown .cyl:nth-child(2) { animation-delay: 0.10s; }
+        html.cy-curtain-shown .cyl:nth-child(3) { animation-delay: 0.16s; }
+        html.cy-curtain-shown .cyl:nth-child(4) { animation-delay: 0.22s; }
+        html.cy-curtain-shown .cyl:nth-child(5) { animation-delay: 0.28s; }
+
+        /* loading bar fills while it holds */
+        .cy-curtain__bar {
+            width: 160px; height: 2px;
+            background: rgba(245,245,236,0.18);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        html.cy-curtain-shown .cy-curtain__bar { opacity: 1; }
+        .cy-curtain__bar-fill {
+            display: block; height: 100%; width: 0;
+            background: #F8F39C;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(248,243,156,0.45);
+        }
+        html.cy-curtain-shown .cy-curtain__bar-fill { animation: cyBar 1.3s cubic-bezier(0.45, 0, 0.15, 1) 0.15s forwards; }
+        @keyframes cyBar { to { width: 100%; } }
+
+        html.cy-curtain-lift  .cy-curtain       { transform: translateY(-101%); }
+        html.cy-curtain-lift  .cy-curtain__inner {
+            opacity: 0;
+            transform: translateY(-34px);
+            transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cy-curtain { display: none !important; }
+        }
+
+
+        /* =============================================
+           CUSTOM CURSOR — liquid / elastic disc
+           A blob that squash-&-stretches toward the
+           direction of travel and springs back to a
+           circle when still. Driven entirely from JS.
+        ============================================= */
+        @media (hover: hover) and (pointer: fine) {
+            html, body, * { cursor: none !important; }
+
+            .cy-cursor {
+                position: fixed;
+                top: 0; left: 0;
+                pointer-events: none;
+                z-index: 10000;
+            }
+            /* soft blurred blob — soft blue, fades to nothing at the edge */
+            .cy-cursor__blob {
+                position: absolute;
+                top: 0; left: 0;
+                width: 30px; height: 30px;
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                background: radial-gradient(circle at 50% 50%,
+                            rgba(125, 167, 205, 0.70) 0%,
+                            rgba(125, 167, 205, 0.48) 45%,
+                            rgba(125, 167, 205, 0.0) 78%);
+                filter: blur(4px);
+                opacity: 0.92;
+                /* springy easing → satisfying "zoom" pop on hover */
+                transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1),
+                            height 0.5s cubic-bezier(0.34,1.56,0.64,1),
+                            filter 0.45s cubic-bezier(0.22,1,0.36,1),
+                            opacity 0.3s ease;
+                will-change: transform;
+            }
+            /* hover → zooms up + sharpens slightly (lens focus feel) */
+            .cy-cursor.is-hover .cy-cursor__blob { width: 84px; height: 84px; filter: blur(6px); opacity: 1; }
+            .cy-cursor.is-down  .cy-cursor__blob { width: 22px; height: 22px; filter: blur(4px); }
+            .cy-cursor.is-down.is-hover .cy-cursor__blob { width: 66px; height: 66px; }
+            .cy-cursor.is-hidden .cy-cursor__blob { opacity: 0; }
+        }
+        @media (hover: none) { .cy-cursor { display: none; } }
+
+
+        /* =================================================================
+           HERO v2 — Beckan headline · Vaselia name · stamp · scroll cue
+           ================================================================= */
+        .hero2 {
+            position: relative;
+            background: #F6F6E7;
+            min-height: 100vh;
+            overflow: visible;        /* let pills overflow freely — no clipping */
+            padding: 0 0 40px;
+        }
+
+        .hero2-top {
+            position: relative;
+            z-index: 3;                /* keep pills above the Munia name row */
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 40px;
+            padding: 86px 70px 0 56px;
+            align-items: start;
+        }
+
+        /* left: three Beckan words */
+        .hero2-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;   /* words shrink to text width → pills anchor to them */
+            gap: 4px;
+            z-index: 1;
+        }
+        .hero2-word {
+            position: relative;        /* anchor for its pill */
+            font-family: beckan, 'Newsreader', serif;
+            font-weight: 400;
+            font-size: 132px;
+            line-height: 0.94;
+            letter-spacing: 0.005em;
+            color: #1B1814;
+        }
+
+        /* right: bio + button, framed by parenthesis arcs */
+        .hero2-right {
+            position: relative;
+            padding-top: 44px;
+            width: 100%;
+            max-width: 470px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .hero2-bio {
+            font-family: 'Newsreader', Georgia, serif;
+            font-weight: 400;
+            font-size: 25px;
+            line-height: 1.32;
+            color: #1B1814;
+            margin: 0 0 20px;
+        }
+        .hero2-right .oval-btn {
+            background-color: #B6DDD8;
+            margin-top: 10px;
+        }
+        .hero2-right .oval-btn:hover { background-color: #A0CFC9; }
+
+        /* bracket SVGs framing the bio */
+        .hero2-arc { position: absolute; pointer-events: none; z-index: 0; }
+        .hero2-arc img { width: 100%; height: auto; display: block; }
+        .hero2-arc--tl { top: -14px;  left: -22px; width: 46px; }
+        .hero2-arc--br { right: -44px; bottom: 74px; width: 42px; }
+
+        /* name row — CENTERED */
+        .hero2-name {
+            position: relative;
+            margin-top: 96px;
+            text-align: center;
+            line-height: 0.8;
+        }
+        .munia-wrap {
+            position: relative;
+            display: inline-block;
+        }
+        .munia {
+            font-family: myFont, 'Newsreader', serif;   /* Vaselia */
+            font-weight: 400;
+            font-size: 400px;
+            line-height: 0.74;
+            letter-spacing: -0.01em;
+            color: #A8C4A2;
+            margin: 0;
+            display: inline-block;
+            position: relative;
+        }
+        /* "Hi, I am" sits right on top of the "M" of Munia */
+        .hero2-greeting {
+            position: absolute;
+            top: -66px;
+            left: 90px;
+            width: clamp(120px, 12vw, 168px);
+            height: auto;
+            transform: rotate(-14deg);
+            transform-origin: center bottom;
+            z-index: 3;
+            pointer-events: none;
+        }
+        /* text fallback greeting — shown only on phones */
+        .hero2-greeting-text {
+            display: none;
+            position: absolute;
+            top: -34px;
+            left: 6%;
+            font-family: adriana, cursive;
+            font-size: clamp(26px, 8vw, 42px);
+            color: #1B1814;
+            transform: rotate(-12deg);
+            z-index: 3;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        /* smiley stamp — sits on top of the "a" of Munia, swinging */
+        .munia-stamp {
+            position: absolute;
+            left: 90%;
+            top: -20%;
+            width: 116px;
+            height: 116px;
+            z-index: 4;
+            transform-origin: 50% 0;
+            animation: muniaStampSwing 3.4s ease-in-out infinite;
+        }
+        @keyframes muniaStampSwing {
+            0%, 100% { transform: rotate(-14deg); }
+            50%      { transform: rotate(14deg); }
+        }
+        .munia-stamp svg { width: 100%; height: 100%; overflow: visible; }
+        .munia-stamp .disc  { fill: #F6F6E7; stroke: #1B1814; stroke-width: 1.5; }
+        .munia-stamp .eye   { fill: #1B1814; }
+        .munia-stamp .smile { fill: none; stroke: #1B1814; stroke-width: 2; stroke-linecap: round; }
+        .munia-stamp .ring-text {
+            fill: #1B1814;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1.6px;
+            text-transform: uppercase;
+        }
+
+        /* right-side animated scroll cue (dashed line + chevron) */
+        .hero2-scroll {
+            position: absolute;
+            top: 190px;
+            right: 46px;
+            height: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 5;
+            pointer-events: none;
+        }
+        .hero2-scroll-line {
+            flex: 1;
+            width: 2px;
+            background: repeating-linear-gradient(#1B1814 0 9px, transparent 9px 18px);
+            background-size: 100% 18px;
+            /* dashes march downward toward the arrow */
+            animation: heroDashFlow 0.9s linear infinite;
+        }
+        @keyframes heroDashFlow {
+            to { background-position: 0 18px; }
+        }
+        .hero2-scroll-chevron {
+            width: 30px;
+            display: inline-flex;
+            animation: heroScrollBounce 1.5s cubic-bezier(0.45,0,0.55,1) infinite;
+        }
+        .hero2-scroll-chevron svg { width: 100%; height: auto; }
+        .hero2-scroll-chevron svg path { stroke: #1B1814; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+        @keyframes heroScrollBounce {
+            0%      { transform: translateY(-4px); opacity: 0.35; }
+            50%     { transform: translateY(8px);  opacity: 1; }
+            100%    { transform: translateY(-4px); opacity: 0.35; }
+        }
+
+        /* falling smiley → morphs into the work-section circle on scroll */
+        #fallSmiley {
+            position: fixed;
+            top: 0; left: 0;
+            width: 116px; height: 116px;
+            transform: translate(-50%, -50%);
+            transform-origin: center center;
+            z-index: 60;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        #fallSmiley .fs-smiley { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+        #fallSmiley .fs-disc  { fill: #F6F6E7; stroke: #1B1814; stroke-width: 1.5; }
+        #fallSmiley .fs-eye   { fill: #1B1814; }
+        #fallSmiley .fs-smile { fill: none; stroke: #1B1814; stroke-width: 2; stroke-linecap: round; }
+        #fallSmiley .fs-text  {
+            fill: #1B1814;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase;
+        }
+        #fallSmiley .fs-blue {
+            position: absolute; inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #9FC0DF 0%, #C2D7E8 42%, #DEE7EE 100%);
+            border: 1.5px solid transparent;
+            opacity: 0;
+        }
+
+        /* scattered retro pills floating over the left copy */
+        .retro-pills {
+            position: absolute;
+            inset: 0;
+            z-index: 6;
+            pointer-events: none;
+        }
+        .retro-pill {
+            position: absolute;
+            pointer-events: auto;
+            display: inline-flex;
+            align-items: center;
+            padding: 9px 18px;
+            border: 1.5px solid #1B1814;
+            border-radius: 100px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: #1B1814;
+            background: var(--pc, #A8D0A0);
+            box-shadow: -3px 5px 0 rgba(27,24,20,0.88);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .retro-pill:active { box-shadow: -2px 3px 0 rgba(27,24,20,0.88); }
+        .retro-pill--green  { --pc: #A8D0A0; }
+        .retro-pill--peach  { --pc: #F0B89B; }
+        .retro-pill--yellow { --pc: #F0DC8A; }
+
+        @media (max-width: 1000px) {
+            .hero2-top { grid-template-columns: 1fr; gap: 24px; padding: 70px 22px 0; }
+            .hero2-word { font-size: 16vw; }
+            .hero2-right { margin: 0 auto; }
+            .hero2-bio { font-size: 22px; }
+            .munia { font-size: 34vw; }
+            .hero2-scroll { display: none; }
+            .munia-stamp { width: 84px; height: 84px; }
+            .retro-pills { display: none; }
+        }
+
+
+        /* =================================================================
+           STACK (what else I'm up to) — text copy instead of SVGs
+           ================================================================= */
+        .stack-title {
+            font-family: felixtowe, 'Newsreader', serif;
+            font-weight: 400;
+            /* scales with viewport + nowrap so the longest title
+               ("Programming & AI") always stays on a single line */
+            font-size: clamp(30px, 10vw, 144px);
+            line-height: 1;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            color: #FFF0C9;
+            margin: 0;
+        }
+        .stack-subcopy {
+            position: static;
+            max-width: 620px;
+            font-family: 'Roboto', system-ui, Arial, sans-serif;
+            font-weight: 400;
+            font-size: 34px;
+            line-height: 1.2;
+            color: #EADDBA;
+            margin: 0 auto;
+            text-align: center;
+            z-index: 2;
+        }
+        .stack-subcopy em {
+            font-family: felixtowe, 'Newsreader', serif;
+            font-style: normal;
+            font-size: 50px;
+            color: #FFF4CF;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        /* nav button — like the work section (oval + pixel arrow) */
+        .stack-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .stack-nav-btn { background-color: #B6DDD8; }
+        .stack-nav-btn:hover { background-color: #A0CFC9; }
+        .stack-nav-arrow {
+            display: inline-flex;
+            width: 56px;
+            transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+        }
+        .stack-nav-arrow.is-back { transform: scaleX(-1); }
+        .stack-nav:hover .stack-nav-arrow { transform: translateX(6px); }
+        .stack-nav:hover .stack-nav-arrow.is-back { transform: scaleX(-1) translateX(6px); }
+
+
+        /* =================================================================
+           WORK v3 — numbered list + cursor-follow preview · BIGGER
+           Background: warm sand-peach that bridges cream hero → dark sage
+           ================================================================= */
+        .work-section.v3 {
+            position: relative;
+            background: #E9E6DC;
+            padding: 0 0 130px;
+            min-height: 100vh;
+            overflow: hidden;
+            color: #1B1814;
+        }
+
+        /* =================================================================
+           TITLE CARD — "Places & spaces" inspired centerpiece
+           ================================================================= */
+        .wp-card {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 40px;
+            overflow: hidden;
+        }
+
+        /* top mono label with globe */
+        .wp-toplabel {
+            position: absolute;
+            top: 42px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; align-items: center; gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #14130F;
+            z-index: 4;
+        }
+        .wp-toplabel .globe {
+            width: 16px; height: 16px;
+            border: 1.2px solid #14130F;
+            border-radius: 50%;
+            position: relative;
+        }
+        .wp-toplabel .globe::before,
+        .wp-toplabel .globe::after {
+            content: ""; position: absolute; inset: 0;
+            border: 1.2px solid #14130F; border-radius: 50%;
+        }
+        .wp-toplabel .globe::before { border-width: 0; border-left: 1.2px solid #14130F; border-right: 1.2px solid #14130F; left: 4px; right: 4px; }
+        .wp-toplabel .globe::after  { border-width: 1.2px 0; top: 7px; bottom: 7px; border-radius: 0; }
+
+        .wp-botlabel {
+            position: absolute;
+            bottom: 40px; left: 50%;
+            transform: translateX(-50%);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px; letter-spacing: 0.16em;
+            color: #14130F;
+            z-index: 4;
+        }
+        .wp-corner-star {
+            position: absolute;
+            top: 34px; left: 40px;
+            font-family: 'Newsreader', serif;
+            font-size: 28px;
+            color: #6E92B4;
+            z-index: 4;
+            animation: wpStarSpin 16s linear infinite;
+        }
+        @keyframes wpStarSpin { to { transform: rotate(360deg); } }
+
+        /* center image portal — tall ellipse, morphs to circle on scroll */
+        .wp-portal {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: clamp(280px, 30vw, 440px);
+            height: clamp(440px, 54vw, 680px);
+            transform: translate(-50%, -50%) scaleX(var(--portal-sx, 1));
+            border-radius: 50%;
+            overflow: hidden;
+            z-index: 1;
+            background: linear-gradient(180deg, #6E97C2 0%, #88ABCF 45%, #A8C2DC 100%);
+        }
+        .wp-portal::before {
+            /* abstract glassy architecture silhouette */
+            content: ""; position: absolute; inset: 0;
+            background:
+              linear-gradient(72deg,  transparent 44%, rgba(110,146,180,0.55) 45%, rgba(110,146,180,0.15) 62%, transparent 63%),
+              linear-gradient(110deg, transparent 38%, rgba(140,170,198,0.5) 39%, transparent 60%),
+              linear-gradient(95deg,  transparent 70%, rgba(120,150,182,0.4) 71%, transparent 84%);
+        }
+
+        /* circular rotating text ring */
+        .wp-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            /* ring sits just OUTSIDE the tall oval portal on laptop/desktop — its
+               text path radius clears the portal's half-height with a small gap
+               (≤800 keeps its own size) */
+            width: clamp(540px, 76vw, 880px);
+            height: clamp(540px, 76vw, 880px);
+            transform: translate(-50%, -50%) rotate(0deg);
+            z-index: 2;
+            pointer-events: none;
+            animation: wpRingSpin 30s linear infinite;
+            opacity: var(--ring-opacity, 0);
+            transition: opacity 0.6s ease;
+        }
+        @keyframes wpRingSpin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        .wp-ring text {
+            fill: #14130F;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+        }
+
+        /* the big serif title over the portal */
+        .wp-title {
+            position: relative;
+            z-index: 3;
+            font-family: 'Fraunces', 'Newsreader', serif;
+            font-weight: 400;
+            font-size: clamp(72px, 15vw, 240px);
+            line-height: 0.8;
+            letter-spacing: -0.02em;
+            color: #14130F;
+            margin: 0;
+        }
+        .wp-title .amp {
+            font-style: italic;
+            font-weight: 300;
+        }
+        .wp-title .row { display: block; }
+
+        /* big side year numbers */
+        .wp-year {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Fraunces', 'Newsreader', serif;
+            font-weight: 380;
+            font-size: clamp(48px, 9vw, 156px);
+            line-height: 1;
+            color: #14130F;
+            z-index: 3;
+            opacity: var(--year-opacity, 0);
+        }
+        .wp-year--l { left: 48px;  transform: translateY(-50%) translateX(calc(var(--year-x-l, -30) * 1px)); }
+        .wp-year--r { right: 48px; transform: translateY(-50%) translateX(calc(var(--year-x-r, 30) * 1px)); }
+
+        /* starburst badge with a number */
+        /* floating decorative stars sprinkled around the circle */
+        .wp-deco {
+            position: absolute;
+            z-index: 4;
+            color: #6E97C2;
+            font-family: 'Newsreader', serif;
+            line-height: 1;
+            pointer-events: none;
+            animation: wpFloat 6s ease-in-out infinite;
+        }
+        .wp-deco--1 { top: 16%;  left: 30%; font-size: 30px; color: #6E97C2; animation-delay: 0s;   }
+        .wp-deco--2 { top: 26%;  right: 28%; font-size: 22px; color: #1B1814; animation-delay: 1.2s; }
+        .wp-deco--3 { bottom: 22%; left: 33%; font-size: 20px; color: #1B1814; animation-delay: 2.1s; }
+        .wp-deco--4 { bottom: 30%; right: 31%; font-size: 30px; color: #6E97C2; animation-delay: 0.6s; }
+        @keyframes wpFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg);   opacity: 0.85; }
+            50%      { transform: translateY(-12px) rotate(18deg); opacity: 1; }
+        }
+
+        @media (max-width: 800px) {
+            .wp-portal { height: clamp(380px, 70vw, 520px); }
+            .wp-ring { width: 92vw; height: 92vw; }
+            .wp-ring text { font-size: 13px; letter-spacing: 3px; }  /* keep tablet/mobile unchanged */
+            .wp-year { display: none; }
+        }
+
+        /* --- Scrolling marquee (top + bottom) --- */
+        .w3-marquee {
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            border-top: 1.2px solid #1B1814;
+            border-bottom: 1.2px solid #1B1814;
+            background: #E9E6DC;
+            padding: 14px 0;
+            z-index: 3;
+        }
+        .w3-marquee-track {
+            display: flex;
+            gap: 60px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            font-family: voyager, serif;
+            font-size: clamp(28px, 3.4vw, 54px);
+            line-height: 1;
+            letter-spacing: -0.01em;
+            animation: w3Marquee 28s linear infinite;
+            padding-right: 60px;
+        }
+        .w3-marquee-track .star {
+            color: #6E92B4;
+            display: inline-block;
+            transform: translateY(-0.05em);
+        }
+        .w3-marquee-track em {
+            font-family: 'Newsreader', serif;
+            font-style: italic;
+            font-weight: 400;
+            color: #1B1814;
+        }
+        @keyframes w3Marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+        .w3-marquee--bot .w3-marquee-track {
+            animation-direction: reverse;
+            animation-duration: 36s;
+        }
+
+        /* Inner wrapper for everything between marquees */
+        .w3-body {
+            position: relative;
+            padding: 80px 56px 0;
+        }
+
+        /* Huge watermark numeral behind the list */
+        .w3-watermark {
+            position: absolute;
+            right: -3vw;
+            top: 28%;
+            font-family: voyager, serif;
+            font-size: clamp(380px, 56vw, 880px);
+            line-height: 0.78;
+            color: #6E97C2;
+            opacity: 0.16;
+            pointer-events: none;
+            z-index: 0;
+            font-style: italic;
+            letter-spacing: -0.05em;
+        }
+
+        .w3-head {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 32px;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+        }
+        .w3-head-meta { padding-top: 6px; }
+        .w3-head-left { display: flex; flex-direction: column; gap: 10px; }
+        .w3-head-tag {
+            font-family: 'Square Peg', cursive;
+            font-weight: 400;
+            font-size: 33px;
+            letter-spacing: 0.01em;
+            color: #1B1814;
+            display: inline-block;
+        }
+        .w3-head-tag .pink { color: #6E92B4; }
+        /* "From the" = Fredoka · "archives" = Amoria */
+        .w3-title {
+            font-family: amoria, 'Newsreader', serif;
+            font-weight: 400;
+            font-size: 169.5px;
+            line-height: 0.86;
+            letter-spacing: -0.01em;
+            color: #1B1814;
+            margin: 0;
+        }
+        .w3-title em {
+            font-family: 'Fredoka', sans-serif;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 240px;
+            line-height: 0.9;
+            display: inline-block;
+        }
+        @media (max-width: 1100px) {
+            .w3-title { font-size: 14vw; }
+            .w3-title em { font-size: 20vw; }
+        }
+
+        /* decorative blue parentheses (Syncopate 180px) */
+        .w3-favrow {
+            position: relative;
+            display: inline-block;
+            margin-left: 215px;     /* aligns under the "o" of From */
+            padding-left: 120px;    /* room for the "(" */
+        }
+        .w3-fromthe { position: relative; white-space: nowrap; }
+        .w3-paren {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 400;
+            font-size: 200px;
+            line-height: 1;
+            color: #A9C8E4;
+            pointer-events: none;
+        }
+        .w3-paren--l { position: absolute; left: 0; top: -32px; }
+        /* right paren: inline so it always shows right after "the" */
+        .w3-paren--r {
+            position: relative;
+            display: inline-block;
+            margin-left: 14px;
+            transform: translateY(-10px);
+        }
+
+        /* "A Few Favorites" — larger + nudged lower */
+        .w3-head-tag { font-size: 48px; transform: translateY(20px); }
+
+        /* "archive" word — anchor for magnifier */
+        .w3-archive { position: relative; display: inline-block; }
+
+        /* magnifying glass after the word, with a "searching" wobble */
+        .w3-magnify {
+            position: absolute;
+            right: -58px;
+            top: 2px;
+            width: 46px; height: 46px;
+            transform-origin: 42% 42%;
+            animation: w3Search 4s ease-in-out infinite;
+        }
+        .w3-magnify svg { width: 100%; height: 100%; overflow: visible; }
+        @keyframes w3Search {
+            0%   { transform: translate(0, 0)     rotate(-10deg); }
+            25%  { transform: translate(5px, -5px) rotate(6deg); }
+            50%  { transform: translate(0, -8px)   rotate(12deg); }
+            75%  { transform: translate(-5px, -4px) rotate(2deg); }
+            100% { transform: translate(0, 0)     rotate(-10deg); }
+        }
+        .w3-head-meta {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            padding-bottom: 14px;
+            margin-right: 120px;    /* nudge [04 — Archive] + button leftward */
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1B1814;
+        }
+
+        /* Rotating "NOW BOOKING" circular stamp */
+        .w3-stamp {
+            position: absolute;
+            top: -28px;
+            right: 175px;
+            width: 120px;
+            height: 120px;
+            animation: w3StampSpin 18s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes w3StampSpin { to { transform: rotate(360deg); } }
+        .w3-stamp svg { width: 100%; height: 100%; overflow: visible; }
+        .w3-stamp text { fill: #1B1814; letter-spacing: 2.4px; }
+        .w3-stamp circle.bg { fill: #6E92B4; }
+        .w3-stamp circle.ring { fill: none; stroke: #1B1814; stroke-width: 1.4; }
+        .w3-stamp .core {
+            font-family: voyager, serif;
+            font-size: 36px;
+            font-weight: 700;
+            fill: #1B1814;
+            text-anchor: middle;
+        }
+        @media (max-width: 1100px) { .w3-stamp { display: none; } }
+        /* archive label aligned with the oval button (offset past the arrow) */
+        .w3-archive-label { margin-right: 76px; }
+        /* "VIEW ALL" — uses the hero oval button + pixel arrow asset */
+        .w3-viewall {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 28px;          /* sits a little lower */
+        }
+        .w3-viewall-btn { background-color: #B6DDD8; }
+        .w3-viewall-btn:hover { background-color: #A0CFC9; }
+        .w3-viewall-arrow {
+            display: inline-flex;
+            width: 60px;
+            transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+        }
+        .w3-viewall-arrow svg, .stack-nav-arrow svg { width: 100%; height: 22px; display: block; }
+        .w3-viewall-arrow path, .stack-nav-arrow path { fill: none; stroke: #2a2a2a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .w3-viewall:hover .w3-viewall-arrow { transform: translateX(8px); }
+
+        /* The list */
+        .w3-list { list-style: none; margin: 0; padding: 0; position: relative; z-index: 2; }
+        .w3-row {
+            position: relative;
+            display: grid;
+            grid-template-columns: 132px 1fr auto;
+            align-items: center;
+            gap: 32px;
+            padding: 32px 28px;
+            border-top: 1.4px solid rgba(27,24,20,0.5);
+            cursor: pointer;
+            transition: padding-left 0.55s cubic-bezier(0.22,1,0.36,1);
+        }
+        .w3-row:last-child { border-bottom: 1.4px solid rgba(27,24,20,0.5); }
+
+        /* Soft hue box highlight behind the whole row on hover */
+        .w3-row::before {
+            content: "";
+            position: absolute;
+            inset: 4px 0;
+            background: rgba(110,151,196,0.16);
+            border-radius: 16px;
+            opacity: 0;
+            transform: scale(0.97);
+            transition: opacity 0.45s ease,
+                        transform 0.55s cubic-bezier(0.22,1,0.36,1);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .w3-row:hover::before { opacity: 1; transform: scale(1); }
+        .w3-row:hover { padding-left: 44px; }
+
+        .w3-num {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: #1B1814;
+        }
+        .w3-num-star {
+            width: 38px; height: 38px;
+            flex: 0 0 auto;
+            overflow: visible;
+            transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+        }
+        .w3-num-star path { fill: none; stroke: #1B1814; stroke-width: 1.4; }
+        .w3-num-star text {
+            fill: #1B1814;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 17px;
+            text-anchor: middle;
+        }
+        .w3-row:hover .w3-num-star { transform: rotate(72deg); }
+        .w3-num-frac { opacity: 0.55; }
+        .w3-name {
+            font-family: 'Fraunces', 'Newsreader', serif;
+            font-weight: 400;
+            font-size: clamp(40px, 5.2vw, 92px);
+            line-height: 1;
+            color: #1B1814;
+            transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), letter-spacing 0.5s;
+            display: inline-block;
+            letter-spacing: -0.01em;
+        }
+        .w3-row:hover .w3-name { letter-spacing: 0.005em; }
+        .w3-name em {
+            font-family: 'Newsreader', serif;
+            font-style: italic;
+            font-weight: 400;
+        }
+        .w3-row:hover .w3-name { transform: translateX(8px); }
+        .w3-tags {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #1B1814;
+            opacity: 0.75;
+        }
+        .w3-year {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            color: #1B1814;
+            opacity: 0.75;
+            white-space: nowrap;
+        }
+        /* Subtle arrow at end of row */
+        .w3-arrow {
+            display: inline-block;
+            margin-left: 18px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.4s, transform 0.5s cubic-bezier(0.22,1,0.36,1);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+        }
+        .w3-row:hover .w3-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+
+        /* Floating image preview — bigger, with subtle tilt entry */
+        .w3-preview {
+            position: fixed;
+            top: 0; left: 0;
+            width: 380px;
+            height: 330px;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 50;
+            transform: translate(-50%, -50%) scale(0.92) rotate(-3deg);
+            transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1),
+                        transform 0.55s cubic-bezier(0.22,1,0.36,1);
+            will-change: transform, opacity;
+        }
+        .w3-preview.is-on {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        }
+        .w3-preview-slot {
+            position: absolute;
+            inset: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1.5px solid #1B1814;
+            box-shadow: 6px 6px 0 rgba(27,24,20,0.18);
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .w3-preview-slot.is-active { opacity: 1; }
+
+        /* CSS-only project mockup tiles (no SVG dependency) */
+        .w3-mock {
+            width: 100%; height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            color: #F6F6E7;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* real project cover fills the preview; dark shade keeps the label legible */
+        .w3-mock .mk-img {
+            position: absolute; inset: 0; z-index: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .w3-mock .mk-shade {
+            position: absolute; inset: 0; z-index: 1;
+            background: linear-gradient(to top,
+                        rgba(20,17,13,0.82) 0%,
+                        rgba(20,17,13,0.12) 48%,
+                        rgba(20,17,13,0.30) 100%);
+        }
+        .w3-mock--01 {
+            background: linear-gradient(140deg, #F2C9B8 0%, #E8A793 100%);
+        }
+        .w3-mock--02 {
+            background: linear-gradient(140deg, #FFEDC2 0%, #E9C977 100%);
+        }
+        .w3-mock--03 {
+            background: linear-gradient(140deg, #B6DDD8 0%, #7FA8A2 100%);
+        }
+        .w3-mock--04 {
+            background: linear-gradient(140deg, #D9C6E5 0%, #9F84B7 100%);
+        }
+        .w3-mock .mk-tag {
+            position: relative; z-index: 2;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: auto;
+        }
+        .w3-mock .mk-name {
+            position: relative; z-index: 2;
+            font-family: voyager, serif;
+            font-size: 32px;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .w3-mock .mk-meta {
+            position: relative; z-index: 2;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        .w3-mock .mk-shape {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            background: rgba(27,24,20,0.18);
+            mix-blend-mode: multiply;
+        }
+        .w3-mock--01 .mk-shape { width: 160px; height: 160px; border-radius: 30% 70% 50% 50% / 60% 40% 60% 40%; }
+        .w3-mock--02 .mk-shape { border-radius: 8px; transform: translate(-50%, -50%) rotate(18deg); width: 110px; height: 150px; }
+        .w3-mock--03 .mk-shape { background: rgba(27,24,20,0.18); border-radius: 50%; }
+        .w3-mock--04 .mk-shape { width: 170px; height: 110px; border-radius: 100px; }
+
+        /* Bottom CTA */
+        .w3-footer {
+            margin-top: 80px;
+            text-align: center;
+        }
+        .w3-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Newsreader', serif;
+            font-weight: 400;
+            font-size: clamp(22px, 2.4vw, 34px);
+            line-height: 1;
+            color: #1B1814;
+            border-bottom: 1.5px solid #1B1814;
+            padding-bottom: 6px;
+            transition: gap 0.4s cubic-bezier(0.22,1,0.36,1), color 0.3s;
+        }
+        .w3-cta:hover { gap: 20px; color: #1B1814; opacity: 0.7; }
+
+        @media (max-width: 800px) {
+            .work-section.v3 { padding: 70px 22px 80px; }
+            .w3-row {
+                grid-template-columns: 60px 1fr;
+                row-gap: 6px;
+                padding: 22px 0;
+            }
+            .w3-tags { grid-column: 2; opacity: 0.65; }
+            .w3-arrow { display: none; }
+            .w3-preview { display: none; }
+        }
+
+
+        /* =================================================================
+           RESPONSIVE — full homepage (placed last so it wins the cascade)
+           ================================================================= */
+
+        /* ---------- ≤1024px : tablet / small laptop ---------- */
+        @media (max-width: 1024px) {
+            /* HERO */
+            .hero2-top { grid-template-columns: 1fr; gap: 18px; padding: 84px 32px 0; }
+            .hero2-word { font-size: 15vw; }
+            .hero2-right { margin: 0 auto; max-width: 560px; padding-top: 6px; }
+            .hero2-bio { font-size: 22px; }
+            .hero2-name { margin-top: 152px; }     /* extra room so the greeting clears the button */
+            .munia { font-size: 33vw; }
+            .hero2-greeting { left: 10%; top: -124px; }
+
+            /* WORK */
+            .w3-body { padding: 60px 32px 0; }
+            .wp-title { font-size: clamp(64px, 16vw, 190px); }
+            .w3-title { font-size: 13vw; }
+            .w3-title em { font-size: 18vw; }
+            .w3-favrow { margin-left: 0; padding-left: 92px; }
+            .w3-paren { font-size: 130px; }
+
+            /* STACK — stack to a column so the skills card never
+               overlaps the copy on tablet */
+            .stack-header { gap: 18px; }
+            .stack-body { flex-direction: column; gap: 30px; align-items: center; }
+            .stack-left { width: 100%; min-height: auto; text-align: center; }
+            .stack-subcopy { position: static; max-width: 100%; margin: 6px auto 0; }
+            .pixel-art-img { display: none; }
+            .stack-card { width: 100%; max-width: 560px; height: 440px; margin: 0 auto; }
+        }
+
+        /* ---------- ≤768px : large phone ---------- */
+        @media (max-width: 768px) {
+            /* NAV */
+            .nav-container { padding: 12px 18px; }
+
+            /* HERO */
+            .hero2 { padding-bottom: 24px; }
+            .hero2-top { padding: 72px 20px 0; }
+            .hero2-word { font-size: 18vw; }
+            /* keep the pill text big enough to render crisply (small = blurry),
+               while still clearing the right edge */
+            .retro-pill {
+                font-size: 10px;
+                padding: 5px 11px;
+                letter-spacing: 0;
+                box-shadow: -2px 3px 0 rgba(27,24,20,0.85);
+            }
+            .hero2-right { text-align: left; align-items: flex-start; max-width: 100%; }
+            .hero2-arc { display: none; }               /* brackets off on phones */
+            .hero2-bio { font-size: 19px; }
+            /* "Hi, I am" sits on the same row as the button (greeting left, button right) */
+            .hero2-cta { align-self: stretch; width: 100%; display: flex; align-items: center; gap: 14px; margin-top: 22px; }
+            .oval-btn { width: 138px; height: 50px; line-height: 50px; font-size: 12px; }
+            .w3-viewall-arrow { width: 44px; }
+            .hero2-name { margin-top: 40px; }
+            .munia { font-size: 52vw; }                  /* Munia bigger */
+            /* swap the rotated SVG greeting for an upright, nicer-font text one */
+            .hero2-greeting { display: none; }
+            .hero2-greeting-text {
+                display: inline-flex; align-items: center;
+                position: static; transform: none;      /* sit normally, no tilt */
+                margin: 0 auto 0 0;                       /* push to the left, button stays right */
+                font-family: 'Caveat', cursive; font-weight: 600;
+                font-size: clamp(28px, 7.5vw, 40px); line-height: 1; color: #1B1814;
+            }
+            .munia-stamp { width: 58px; height: 58px; left: 84%; top: -10%; }
+
+            /* WORK */
+            .work-section.v3 { padding-bottom: 70px; }
+            .wp-card { min-height: 78vh; }
+            /* keep the portal a true circle on phones (no scroll-stretch) */
+            .wp-portal {
+                width: 64vw; height: 64vw;
+                transform: translate(-50%, -50%) !important;
+            }
+            .wp-ring { width: 80vw; height: 80vw; }
+            .wp-title { font-size: clamp(52px, 19vw, 120px); }
+            .wp-corner-star { top: 18px; left: 20px; font-size: 22px; }
+            .wp-toplabel { top: 22px; font-size: 10px; }
+            .w3-body { padding: 44px 20px 0; }
+            .w3-head { flex-direction: column; align-items: flex-start; gap: 18px; }
+            .w3-head-meta { align-items: flex-start; margin-right: 0; }   /* [04 — Archive] to the left */
+            /* shrink so "From the )" fits one line on phones */
+            .w3-title { font-size: 13vw; }
+            .w3-title em { font-size: 11vw; }
+            .w3-favrow { padding-left: 40px; }
+            .w3-paren { font-size: 50px; }
+            .w3-paren--l { top: 0; }
+            .w3-paren--r { transform: translateY(-4px); margin-left: 8px; }
+            .w3-name { font-size: clamp(30px, 8.5vw, 56px); }
+            .w3-row { grid-template-columns: 52px 1fr; padding: 20px 12px; }
+            .w3-num-star { width: 30px; height: 30px; }
+            .w3-watermark { display: none; }
+
+            /* STACK */
+            .stack-section { padding: 56px 20px 60px; }
+            /* keep the cycling heading + Next button centered like the laptop view */
+            .stack-header { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+            .stack-body { flex-direction: column; gap: 28px; }
+            .stack-left { width: 100%; min-height: auto; }
+            .stack-subcopy { position: static; max-width: 100%; font-size: 24px; line-height: 1.3; margin-top: 8px; }
+            .stack-subcopy em { font-size: 32px; }
+            .pixel-art-img { display: none; }
+            .stack-card { width: 100%; height: 420px; }
+
+            /* FOOTER — 3 compact cards side by side */
+            .footer2-now { gap: 8px; flex-wrap: nowrap; padding-bottom: 40px; }
+            .now-card {
+                flex: 1 1 0;
+                min-width: 0;
+                width: auto;
+                max-width: none;
+                padding: 12px 10px;
+                gap: 8px;
+                border-radius: 14px;
+                overflow: hidden;
+            }
+            .now-label { font-size: 8px; letter-spacing: 0.08em; gap: 5px; }
+            /* icon stacks above text so the text gets the full card width */
+            .now-body { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .now-icon { width: 36px; height: 36px; font-size: 17px; border-radius: 9px; }
+            .now-text { min-width: 0; width: 100%; }
+            .now-title { font-size: 12.5px; line-height: 1.14; white-space: normal; word-break: break-word; }
+            .now-sub { font-size: 9px; white-space: normal; word-break: break-word; }
+            .now-meta { font-size: 8px; gap: 5px; }
+            .eq { height: 9px; }
+            .footer2-heading { font-size: clamp(30px, 8vw, 54px); }
+        }
+
+        /* ---------- ≤480px : phone ---------- */
+        @media (max-width: 480px) {
+            .hero2-word { font-size: 16vw; }   /* trimmed so the bigger, crisper pills fit */
+            .hero2-bio { font-size: 17px; }
+            .munia { font-size: 56vw; }
+            .munia-stamp { width: 50px; height: 50px; }
+            .hero2-greeting { display: none; }          /* SVG greeting off; text greeting stays */
+            .hero2-greeting-text { font-size: clamp(24px, 7vw, 34px); }
+            .retro-pill { font-size: 10px; padding: 5px 10px; }
+
+            .wp-title { font-size: 22vw; }
+            .w3-title { font-size: 13vw; }
+            .w3-title em { font-size: 11vw; }
+            .w3-name { font-size: clamp(26px, 9vw, 46px); }
+            .w3-favrow { padding-left: 38px; }
+            .w3-paren { font-size: 46px; }
+
+            .stack-card { height: 380px; padding: 22px 16px; }
+            .skill-tag { font-size: 12px; padding: 8px 14px; }
+
+            .footer2 { padding: 48px 16px 0; }
+            .footer2-heading { font-size: clamp(26px, 9vw, 44px); }
+            .fsoc { width: 50px; height: 50px; }
+        }
+
+        /* smallest phones (Mobile S): trim the words + pills a touch more so the
+           right-edge pills ("ui/ux designer", "curious about AI") clear the screen */
+        @media (max-width: 360px) {
+            .hero2-word { font-size: 14.5vw; }
+            .retro-pill { font-size: 9px; padding: 4px 9px; }
+        }
+
+        /* ---------- Laptop L (~1440px) only ----------
+           On tall Laptop-L viewports the hero's min-height:100vh stretches
+           the hero and leaves a large empty gap below "Munia" before the
+           "More about my work" pill. In this width band only, let the hero
+           hug its content so the work section follows naturally. Other
+           viewports (≤1024 and ≥1601, incl. 1920) keep their spacing. */
+        @media (min-width: 1281px) and (max-width: 1600px) {
+            .hero2 { min-height: auto; }
+        }
+
+    </style>
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Page-load curtain -->
+<div class="cy-curtain" id="cy-curtain">
+    <div class="cy-curtain__inner">
+        <span class="cy-curtain__text" aria-label="Munia">
+            <span class="cyl">M</span><span class="cyl">u</span><span class="cyl">n</span><span class="cyl">i</span><span class="cyl">a</span>
+        </span>
+    </div>
+</div>
+
+<!-- Custom cursor -->
+<div class="cy-cursor" id="cy-cursor">
+    <span class="cy-cursor__blob"></span>
+</div>
+
+<!-- Page-load curtain controller (runs early) -->
+<script>
+(function () {
+  const html = document.documentElement;
+  const curtain = document.getElementById('cy-curtain');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function fireIntro() {
+    document.dispatchEvent(new Event('cy:curtain-lift'));
+  }
+
+  // Only show the "Munia." intro on the first load of the session.
+  let seen = false;
+  try { seen = !!sessionStorage.getItem('cyIntroSeen'); } catch (e) {}
+  if (seen) {
+    html.classList.remove('cy-loading');
+    if (curtain) curtain.remove();
+    fireIntro();              // let the hero intro still play
+    return;
+  }
+  try { sessionStorage.setItem('cyIntroSeen', '1'); } catch (e) {}
+
+  function lift() {
+    if (lift._done) return; lift._done = true;
+    html.classList.add('cy-curtain-shown');      // fade in "Munia."
+    setTimeout(() => {
+      html.classList.remove('cy-loading');
+      html.classList.add('cy-curtain-lift');     // sweep up
+      fireIntro();                               // → triggers GSAP hero intro
+      setTimeout(() => curtain && curtain.remove(), 1300);
+    }, reduce ? 0 : 1100);                       // hold duration (lets letters finish, then a beat)
+  }
+
+  if (document.readyState === 'complete') lift();
+  else {
+    window.addEventListener('load', lift, { once: true });
+    setTimeout(lift, 2500);                      // safety timeout
+  }
+})();
+</script>
+
+<!-- Custom cursor controller -->
+<script>
+(function () {
+  const cursor = document.getElementById('cy-cursor');
+  const ok = matchMedia('(hover: hover) and (pointer: fine)').matches
+          && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!cursor || !ok) { cursor && cursor.remove(); return; }
+
+  const disc = cursor.querySelector('.cy-cursor__blob');
+
+  let mx = innerWidth / 2, my = innerHeight / 2;
+  let cx = mx, cy = my;
+  let visible = false;
+
+  addEventListener('mousemove', (e) => {
+    mx = e.clientX; my = e.clientY;
+    if (!visible) { cx = mx; cy = my; visible = true; }
+    cursor.classList.remove('is-hidden');
+  }, { passive: true });
+
+  // Hide when the pointer leaves the window / enters iframe etc.
+  document.addEventListener('mouseleave', () => cursor.classList.add('is-hidden'));
+  document.addEventListener('mouseenter', () => cursor.classList.remove('is-hidden'));
+  addEventListener('blur', () => cursor.classList.add('is-hidden'));
+
+  let str = 0, ang = 0;            // smoothed stretch + angle
+  let lastT = performance.now();
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  (function loop() {
+    requestAnimationFrame(loop);
+    const now = performance.now();
+    const dt = Math.max(8, now - lastT);   // ms since last frame
+    lastT = now;
+
+    const vx = mx - cx, vy = my - cy;
+    cx += vx * 0.28;                        // follow with a little lag
+    cy += vy * 0.28;
+
+    // squash & stretch only while moving; relax to a circle when idle.
+    // Suppressed on hover so the ring stays a clean circle around elements.
+    const hovering = cursor.classList.contains('is-hover');
+    const speed = Math.hypot(vx, vy) / dt * 16;
+    const targetStr = hovering ? 0 : Math.min(speed / 22, 1);
+    if (speed > 0.4) ang = Math.atan2(vy, vx);
+    str = lerp(str, targetStr, 0.25);
+
+    const stretch = 1 + str * 0.8;
+    const squash  = 1 - str * 0.45;
+
+    disc.style.transform =
+      `translate(${cx}px, ${cy}px) translate(-50%, -50%) ` +
+      `rotate(${ang}rad) scale(${stretch.toFixed(3)}, ${squash.toFixed(3)})`;
+  })();
+
+  // Interactive targets → bloom state
+  const HOVER = 'a, button, .magnetic, .oval-btn, .boundary-pill, .retro-pill, ' +
+                '.fsoc, .w3-row, .now-card, .menu, .close-btn, .skill-tag, ' +
+                '[role="button"], input, textarea, [contenteditable]';
+  const TEXT  = 'input, textarea, [contenteditable]';
+
+  document.addEventListener('mouseover', (e) => {
+    const t = e.target;
+    if (t.closest?.(HOVER))      cursor.classList.add('is-hover');
+    else if (t.closest?.(TEXT))  cursor.classList.add('is-text');
+  });
+  document.addEventListener('mouseout', (e) => {
+    const t = e.target;
+    if (t.closest?.(HOVER))      cursor.classList.remove('is-hover');
+    if (t.closest?.(TEXT))       cursor.classList.remove('is-text');
+  });
+
+  // Tactile press feedback
+  addEventListener('mousedown', () => cursor.classList.add('is-down'));
+  addEventListener('mouseup',   () => cursor.classList.remove('is-down'));
+})();
+</script>
+
+<!-- =============================================
+     NAV
+============================================= -->
+<header class="nav-container">
+    <a href="index.html">
+        <div class="logo">
+            <img src="images\logo2.png" alt="Muns logo">
+        </div>
+    </a>
+    <div class="menu">
+        <img src="images/menu3.png" alt="Open menu" id="menu-icon">
+    </div>
+</header>
+
+
+<!-- =============================================
+     FULLSCREEN MENU
+============================================= -->
+<div class="fullscreen-menu" id="fullscreen-menu">
+    <span class="close-btn" id="close-btn">&times;</span>
+    <ul>
+        <li>
+            <a href="index.html">
+                <span>H</span><span>O</span><span>M</span><span>E</span>
+            </a>
+        </li>
+        <li>
+            <a href="work.html">
+                <span>W</span><span>O</span><span>R</span><span>K</span>
+            </a>
+        </li>
+        <li>
+            <a href="aboutMe.html">
+                <span>A</span><span>B</span><span>O</span><span>U</span><span>T</span>
+            </a>
+        </li>
+        <li>
+            <a href="contact.html">
+                <span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<!-- =============================================
+     SECTION 1 — HERO
+============================================= -->
+<section class="hero2">
+
+    <div class="hero2-top">
+
+        <!-- Left: three Beckan words, each with its pill anchored to it -->
+        <div class="hero2-left">
+            <span class="hero2-word">Designing<button class="retro-pill retro-pill--green"  data-rot="4"  data-speed="0.5" style="top: 24%; left: 82%;">ui/ux designer</button></span>
+            <span class="hero2-word">Coding<button class="retro-pill retro-pill--peach"  data-rot="-3" data-speed="0.8" style="top: 64%; left: 26%;">frontend dev</button></span>
+            <span class="hero2-word">Exploring<button class="retro-pill retro-pill--yellow" data-rot="-6" data-speed="0.6" style="top: 40%; left: 70%;">curious about AI</button></span>
+        </div>
+
+        <!-- Right: bio + button, framed by thin arcs -->
+        <div class="hero2-right">
+            <span class="hero2-arc hero2-arc--tl" aria-hidden="true">
+                <img src="portfolio/hero brack left.svg" alt="">
+            </span>
+            <p class="hero2-bio">I design and code experiences with curiosity and an unhealthy amount of attention to tiny details.</p>
+            <p class="hero2-bio">Beyond frontend and UI, I&rsquo;m exploring the world of ML/DL &mdash; probably with a cup of coffee nearby and too many tabs open.</p>
+            <div class="w3-viewall hero2-cta">
+                <span class="hero2-greeting-text" aria-hidden="true">Hi, I am</span>
+                <a href="work.html" class="oval-btn oval-btn--dark w3-viewall-btn magnetic">View my work</a>
+                <span class="w3-viewall-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg>
+                </span>
+            </div>
+            <span class="hero2-arc hero2-arc--br" aria-hidden="true">
+                <img src="portfolio/hero bracket right.svg" alt="">
+            </span>
+        </div>
+
+    </div><!-- /.hero2-top -->
+
+    <!-- Name row: greeting + Munia + stamp (centered) -->
+    <div class="hero2-name">
+        <span class="munia-wrap">
+            <img src="images/nh/hi-i-am.svg" alt="Hi, I am" class="hero2-greeting">
+            <h1 class="munia">Munia<span class="munia-stamp" aria-hidden="true">
+                <svg viewBox="0 0 140 140">
+                    <defs>
+                        <path id="muniaArc" d="M 21 74 A 49 49 0 0 1 119 74"/>
+                    </defs>
+                    <circle class="disc" cx="70" cy="70" r="56"/>
+                    <circle class="eye" cx="57" cy="63" r="2.7"/>
+                    <circle class="eye" cx="83" cy="63" r="2.7"/>
+                    <path class="smile" d="M 55 75 Q 70 88 85 75"/>
+                    <text class="ring-text"><textPath href="#muniaArc" startOffset="50%" text-anchor="middle">Ideas Brewing</textPath></text>
+                </svg>
+            </span></h1>
+        </span>
+    </div>
+
+
+</section><!-- /.hero2 -->
+
+<!-- Boundary tab: matches work section bg (#AAC6AA), rounded top only -->
+<div class="boundary-pill-wrap">
+    <a href="work.html"
+       class="boundary-pill"
+       style="--pill-bg:#E9E6DC;">
+        More about my work &#8594;
+    </a>
+</div>
+
+
+<!-- =============================================
+     SECTION 2 — WORK
+============================================= -->
+<section class="work-section v3">
+
+    <!-- ===== Title card ("Places & spaces"-style centerpiece) ===== -->
+    <div class="wp-card" id="wpCard">
+
+        <span class="wp-corner-star" aria-hidden="true">✻</span>
+
+        <!-- center image portal -->
+        <div class="wp-portal" id="wpPortal" aria-hidden="true"></div>
+
+        <!-- circular rotating text ring -->
+        <svg class="wp-ring" id="wpRing" viewBox="0 0 300 300" aria-hidden="true">
+            <defs>
+                <path id="wpRingPath" d="M 150 150 m -130 0 a 130 130 0 1 1 260 0 a 130 130 0 1 1 -260 0"/>
+            </defs>
+            <text>
+                <textPath href="#wpRingPath" startOffset="0">
+                    Ideas are brewing · Ideas are brewing · Ideas are brewing ·
+                </textPath>
+            </text>
+        </svg>
+
+        <!-- the title -->
+        <h2 class="wp-title reveal-mask">
+            <span class="row">Work <span class="amp">&amp;</span></span>
+            <span class="row">play</span>
+        </h2>
+
+        <!-- floating decorative stars around the circle -->
+        <span class="wp-deco wp-deco--1" aria-hidden="true">✦</span>
+        <span class="wp-deco wp-deco--2" aria-hidden="true">✺</span>
+        <span class="wp-deco wp-deco--3" aria-hidden="true">✦</span>
+        <span class="wp-deco wp-deco--4" aria-hidden="true">+</span>
+
+    </div>
+
+    <div class="w3-body">
+
+        <!-- Big watermark numeral behind the list -->
+        <div class="w3-watermark" aria-hidden="true">04</div>
+
+        <!-- Header -->
+        <div class="w3-head">
+            <div class="w3-head-left">
+                <span class="w3-favrow reveal-up">
+                    <span class="w3-paren w3-paren--l" aria-hidden="true">(</span>
+                    <span class="w3-head-tag">A Few Favorites <span class="pink">✦</span></span>
+                </span>
+                <h3 class="w3-title reveal-mask">
+                    <em class="w3-fromthe">From the<span class="w3-paren w3-paren--r" aria-hidden="true">)</span></em><br>
+                    <span class="w3-archive">archive<span class="w3-magnify" aria-hidden="true">
+                        <svg viewBox="0 0 48 48"><circle cx="20" cy="20" r="15" fill="none" stroke="#1B1814" stroke-width="3"/><line x1="31" y1="31" x2="44" y2="44" stroke="#1B1814" stroke-width="3" stroke-linecap="round"/></svg>
+                    </span></span>
+                </h3>
+            </div>
+
+            <div class="w3-head-meta reveal-up">
+                <span class="w3-archive-label">[ 04 — Archive ]</span>
+                <div class="w3-viewall">
+                    <a href="work.html" class="oval-btn oval-btn--dark w3-viewall-btn magnetic">View all</a>
+                    <span class="w3-viewall-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    <!-- Project list — hover any row to see its preview floating by your cursor -->
+    <ul class="w3-list" id="w3List">
+
+        <li class="w3-row" data-mock="01">
+            <span class="w3-num">
+                <svg class="w3-num-star" viewBox="0 0 60 60" aria-hidden="true">
+                    <path d="M30 2 L34 12 L44 7 L42 18 L53 18 L45 26 L54 32 L43 35 L48 45 L37 42 L36 53 L30 44 L24 53 L23 42 L12 45 L17 35 L6 32 L15 26 L7 18 L18 18 L16 7 L26 12 Z"/>
+                    <text x="30" y="36">01</text>
+                </svg>
+                <span class="w3-num-frac">/ 04</span>
+            </span>
+            <a href="uicase01.html" class="w3-name">Guide<em>/X</em><span class="w3-arrow">↗</span></a>
+            <span class="w3-tags">UI/UX · Web</span>
+        </li>
+
+        <li class="w3-row" data-mock="02">
+            <span class="w3-num">
+                <svg class="w3-num-star" viewBox="0 0 60 60" aria-hidden="true">
+                    <path d="M30 2 L34 12 L44 7 L42 18 L53 18 L45 26 L54 32 L43 35 L48 45 L37 42 L36 53 L30 44 L24 53 L23 42 L12 45 L17 35 L6 32 L15 26 L7 18 L18 18 L16 7 L26 12 Z"/>
+                    <text x="30" y="36">02</text>
+                </svg>
+                <span class="w3-num-frac">/ 04</span>
+            </span>
+            <a href="uicase02.html" class="w3-name">Nasir <em>Enterprise</em><span class="w3-arrow">↗</span></a>
+            <span class="w3-tags">UI/UX · Web</span>
+        </li>
+
+        <li class="w3-row" data-mock="03">
+            <span class="w3-num">
+                <svg class="w3-num-star" viewBox="0 0 60 60" aria-hidden="true">
+                    <path d="M30 2 L34 12 L44 7 L42 18 L53 18 L45 26 L54 32 L43 35 L48 45 L37 42 L36 53 L30 44 L24 53 L23 42 L12 45 L17 35 L6 32 L15 26 L7 18 L18 18 L16 7 L26 12 Z"/>
+                    <text x="30" y="36">03</text>
+                </svg>
+                <span class="w3-num-frac">/ 04</span>
+            </span>
+            <a href="uicase04.html" class="w3-name"><em>Craving</em><span class="w3-arrow">↗</span></a>
+            <span class="w3-tags">Front-End · Mobile</span>
+        </li>
+
+        <li class="w3-row" data-mock="04">
+            <span class="w3-num">
+                <svg class="w3-num-star" viewBox="0 0 60 60" aria-hidden="true">
+                    <path d="M30 2 L34 12 L44 7 L42 18 L53 18 L45 26 L54 32 L43 35 L48 45 L37 42 L36 53 L30 44 L24 53 L23 42 L12 45 L17 35 L6 32 L15 26 L7 18 L18 18 L16 7 L26 12 Z"/>
+                    <text x="30" y="36">04</text>
+                </svg>
+                <span class="w3-num-frac">/ 04</span>
+            </span>
+            <a href="uicase06.html" class="w3-name">Poster <em>&amp; Banner</em><span class="w3-arrow">↗</span></a>
+            <span class="w3-tags">Print · Visual</span>
+        </li>
+
+    </ul>
+
+    <!-- Bottom CTA -->
+    <div class="w3-footer reveal-up">
+        <a href="work.html" class="w3-cta magnetic">View the full archive ↗</a>
+    </div>
+
+    </div><!-- /.w3-body -->
+
+    <!-- Floating image preview (follows cursor when hovering a row) -->
+    <div class="w3-preview" id="w3Preview" aria-hidden="true">
+        <div class="w3-preview-slot" data-slot="01">
+            <div class="w3-mock w3-mock--01">
+                <img class="mk-img" src="images/guidex03-explore.png" alt="">
+                <span class="mk-shade"></span>
+                <span class="mk-tag">Case 01 · UI/UX</span>
+                <span class="mk-name">Guide/X</span>
+                <span class="mk-meta">AI for fire engineers · 2026</span>
+            </div>
+        </div>
+        <div class="w3-preview-slot" data-slot="02">
+            <div class="w3-mock w3-mock--02">
+                <img class="mk-img" src="images/nasir01-hero.png" alt="">
+                <span class="mk-shade"></span>
+                <span class="mk-tag">Case 02 · Web</span>
+                <span class="mk-name">Nasir Enterprise</span>
+                <span class="mk-meta">Client site · 2026</span>
+            </div>
+        </div>
+        <div class="w3-preview-slot" data-slot="03">
+            <div class="w3-mock w3-mock--03">
+                <img class="mk-img" src="images/craving-cover.png" alt="">
+                <span class="mk-shade"></span>
+                <span class="mk-tag">Case 03 · Mobile</span>
+                <span class="mk-name">Craving</span>
+                <span class="mk-meta">Social food app · 2026</span>
+            </div>
+        </div>
+        <div class="w3-preview-slot" data-slot="04">
+            <div class="w3-mock w3-mock--04">
+                <img class="mk-img" src="images/visual-poster-01.svg" alt="">
+                <span class="mk-shade"></span>
+                <span class="mk-tag">Case 04 · Visual</span>
+                <span class="mk-name">Poster &amp; Banner</span>
+                <span class="mk-meta">Print &amp; Web · 2025</span>
+            </div>
+        </div>
+    </div>
+
+</section><!-- /.work-section -->
+
+<!-- Boundary tab: matches stack section bg (#779292), rounded top only -->
+<div class="boundary-pill-wrap">
+    <a href="aboutMe.html"
+       class="boundary-pill"
+       style="--pill-bg:#779292;">
+        What else am I up to? &#8594;
+    </a>
+</div>
+
+
+<!-- =============================================
+     SECTION 3 — FRONTEND STACK
+============================================= -->
+<section class="stack-section">
+
+    <!-- Header: main copy (cycles) + Next/Back button -->
+    <div class="stack-header">
+        <h2 class="stack-title reveal-up" id="stackMainCopy" data-copy="1">Frontend Stack</h2>
+        <div class="stack-nav">
+            <button type="button" class="oval-btn oval-btn--dark stack-nav-btn magnetic" id="stackNavBtn">Next</button>
+            <span class="stack-nav-arrow" id="stackNavArrow" aria-hidden="true">
+                <svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg>
+            </span>
+        </div>
+    </div>
+
+    <!-- Body: subcopy left + card right -->
+    <div class="stack-body">
+
+        <div class="stack-left reveal-up">
+            <img src="images/nh/new-arrow2.png"
+                 alt=""
+                 class="pixel-art-img"
+                 aria-hidden="true">
+            <p class="stack-subcopy">With a diverse set of technical skills,<br>here&rsquo;s a glimpse of what<br><em>I bring to the table.</em></p>
+        </div>
+
+        <div class="stack-card" id="stackCard">
+            <!-- Skills are rendered dynamically by JS based on stackMainCopy -->
+        </div>
+
+    </div><!-- /.stack-body -->
+
+</section><!-- /.stack-section -->
+
+
+<!-- =============================================
+     SECTION 4 — CONTACT / FOOTER
+============================================= -->
+<footer class="footer2">
+
+    <!-- ambient floating glow blobs -->
+    <span class="footer2-blob footer2-blob--1" aria-hidden="true"></span>
+    <span class="footer2-blob footer2-blob--2" aria-hidden="true"></span>
+
+    <!-- "now" status cards -->
+    <div class="footer2-now">
+        <div class="now-card reveal-up">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--music">&#9834;</span>
+                <div class="now-text">
+                    <span class="now-title">Loner</span>
+                    <span class="now-sub">Teflon Sega</span>
+                    <span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="now-card reveal-up">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--book">&#182;</span>
+                <div class="now-text">
+                    <span class="now-title">The Correspondent</span>
+                    <span class="now-sub">Virginia Evans</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="now-card reveal-up">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--build">&#9874;&#65038;</span>
+                <div class="now-text">
+                    <span class="now-title">Fullstack Bus App</span>
+                    <span class="now-sub">Web · in progress</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer2-main">
+        <h2 class="footer2-heading reveal-up">You have an idea?<br>I got the <em>vision.</em></h2>
+
+        <span class="footer2-touch reveal-up">get in touch</span>
+
+        <div class="footer2-socials reveal-up">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc magnetic" aria-label="Email">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc magnetic" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc magnetic" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer2-bottom">
+        <span>© Munia · 2025</span>
+        <span class="footer2-clock">Local time — <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top ↑</a>
+    </div>
+
+</footer><!-- /.footer2 -->
+
+
+<!-- =============================================
+     SCRIPTS
+============================================= -->
+<script>
+    // Fullscreen menu toggle
+    const menuIcon       = document.getElementById("menu-icon");
+    const fullscreenMenu = document.getElementById("fullscreen-menu");
+    const closeBtn       = document.getElementById("close-btn");
+
+    menuIcon.addEventListener("click", () => {
+        fullscreenMenu.classList.add("active");
+    });
+
+    closeBtn.addEventListener("click", () => {
+        fullscreenMenu.classList.remove("active");
+    });
+
+    // Close menu on Escape key
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") fullscreenMenu.classList.remove("active");
+    });
+
+    // Munia parallax is now handled by GSAP ScrollTrigger (see motion init below).
+
+    // Badge lerp mouse-parallax — ollyo.com style smooth continuous follow
+    (function () {
+        const badges = Array.from(document.querySelectorAll('.hero-badges .badge'));
+        if (!badges.length) return;
+
+        // Per-badge state: current and target positions
+        const state = badges.map(() => ({ cx: 0, cy: 0, tx: 0, ty: 0 }));
+
+        let mouseX = 0, mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            // Normalised mouse offset from centre [-1 … +1]
+            mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        }, { passive: true });
+
+        function lerp(a, b, t) { return a + (b - a) * t; }
+
+        (function loop() {
+            requestAnimationFrame(loop);
+            badges.forEach((badge, i) => {
+                const speed = parseFloat(badge.dataset.speed) || 0.05;
+                // Each badge moves a different distance based on its speed value (acts as depth)
+                state[i].tx = mouseX * speed * 420;
+                state[i].ty = mouseY * speed * 260;
+                // Lerp toward target for silky smooth easing
+                state[i].cx = lerp(state[i].cx, state[i].tx, 0.06);
+                state[i].cy = lerp(state[i].cy, state[i].ty, 0.06);
+                badge.style.transform =
+                    `translate(${state[i].cx.toFixed(2)}px, ${state[i].cy.toFixed(2)}px)`;
+            });
+        })();
+    })();
+
+    /* ---------------------------------------------------------------
+       STACK CAROUSEL
+       3 panels — frontend / ui-ux / ai-data — cycled by the
+       Next button; on the last panel it switches to "Back" and
+       walks the user back the same way.
+    --------------------------------------------------------------- */
+    const stackCard    = document.getElementById("stackCard");
+    const stackMain    = document.getElementById("stackMainCopy");
+    const stackNavBtn  = document.getElementById("stackNavBtn");
+
+    const stackNavArrow = document.getElementById("stackNavArrow");
+
+    const STACK_PANELS = [
+        // 1. Frontend Stack
+        {
+            title: "Frontend Stack",
+            skills: [
+                { label: "CSS",        x: "26%", y: "15%", rot: "-8deg"  },
+                { label: "HTML",       x: "68%", y: "14%", rot: "7deg"   },
+                { label: "React 18",   x: "44%", y: "37%", rot: "-5deg"  },
+                { label: "Typescript", x: "76%", y: "42%", rot: "9deg"   },
+                { label: "Javascript", x: "26%", y: "62%", rot: "-10deg" },
+                { label: "Bootstrap",  x: "62%", y: "84%", rot: "6deg"   },
+            ],
+        },
+        // 2. UI/UX
+        {
+            title: "UI/UX",
+            skills: [
+                { label: "Figma",          x: "27%", y: "15%", rot: "-7deg"  },
+                { label: "Wireframing",    x: "69%", y: "16%", rot: "8deg"   },
+                { label: "Prototyping",    x: "42%", y: "38%", rot: "-11deg" },
+                { label: "Framer",         x: "76%", y: "44%", rot: "7deg"   },
+                { label: "Design Systems", x: "30%", y: "63%", rot: "-9deg"  },
+                { label: "User Research",  x: "60%", y: "84%", rot: "6deg"   },
+            ],
+        },
+        // 3. Programming & AI
+        {
+            title: "Programming & AI",
+            skills: [
+                { label: "Python",           x: "28%", y: "15%", rot: "-8deg"  },
+                { label: "SQL",              x: "70%", y: "17%", rot: "8deg"   },
+                { label: "Machine Learning", x: "44%", y: "40%", rot: "-11deg" },
+                { label: "Deep Learning",    x: "72%", y: "62%", rot: "9deg"   },
+                { label: "Java",             x: "30%", y: "82%", rot: "-7deg"  },
+            ],
+        },
+    ];
+
+    let stackIndex = 0;
+    // direction tracks which way the user is currently walking through
+    // the carousel — once they reach the last panel the button flips to
+    // "Back" and stays "Back" until they walk all the way back to panel 0.
+    let stackDirection = "forward";
+
+    function renderSkills(skills) {
+        if (!stackCard) return;
+        stackCard.innerHTML = "";
+        skills.forEach((s, i) => {
+            const tag = document.createElement("span");
+            tag.className = "skill-tag";
+            tag.style.setProperty("--x",   s.x);
+            tag.style.setProperty("--y",   s.y);
+            tag.style.setProperty("--rot", s.rot);
+            tag.style.animationDelay = (0.05 + i * 0.15) + "s";
+            tag.textContent = s.label;
+            stackCard.appendChild(tag);
+        });
+        // Trigger the fall-in animation
+        stackCard.classList.remove("in-view");
+        // force reflow so the animation restarts
+        void stackCard.offsetWidth;
+        stackCard.classList.add("in-view");
+    }
+
+    function renderStackPanel(idx) {
+        const panel = STACK_PANELS[idx];
+        if (!panel) return;
+        if (stackMain) {
+            stackMain.textContent = panel.title;
+            stackMain.dataset.copy = String(idx + 1);
+        }
+        renderSkills(panel.skills);
+        const isBack = stackDirection === "backward";
+        if (stackNavBtn) {
+            stackNavBtn.textContent = isBack ? "Back" : "Next";
+            stackNavBtn.dataset.mode = isBack ? "back" : "next";
+        }
+        if (stackNavArrow) {
+            stackNavArrow.classList.toggle("is-back", isBack);
+        }
+    }
+
+    if (stackNavBtn) {
+        stackNavBtn.addEventListener("click", () => {
+            if (stackDirection === "forward") {
+                if (stackIndex < STACK_PANELS.length - 1) {
+                    stackIndex += 1;
+                }
+                // Reached the last panel — next click should go backward
+                if (stackIndex === STACK_PANELS.length - 1) {
+                    stackDirection = "backward";
+                }
+            } else {
+                if (stackIndex > 0) {
+                    stackIndex -= 1;
+                }
+                // Reached the first panel — next click should go forward
+                if (stackIndex === 0) {
+                    stackDirection = "forward";
+                }
+            }
+            renderStackPanel(stackIndex);
+        });
+    }
+
+    // Initial render
+    renderStackPanel(stackIndex);
+
+    // Skill tag "fall into the box" animation on first scroll into view
+    if (stackCard && "IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    stackCard.classList.add("in-view");
+                    io.unobserve(stackCard);
+                }
+            });
+        }, { threshold: 0.25 });
+        io.observe(stackCard);
+    } else if (stackCard) {
+        stackCard.classList.add("in-view");
+    }
+</script>
+
+
+<!-- =============================================
+     MOTION ENGINE — chungiyoo-style
+     Lenis smooth scroll + GSAP ScrollTrigger:
+       • smooth inertia scrolling
+       • hero intro reveal on load
+       • mask/clip + slide-up reveals on scroll
+       • slow parallax drift on the big Munia name
+       • magnetic buttons that pull toward the cursor
+     Degrades gracefully: if libs/JS fail, html.anim
+     CSS fallbacks keep everything visible.
+============================================= -->
+<script>
+(function () {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasGSAP  = typeof window.gsap !== 'undefined';
+    const hasLenis = typeof window.Lenis !== 'undefined';
+
+    // If the motion libs didn't load, reveal everything and bail.
+    if (!hasGSAP || reduceMotion) {
+        document.documentElement.classList.remove('anim');
+        return;
+    }
+
+    /* ---------- 1. Lenis smooth scroll, driven by GSAP ticker ---------- */
+    let lenis = null;
+    if (hasLenis) {
+        lenis = new Lenis({
+            duration: 1.15,
+            // chungiyoo-ish slow expo ease-out
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            touchMultiplier: 1.6,
+        });
+        gsap.ticker.add((time) => lenis.raf(time * 1000));
+        gsap.ticker.lagSmoothing(0);
+        window.lenis = lenis;   // expose for back-to-top etc.
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+    if (lenis) {
+        lenis.on('scroll', ScrollTrigger.update);
+        // Smooth in-page anchor links through the existing Lenis instance
+        document.querySelectorAll('a[href^="#"]').forEach((a) => {
+            a.addEventListener('click', (e) => {
+                const id = a.getAttribute('href').slice(1);
+                const target = id && document.getElementById(id);
+                if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -40 }); }
+            });
+        });
+    }
+
+    const EASE = 'expo.out';
+
+    /* ---------- 2. Hero intro timeline (on load) ---------- */
+    const heroLeft = document.querySelector('.hero2-left') || document.querySelector('.hero-left-img');
+    // Built paused — plays only once the page-load curtain lifts.
+    const introTl = gsap.timeline({ paused: true, defaults: { ease: EASE } });
+
+    let introStarted = false;
+    function playIntro() {
+        if (introStarted) return;
+        introStarted = true;
+        introTl.play();
+    }
+    document.addEventListener('cy:curtain-lift', playIntro, { once: true });
+    // Fallbacks: if the curtain was skipped/removed or its event was
+    // missed, never leave the hero stuck hidden.
+    if (!document.getElementById('cy-curtain')) playIntro();
+    window.addEventListener('load', () => setTimeout(playIntro, 2600), { once: true });
+
+    if (heroLeft) {
+        introTl.fromTo(heroLeft,
+            { clipPath: 'inset(0 0 100% 0)', y: 40 },
+            { clipPath: 'inset(0 0 0% 0)', y: 0, duration: 1.4 },
+            0.15);
+        heroLeft.classList.remove('reveal-mask'); // hand off from CSS to GSAP
+    }
+    // Greeting + Munia name rise in just after the headline
+    const muniaEl = document.querySelector('.munia') || document.querySelector('.munia-svg');
+    const greetEl = document.querySelector('.hero2-greeting') || document.querySelector('.hero-greeting');
+    if (muniaEl) {
+        introTl.fromTo(muniaEl, { y: 80, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2 }, 0.55);
+    }
+    if (greetEl) {
+        introTl.fromTo(greetEl, { y: 20, opacity: 0, rotation: -30 },
+            { y: 0, opacity: 1, rotation: -16, duration: 0.9 }, 0.9);
+    }
+
+    /* ---------- 3. Scroll reveals ---------- */
+    // Mask reveals (clip wipe upward) — big editorial SVGs
+    gsap.utils.toArray('.reveal-mask').forEach((el) => {
+        gsap.fromTo(el,
+            { clipPath: 'inset(0 0 100% 0)', y: 60 },
+            {
+                clipPath: 'inset(0 0 0% 0)', y: 0,
+                duration: 1.3, ease: EASE,
+                scrollTrigger: { trigger: el, start: 'top 85%' },
+            });
+    });
+
+    // Slide-up + fade reveals — grouped rows / text
+    gsap.utils.toArray('.reveal-up').forEach((el) => {
+        gsap.fromTo(el,
+            { y: 50, opacity: 0 },
+            {
+                y: 0, opacity: 1,
+                duration: 1.0, ease: EASE,
+                scrollTrigger: { trigger: el, start: 'top 88%' },
+            });
+    });
+
+    gsap.utils.toArray('.reveal-fade').forEach((el) => {
+        gsap.fromTo(el, { opacity: 0 },
+            { opacity: 1, duration: 1.1, ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 90%' } });
+    });
+
+    /* ---------- 4. Parallax drift on the Munia name ---------- */
+    if (muniaEl) {
+        gsap.to(muniaEl, {
+            yPercent: -14,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '.hero-name',
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: 1,
+            },
+        });
+    }
+
+    /* ---------- 5. Magnetic buttons ---------- */
+    const lerp = (a, b, t) => a + (b - a) * t;
+    document.querySelectorAll('.magnetic').forEach((el) => {
+        let bx = 0, by = 0, tx = 0, ty = 0, raf = null, hovering = false;
+        const STRENGTH = 0.35;
+
+        function frame() {
+            bx = lerp(bx, tx, 0.18);
+            by = lerp(by, ty, 0.18);
+            el.style.transform = `translate(${bx.toFixed(2)}px, ${by.toFixed(2)}px)`;
+            if (Math.abs(bx - tx) > 0.1 || Math.abs(by - ty) > 0.1 || hovering) {
+                raf = requestAnimationFrame(frame);
+            } else {
+                el.style.transform = '';
+                raf = null;
+            }
+        }
+        function start() { hovering = true; if (!raf) raf = requestAnimationFrame(frame); }
+        el.addEventListener('mouseenter', start);
+        el.addEventListener('mousemove', (e) => {
+            const r = el.getBoundingClientRect();
+            tx = (e.clientX - (r.left + r.width / 2)) * STRENGTH;
+            ty = (e.clientY - (r.top + r.height / 2)) * STRENGTH;
+            start();
+        });
+        el.addEventListener('mouseleave', () => { hovering = false; tx = 0; ty = 0; });
+    });
+
+    /* Recalculate triggers once everything (fonts/SVGs) has painted */
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+})();
+</script>
+
+
+<!-- =============================================
+     WORK v3 — cursor-follow preview controller
+============================================= -->
+<script>
+(function () {
+    const list    = document.getElementById('w3List');
+    const preview = document.getElementById('w3Preview');
+    if (!list || !preview) return;
+    const slots = Array.from(preview.querySelectorAll('.w3-preview-slot'));
+    const rows  = Array.from(list.querySelectorAll('.w3-row'));
+
+    // Skip the hover-preview on touch / no-pointer devices
+    const ok = matchMedia('(hover: hover) and (pointer: fine)').matches
+            && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!ok) { preview.remove(); return; }
+
+    let active = false;
+    let mx = innerWidth / 2, my = innerHeight / 2;
+    let cx = mx, cy = my;
+
+    addEventListener('mousemove', (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+
+    function setSlot(id) {
+        slots.forEach((s) => s.classList.toggle('is-active', s.dataset.slot === id));
+    }
+
+    rows.forEach((row) => {
+        row.addEventListener('mouseenter', () => {
+            setSlot(row.dataset.mock);
+            active = true;
+            preview.classList.add('is-on');
+        });
+        row.addEventListener('mouseleave', () => {
+            active = false;
+            preview.classList.remove('is-on');
+        });
+    });
+
+    (function loop() {
+        requestAnimationFrame(loop);
+        // Lerp cursor → preview for smooth trail
+        cx += (mx - cx) * 0.18;
+        cy += (my - cy) * 0.18;
+        if (active) {
+            preview.style.transform =
+                `translate(${cx}px, ${cy}px) translate(-50%, -50%) scale(1)`;
+        }
+    })();
+})();
+</script>
+
+
+<!-- =============================================
+     WORK title-card — scroll morph (oval → circle,
+     side numbers slide in, ring fades in)
+============================================= -->
+<script>
+(function () {
+    if (typeof window.gsap === 'undefined' || typeof window.ScrollTrigger === 'undefined') return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const card = document.getElementById('wpCard');
+    if (!card) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: card,
+            start: 'top 70%',
+            end: 'center 35%',
+            scrub: 1,
+        },
+    });
+
+    // Oval widens toward a circle
+    tl.fromTo('#wpPortal', { '--portal-sx': 1 }, { '--portal-sx': 1.55, ease: 'none' }, 0);
+    // Ring of text fades in
+    tl.fromTo('#wpRing',   { '--ring-opacity': 0 }, { '--ring-opacity': 1, ease: 'none' }, 0);
+})();
+</script>
+
+
+<!-- Falling smiley overlay (animates from hero smiley → work circle) -->
+<div id="fallSmiley" aria-hidden="true">
+    <svg class="fs-smiley" viewBox="0 0 140 140">
+        <defs><path id="fsArc" d="M 21 74 A 49 49 0 0 1 119 74"/></defs>
+        <circle class="fs-disc" cx="70" cy="70" r="56"/>
+        <circle class="fs-eye" cx="57" cy="63" r="2.7"/>
+        <circle class="fs-eye" cx="83" cy="63" r="2.7"/>
+        <path class="fs-smile" d="M 55 75 Q 70 88 85 75"/>
+        <text class="fs-text"><textPath href="#fsArc" startOffset="50%" text-anchor="middle">Ideas Brewing</textPath></text>
+    </svg>
+    <div class="fs-blue"></div>
+</div>
+
+<!-- =============================================
+     SMILEY FALL — hero smiley falls & morphs into the work circle
+============================================= -->
+<script>
+(function () {
+    if (typeof window.gsap === 'undefined' || typeof window.ScrollTrigger === 'undefined') return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const fall   = document.getElementById('fallSmiley');
+    const smiley  = document.querySelector('.munia-stamp');
+    const portal  = document.getElementById('wpPortal');
+    const card    = document.getElementById('wpCard');
+    if (!fall || !smiley || !portal || !card) return;
+
+    const fsSmiley = fall.querySelector('.fs-smiley');
+    const fsBlue   = fall.querySelector('.fs-blue');
+    const BASE = 116; // px, the clone's css size
+
+    // document-space centres + target scale, recomputed on refresh/resize
+    let sx = 0, sy = 0, px = 0, py = 0, endScale = 1;
+    function measure() {
+        const sr = smiley.getBoundingClientRect();
+        const pr = portal.getBoundingClientRect();
+        const X = window.scrollX, Y = window.scrollY;
+        sx = sr.left + X + sr.width  / 2;
+        sy = sr.top  + Y + sr.height / 2;
+        px = pr.left + X + pr.width  / 2;
+        py = pr.top  + Y + pr.height / 2;
+        const target = Math.min(pr.width, pr.height) || 320;
+        endScale = target / BASE;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Render the flying clone at morph progress t (0 = smiley resting in the hero,
+    // 1 = committed into the work-section circle). Positions are read LIVE each
+    // frame so it still lands on the circle even while the page keeps moving.
+    function render(t) {
+        if (t <= 0.001) {                 // resting at the top — smiley sits in the hero
+            fall.style.opacity = '0';
+            smiley.style.opacity = '';
+            portal.style.opacity = '';
+            return;
+        }
+        if (t >= 0.999) {                 // COMMITTED — it now lives in the circle, so the
+            fall.style.opacity = '0';     // hero smiley stays hidden (it doesn't reappear)
+            smiley.style.opacity = '0';
+            portal.style.opacity = '';    // the real circle (portal) is shown
+            return;
+        }
+        // mid-flight: drive the fixed clone from the live smiley → live circle
+        const sr = smiley.getBoundingClientRect();
+        const pr = portal.getBoundingClientRect();
+        const sxv = sr.left + sr.width / 2,  syv = sr.top + sr.height / 2;
+        const pxv = pr.left + pr.width / 2,  pyv = pr.top + pr.height / 2;
+        const eScale = (Math.min(pr.width, pr.height) || 320) / BASE;
+        fall.style.opacity = '1';
+        smiley.style.opacity = '0';
+        portal.style.opacity = '0';
+        const vx = sxv + (pxv - sxv) * t;
+        const vy = syv + (pyv - syv) * t;
+        const scale = 1 + (eScale - 1) * t;
+        const rot = (1 - t) * -12;
+        fall.style.transform =
+            `translate(${vx.toFixed(2)}px, ${vy.toFixed(2)}px) translate(-50%, -50%) ` +
+            `scale(${scale.toFixed(3)}) rotate(${rot.toFixed(2)}deg)`;
+        // cream face stays solid while the blue disc fades in on top (never a faint ghost)
+        let bp = (t - 0.18) / 0.5;
+        bp = Math.min(1, Math.max(0, bp));
+        bp = bp * bp * (3 - 2 * bp);
+        fsSmiley.style.opacity = '1';
+        fsBlue.style.opacity   = String(bp);
+    }
+
+    // Time-based COMMIT: once you scroll past the threshold the smiley flies into the
+    // circle on its own clock (0.6s) and STAYS committed — pausing can't freeze it in
+    // the gap. Scrolling back up past the threshold returns it to the hero.
+    const morph = { t: 0 };
+    let tween = null;
+    function go(to) {
+        if (tween) tween.kill();
+        tween = gsap.to(morph, {
+            t: to, duration: 0.6, ease: 'power2.out',
+            onUpdate: () => render(morph.t),
+            onComplete: () => render(morph.t),
+        });
+    }
+
+    ScrollTrigger.create({
+        trigger: '.hero2-name',
+        start: 'center center',     // the point where the smiley commits into the circle
+        onRefresh: measure,
+        onEnter: () => go(1),       // scrolled down past it → fly into the circle
+        onLeaveBack: () => go(0),   // scrolled back up → smiley returns to the hero
+    });
+
+    // pick the right state on load (e.g. if the page opens already scrolled down)
+    function initState() {
+        const el = document.querySelector('.hero2-name'); if (!el) return;
+        const r = el.getBoundingClientRect();
+        morph.t = (r.top + r.height / 2) < window.innerHeight / 2 ? 1 : 0;
+        render(morph.t);
+    }
+    window.addEventListener('load', () => { measure(); initState(); });
+})();
+</script>
+
+
+<!-- =============================================
+     HERO retro pills — ollyo-style mouse-drift parallax + click spin
+============================================= -->
+<script>
+(function () {
+    const pills = Array.from(document.querySelectorAll('.retro-pill'));
+    if (!pills.length) return;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // normalised global mouse offset from screen centre [-1 … +1]
+    let mx = 0, my = 0;
+    if (!reduce) {
+        document.addEventListener('mousemove', (e) => {
+            mx = (e.clientX / window.innerWidth  - 0.5) * 2;
+            my = (e.clientY / window.innerHeight - 0.5) * 2;
+        }, { passive: true });
+    }
+
+    const state = pills.map((pill) => ({
+        baseRot: parseFloat(pill.dataset.rot) || 0,
+        // each pill drifts a different distance → sense of depth
+        speed: parseFloat(pill.dataset.speed) || 0.6,
+        cx: 0, cy: 0,
+        curRot: parseFloat(pill.dataset.rot) || 0,
+        targetRot: parseFloat(pill.dataset.rot) || 0,
+        hover: 0, hoverT: 0,
+    }));
+
+    /* touch / small screens: render a static tilt only — no rAF parallax and no
+       compositor layer — so the tiny pill text stays crisp instead of blurring */
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (reduce || !finePointer) {
+        pills.forEach((pill, i) => { pill.style.transform = `rotate(${state[i].baseRot}deg)`; });
+        return;
+    }
+
+    pills.forEach((pill, i) => {
+        pill.style.transform = `translate(0,0) rotate(${state[i].baseRot}deg)`;
+        pill.addEventListener('mouseenter', () => { state[i].hoverT = 1; });
+        pill.addEventListener('mouseleave', () => { state[i].hoverT = 0; });
+        pill.addEventListener('click', () => { state[i].targetRot += 360; });
+    });
+
+    (function loop() {
+        requestAnimationFrame(loop);
+        pills.forEach((pill, i) => {
+            const s = state[i];
+            // global drift + a little extra lift while hovered
+            s.hover = lerp(s.hover, s.hoverT, 0.12);
+            const range = 70 * s.speed * (1 + s.hover * 0.6);
+            const tx = mx * range;
+            const ty = my * range * 0.7;
+            s.cx = lerp(s.cx, tx, 0.07);
+            s.cy = lerp(s.cy, ty, 0.07);
+            s.curRot = lerp(s.curRot, s.targetRot, 0.1);
+            pill.style.transform =
+                `translate(${s.cx.toFixed(2)}px, ${s.cy.toFixed(2)}px) rotate(${s.curRot.toFixed(2)}deg)`;
+        });
+    })();
+})();
+</script>
+
+
+<!-- =============================================
+     FOOTER — live clock + back to top
+============================================= -->
+<script>
+(function () {
+    const clock = document.getElementById('footClock');
+    if (clock) {
+        const tick = () => {
+            clock.textContent = new Date().toLocaleTimeString([], {
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            });
+        };
+        tick();
+        setInterval(tick, 1000);
+    }
+
+    const top = document.getElementById('footTop');
+    if (top) {
+        top.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (window.lenis) window.lenis.scrollTo(0);
+            else window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+})();
+</script>
+
+</body>
+</html>

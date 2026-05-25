@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work | Munia</title>
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+    <link rel="stylesheet" href="work.css">
+
+    <!-- Fonts used by the homepage button + footer -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cursor.css">
+
+    <style>
+        @font-face { font-family: adriana; src: url(fonts/AdrianagabrielleRegular-5yXXG.otf); }
+
+        /* =============================================
+           OVAL + PIXEL-ARROW BUTTON (from homepage)
+        ============================================= */
+        .w3-viewall {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .oval-btn {
+            position: relative;
+            display: inline-block;
+            border: none;
+            padding: 0;
+            width: 168px;
+            height: 60px;
+            color: #2a2a2a;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+            white-space: nowrap;
+            background: #B6DDD8;
+            border-radius: 50%;
+            transition: background-color 0.3s ease, color 0.25s ease;
+        }
+        .oval-btn::before, .oval-btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border: 1.5px solid currentColor;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+        }
+        .oval-btn::before { transform: rotate(5deg); }
+        .oval-btn::after  { transform: rotate(-5deg); }
+        .oval-btn:hover { background-color: #A0CFC9; }
+        .oval-btn:hover::before { transform: rotate(0deg); }
+        .oval-btn:hover::after  { transform: rotate(0deg); }
+        .w3-viewall-arrow {
+            display: inline-flex;
+            width: 56px;
+            transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+        }
+        .w3-viewall-arrow img { width: 100%; height: auto; display: block; }
+        .w3-viewall-arrow svg { width: 100%; height: 22px; display: block; }
+        .w3-viewall-arrow path { fill: none; stroke: #2a2a2a; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .w3-viewall:hover .w3-viewall-arrow { transform: translateX(8px); }
+
+        /* =============================================
+           FOOTER v2 — dark close (from homepage)
+        ============================================= */
+        .footer2 {
+            position: relative;
+            background: #292623;          /* soft black, not pitch black */
+            color: #F6F6E7;
+            padding: 64px 60px 0;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .footer2 * { box-sizing: border-box; }
+        .footer2 a { color: inherit; }    /* kill bootstrap's blue link colour */
+        /* ambient gradient blobs removed per request */
+        .footer2-blob { display: none; }
+
+        .footer2-now { position: relative; z-index: 1; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding-bottom: 48px; }
+        .now-card {
+            display: flex; flex-direction: column; gap: 16px;
+            width: 300px; max-width: 100%;
+            padding: 18px 22px; border-radius: 18px;
+            background: rgba(246,246,231,0.05);
+            border: 1px solid rgba(246,246,231,0.15);
+            transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .now-card:hover { transform: translateY(-7px); background: rgba(246,246,231,0.09); border-color: rgba(255,147,203,0.5); }
+        .now-label { align-self: flex-end; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .now-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF93CB; animation: footPulse 2.2s ease-in-out infinite; }
+        .now-body { display: flex; align-items: center; gap: 16px; }
+        .now-icon { flex: 0 0 auto; width: 52px; height: 52px; border-radius: 13px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; color: #1B1814; }
+        .now-icon--music { background: #C9B6E4; }
+        .now-icon--book  { background: #A8D0A0; }
+        .now-icon--build { background: #F0B89B; }
+        .now-text { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .now-title { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 500; color: #F6F6E7; line-height: 1.1; }
+        .now-sub { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(246,246,231,0.6); }
+        .now-meta { display: inline-flex; align-items: center; gap: 8px; margin-top: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(246,246,231,0.55); }
+        .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+        .eq i { width: 3px; height: 5px; background: #FF93CB; border-radius: 1px; animation: eqBar 0.9s ease-in-out infinite; }
+        .eq i:nth-child(2) { animation-delay: 0.18s; }
+        .eq i:nth-child(3) { animation-delay: 0.36s; }
+        .eq i:nth-child(4) { animation-delay: 0.54s; }
+        @keyframes eqBar { 0%,100% { height: 4px; } 50% { height: 14px; } }
+
+        .footer2-main { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 44px; }
+        .footer2-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #FF93CB; margin: 0 0 22px; display: flex; align-items: center; gap: 10px; }
+        @keyframes footPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.5} }
+        .footer2-heading { font-family: afteris, 'Newsreader', serif; font-weight: 400; font-size: clamp(34px, 5vw, 76px); line-height: 1.05; color: #F6F6E7; margin: 0 0 16px; }
+        .footer2-heading em { font-style: normal; color: #FF93CB; display: inline-block; animation: footWiggle 5s ease-in-out infinite; transform-origin: center bottom; }
+        @keyframes footWiggle { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+        .footer2-touch { font-family: adriana, cursive; font-size: clamp(26px, 2.6vw, 40px); color: #FF93CB; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .footer2-touch-arrow { display: inline-block; font-family: 'Newsreader', serif; animation: footTouchBob 1.5s ease-in-out infinite; }
+        @keyframes footTouchBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+        .footer2-socials { display: flex; gap: 22px; }
+        .fsoc {
+            width: 64px; height: 64px; border-radius: 50%;
+            border: 1.5px solid rgba(246,246,231,0.45);
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #F6F6E7; background: transparent;
+            transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            will-change: transform;
+        }
+        .fsoc svg { width: 24px; height: 24px; fill: currentColor; }
+        .fsoc:hover { background: #FF93CB; border-color: #FF93CB; color: #1B1814; transform: translateY(-9px) rotate(8deg); }
+        .footer2-bottom { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 24px 0 32px; border-top: 1px solid rgba(246,246,231,0.18); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .footer2-bottom a { border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+        .footer2-bottom a:hover { border-color: rgba(246,246,231,0.7); }
+
+        @media (max-width: 768px) {
+            .footer2 { padding: 56px 18px 0; }
+            .footer2-main { padding-bottom: 40px; }
+            .footer2-now { gap: 8px; flex-wrap: nowrap; padding-bottom: 40px; }
+            .now-card { flex: 1 1 0; min-width: 0; width: auto; max-width: none; padding: 12px 10px; gap: 8px; border-radius: 14px; overflow: hidden; }
+            .now-label { font-size: 8px; letter-spacing: 0.08em; gap: 5px; }
+            .now-body { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .now-icon { width: 36px; height: 36px; font-size: 17px; border-radius: 9px; }
+            .now-text { min-width: 0; width: 100%; }
+            .now-title { font-size: 12.5px; line-height: 1.14; white-space: normal; word-break: break-word; }
+            .now-sub { font-size: 9px; white-space: normal; word-break: break-word; }
+            .now-meta { font-size: 8px; gap: 5px; }
+            .eq { height: 9px; }
+            .footer2-heading { font-size: clamp(30px, 8vw, 54px); }
+            .fsoc { width: 54px; height: 54px; }
+            .footer2-bottom { flex-direction: column; gap: 8px; text-align: center; }
+        }
+
+        /* =============================================
+           ELASTIC "PLUCKED STRING" COLUMN DIVIDERS
+        ============================================= */
+        /* nav — match the homepage (transparent overlay, same sizing) */
+        .nav-container {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 500;
+            padding: 14px 28px;
+            background-color: transparent;
+        }
+        .logo img { max-height: 72px; width: auto; }
+        .menu img { max-height: 48px; cursor: pointer; }
+        @media (max-width: 1024px) {
+            .logo img { max-height: 60px; }
+            .menu img { max-height: 40px; }
+        }
+        @media (max-width: 768px) {
+            .nav-container { padding: 10px 16px; }
+        }
+
+        /* a substantial section, but content-driven height with a minimum — so
+           the columns don't stretch taller than they need on tall viewports */
+        .main-box { margin-top: 100px; margin-bottom: clamp(60px, 9vh, 120px); height: auto; min-height: 72vh; }
+
+        /* equal-height titles → the subheadings below them line up across columns */
+        .title {
+            min-height: 2.6em;
+            align-items: flex-start;
+        }
+        /* keep the title + copy + button grouped and vertically centred, so the
+           button sits just below the copy instead of being stretched to the
+           bottom edge of the column (which left a big gap on laptop / laptop-L) */
+        .work-type { justify-content: center; }
+        .work-type .button-container { margin-top: clamp(2.2rem, 6vh, 4rem); }
+
+        /* swap the static border for an animated SVG line */
+        .work-type { border-right: none; overflow: visible; }
+        .wt-divider {
+            position: absolute;
+            top: 0; right: 0;
+            width: 44px; height: 100%;
+            overflow: visible;
+            pointer-events: none;
+            z-index: 4;
+        }
+        .wt-divider-path {
+            fill: none;
+            stroke: #1B1814;
+            stroke-width: 1.6;
+            stroke-linecap: round;
+        }
+
+        /* tablet & mobile → stack the 3 columns into one (the big display titles
+           need the full width; 3 narrow columns would crowd them) */
+        @media (max-width: 900px) {
+            .wt-divider { display: none; }
+            .main-box {
+                flex-direction: column;
+                width: 90vw;
+                max-width: 100%;
+                height: auto;
+                min-height: 0;
+                margin-top: 88px;
+                box-sizing: border-box;
+            }
+            .work-type {
+                width: 100%;
+                max-width: 100%;
+                min-height: auto;
+                justify-content: center;
+                padding: 2.4rem 0.6rem 2.8rem;
+                border-right: none;
+                border-bottom: 1px solid rgba(27,24,20,0.5);
+                box-sizing: border-box;
+            }
+            .work-type:last-child { border-bottom: none; }
+            .title { min-height: 0; padding-top: 0; font-size: clamp(2.4rem, 8vw, 3.4rem); }
+            .title-info { min-height: 0; padding-top: 0.7em; }
+            .work-type .button-container { margin-top: 1.6rem; }
+            /* the CTA was oversized once columns go full-width — shrink it */
+            .oval-btn { width: 138px; height: 50px; line-height: 50px; font-size: 12px; }
+            .w3-viewall-arrow { width: 42px; }
+        }
+
+        /* narrow 3-column range (small laptops / iPad landscape): ease the title
+           & copy so the long words fit and every copy stays 2 lines + aligned */
+        @media (min-width: 901px) and (max-width: 1024px) {
+            .title { font-size: clamp(2.4rem, 5.4vw, 3.6rem); }
+            .title-info { font-size: clamp(1.2rem, 2.2vw, 1.55rem); }
+            .oval-btn { width: 150px; height: 56px; line-height: 56px; }
+            .w3-viewall-arrow { width: 46px; }
+        }
+    </style>
+
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Nav -->
+<div class="nav-container">
+    <a href="index.html"> 
+        <div class="logo">
+        <img src="images/logo2.png" alt="Website Logo">
+    </div>
+</a>
+    <div class="menu">
+        <img src="images/menu3.png" alt="Menu Icon" id="menu-icon">
+    </div>
+</div>
+
+<!-- Full-Screen Menu -->
+<div class="fullscreen-menu" id="fullscreen-menu">
+    <span class="close-btn" id="close-btn">&times;</span>
+    <ul>
+        <li>
+            <a href="index.html">
+                <span>H</span><span>O</span><span>M</span><span>E</span>
+            </a>
+        </li>
+        <li>
+            <a href="work.html">
+                <span>W</span><span>O</span><span>R</span><span>K</span>
+            </a>
+        </li>
+        <li>
+            <a href="aboutMe.html">
+                <span>A</span><span>B</span><span>O</span><span>U</span><span>T</span>
+            </a>
+        </li>
+        <li>
+            <a href="contact.html">
+                <span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+   
+
+    
+
+
+    <div class="main-box">
+
+
+       <div class="work-type">
+           <svg class="wt-divider" viewBox="0 0 44 1000" preserveAspectRatio="none" aria-hidden="true"><path class="wt-divider-path" d="M 42 0 Q 42 500 42 1000" vector-effect="non-scaling-stroke"/></svg>
+           <div class="title"> UI <br> UX</div>
+           <div class="title-info">Browse my case studies, prototypes &amp; UI/UX designs</div>
+           
+           <div class="button-container">
+            <div class="w3-viewall">
+                <a href="uiuxcollection.html" class="oval-btn magnetic">Discover</a>
+                <span class="w3-viewall-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+            </div>
+        </div>
+          
+
+           
+       </div>
+
+       <div class="work-type">
+           <svg class="wt-divider" viewBox="0 0 44 1000" preserveAspectRatio="none" aria-hidden="true"><path class="wt-divider-path" d="M 42 0 Q 42 500 42 1000" vector-effect="non-scaling-stroke"/></svg>
+        <div class="title">FRONT<br>END</div>
+           <div class="title-info">Explore a collection of my frontend websites</div>
+
+           <div class="button-container">
+            <div class="w3-viewall">
+                <a href="frontendwork.html" class="oval-btn magnetic">Discover</a>
+                <span class="w3-viewall-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+            </div>
+        </div>
+          
+          
+       </div>
+
+       <div class="work-type">
+           <svg class="wt-divider" viewBox="0 0 44 1000" preserveAspectRatio="none" aria-hidden="true"><path class="wt-divider-path" d="M 42 0 Q 42 500 42 1000" vector-effect="non-scaling-stroke"/></svg>
+           <div class="title">DIGITAL<br> MARKETING</div>
+           <div class="title-info">A glimpse of my content &amp; copywriting range</div>
+
+           <div class="button-container">
+            <div class="w3-viewall">
+                <a href="marketing.html" class="oval-btn magnetic">Discover</a>
+                <span class="w3-viewall-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+            </div>
+        </div>
+          
+       </div>
+
+    </div>
+  
+
+
+ <!-- FOOTER (shared with homepage) -->
+
+<footer class="footer2">
+
+    <span class="footer2-blob footer2-blob--1" aria-hidden="true"></span>
+    <span class="footer2-blob footer2-blob--2" aria-hidden="true"></span>
+
+    <div class="footer2-now">
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--music">&#9834;</span>
+                <div class="now-text">
+                    <span class="now-title">Loner</span>
+                    <span class="now-sub">Teflon Sega</span>
+                    <span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span>
+                </div>
+            </div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--book">&#182;</span>
+                <div class="now-text">
+                    <span class="now-title">The Correspondent</span>
+                    <span class="now-sub">Virginia Evans</span>
+                </div>
+            </div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--build">&#9874;&#65038;</span>
+                <div class="now-text">
+                    <span class="now-title">Fullstack Bus App</span>
+                    <span class="now-sub">Web · in progress</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer2-main">
+        <h2 class="footer2-heading">You have an idea?<br>I got the <em>vision.</em></h2>
+        <span class="footer2-touch">get in touch</span>
+        <div class="footer2-socials">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc magnetic" aria-label="Email">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc magnetic" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc magnetic" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer2-bottom">
+        <span>© Munia · 2025</span>
+        <span class="footer2-clock">Local time — <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top ↑</a>
+    </div>
+
+</footer><!-- /.footer2 -->
+
+
+
+
+
+    </section>
+
+
+
+
+
+<script>
+    // Menu toggle logic
+const menuIcon = document.getElementById("menu-icon");
+const fullscreenMenu = document.getElementById("fullscreen-menu");
+const closeBtn = document.getElementById("close-btn");
+
+// Open the fullscreen menu
+menuIcon.addEventListener("click", () => {
+    fullscreenMenu.classList.add("active");
+});
+
+// Close the fullscreen menu
+closeBtn.addEventListener("click", () => {
+    fullscreenMenu.classList.remove("active");
+});
+
+// Elastic "plucked string" column dividers
+(function () {
+    const cols = Array.from(document.querySelectorAll('.work-type'));
+    if (!cols.length) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const X0 = 42, H = 1000, PULL = 30;   // viewBox coords
+    const dividers = cols.map((col) => {
+        const path = col.querySelector('.wt-divider-path');
+        return { path, cx: X0, vx: 0, target: X0, cy: H / 2 };
+    }).filter((d) => d.path);
+
+    // bend divider toward a side (dir: -1 left / +1 right) at vertical fraction f
+    function bend(d, dir, f) {
+        if (!d) return;
+        d.target = X0 + dir * PULL;
+        d.cy = Math.max(0, Math.min(1, f)) * H;
+    }
+
+    cols.forEach((col, i) => {
+        const grab = (e) => {
+            const r = col.getBoundingClientRect();
+            const f = (e.clientY - r.top) / r.height;
+            bend(dividers[i], -1, f);          // this column's own (right) line → pulled left
+            if (i > 0) bend(dividers[i - 1], +1, f);  // the line on its left → pulled right
+        };
+        col.addEventListener('mouseenter', grab);
+        col.addEventListener('mousemove', grab);
+        col.addEventListener('mouseleave', () => {
+            if (dividers[i]) dividers[i].target = X0;       // release → snap back
+            if (i > 0 && dividers[i - 1]) dividers[i - 1].target = X0;
+        });
+    });
+
+    // underdamped spring loop → the "snap"/wobble on release
+    const STIFF = 0.18, DAMP = 0.86;
+    (function frame() {
+        requestAnimationFrame(frame);
+        dividers.forEach((d) => {
+            const force = (d.target - d.cx) * STIFF;
+            d.vx = (d.vx + force) * DAMP;
+            d.cx += d.vx;
+            d.path.setAttribute('d', `M ${X0} 0 Q ${d.cx.toFixed(2)} ${d.cy.toFixed(2)} ${X0} ${H}`);
+        });
+    })();
+})();
+
+// Footer live clock + back-to-top
+(function () {
+    const clock = document.getElementById('footClock');
+    if (clock) {
+        const tick = () => {
+            clock.textContent = new Date().toLocaleTimeString([], {
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            });
+        };
+        tick();
+        setInterval(tick, 1000);
+    }
+    const top = document.getElementById('footTop');
+    if (top) {
+        top.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+})();
+
+</script>
+<script src="cursor.js"></script>
+
+</body>
+</html>

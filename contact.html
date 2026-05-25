@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Munia</title>
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+    <link rel="stylesheet" href="contact.css">
+    <link rel="stylesheet" href="cursor.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+
+
+<body>
+    
+<!-- Nav -->
+<div class="nav-container">
+    <a href="index.html"> 
+        <div class="logo">
+        <img src="images/logo3.png" alt="Website Logo">
+    </div>
+</a>
+    <div class="menu">
+        <img src="images/menu3.png" alt="Menu Icon" id="menu-icon">
+    </div>
+</div>
+
+<!-- Full-Screen Menu -->
+<div class="fullscreen-menu" id="fullscreen-menu">
+    <span class="close-btn" id="close-btn">&times;</span>
+    <ul>
+        <li>
+            <a href="index.html">
+                <span>H</span><span>O</span><span>M</span><span>E</span>
+            </a>
+        </li>
+        <li>
+            <a href="work.html">
+                <span>W</span><span>O</span><span>R</span><span>K</span>
+            </a>
+        </li>
+        <li>
+            <a href="aboutMe.html">
+                <span>A</span><span>B</span><span>O</span><span>U</span><span>T</span>
+            </a>
+        </li>
+        <li>
+            <a href="contact.html">
+                <span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<!--dome1-->
+
+<div class="dome1-cont">
+    <section class="dome1">
+        <div class="dome-inner">
+            <span class="ct-eyebrow"><span class="ct-spark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/></svg></span> Say hello</span>
+            <h1 class="ct-title">Let&rsquo;s make something <em>together.</em></h1>
+            <p class="ct-sub">Whether you have an exciting project idea, need a hand designing your dream website, or just want to say hi, I&rsquo;m all ears.</p>
+
+            <div class="ct-mail">
+                <span class="ct-mail-label">Drop me a line</span>
+                <div class="ct-mail-row">
+                    <a href="mailto:tanhaamuniaa@gmail.com" class="ct-mail-addr">tanhaamuniaa@gmail.com</a>
+                    <button type="button" class="ct-copy" id="copyMail" aria-label="Copy email address">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+                        <span class="ct-copy-txt">Copy</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="lang-details">
+                <span class="lang">Find me online</span>
+                <div class="lang-name-container">
+                    <a class="ct-chip" href="https://github.com/Munsb0t" target="_blank" rel="noopener">
+                        <img src="images/GitHub.png" alt=""> GitHub
+                    </a>
+                    <a class="ct-chip" href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener">
+                        <img src="images/lnk.svg" alt=""> LinkedIn
+                    </a>
+                    <a class="ct-chip" href="mailto:tanhaamuniaa@gmail.com">
+                        <img src="images/Gmail Logo.svg" alt=""> Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+ <!-- FOOTER (shared site footer) -->
+<footer class="footer2">
+    <div class="footer2-now">
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body"><span class="now-icon now-icon--music">&#9834;</span><div class="now-text"><span class="now-title">Loner</span><span class="now-sub">Teflon Sega</span><span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body"><span class="now-icon now-icon--book">&#182;</span><div class="now-text"><span class="now-title">The Correspondent</span><span class="now-sub">Virginia Evans</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body"><span class="now-icon now-icon--build">&#9874;&#65038;</span><div class="now-text"><span class="now-title">Fullstack Bus App</span><span class="now-sub">Web &middot; in progress</span></div></div>
+        </div>
+    </div>
+    <div class="footer2-main">
+        <h2 class="footer2-heading">You have an idea?<br>I got the <em>vision.</em></h2>
+        <span class="footer2-touch">get in touch</span>
+        <div class="footer2-socials">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg></a>
+        </div>
+    </div>
+    <div class="footer2-bottom">
+        <span>&copy; Munia &middot; 2025</span>
+        <span>Local time &mdash; <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top &uarr;</a>
+    </div>
+</footer>
+
+    <script>
+        // Menu toggle logic
+const menuIcon = document.getElementById("menu-icon");
+const fullscreenMenu = document.getElementById("fullscreen-menu");
+const closeBtn = document.getElementById("close-btn");
+
+// Open the fullscreen menu
+menuIcon.addEventListener("click", () => {
+    fullscreenMenu.classList.add("active");
+});
+
+// Close the fullscreen menu
+closeBtn.addEventListener("click", () => {
+    fullscreenMenu.classList.remove("active");
+});
+
+// Copy email to clipboard
+const copyBtn = document.getElementById("copyMail");
+if (copyBtn) {
+    const EMAIL = "tanhaamuniaa@gmail.com";
+    copyBtn.addEventListener("click", async () => {
+        try {
+            await navigator.clipboard.writeText(EMAIL);
+        } catch (e) {
+            const t = document.createElement("textarea");
+            t.value = EMAIL; document.body.appendChild(t); t.select();
+            try { document.execCommand("copy"); } catch (_) {}
+            t.remove();
+        }
+        const txt = copyBtn.querySelector(".ct-copy-txt");
+        copyBtn.classList.add("copied");
+        if (txt) txt.textContent = "Copied!";
+        setTimeout(() => {
+            copyBtn.classList.remove("copied");
+            if (txt) txt.textContent = "Copy";
+        }, 1600);
+    });
+}
+
+// Footer clock + back to top
+(function(){
+    const c = document.getElementById("footClock");
+    if (c) {
+        const tick = () => c.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+        tick(); setInterval(tick, 1000);
+    }
+    const top = document.getElementById("footTop");
+    if (top) top.addEventListener("click", e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); });
+})();
+
+    </script>
+
+<script src="cursor.js"></script>
+</body>
+</html>

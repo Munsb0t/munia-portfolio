@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About · Meet the Player | Munia</title>
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+    <link rel="stylesheet" href="aboutMe.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cursor.css">
+
+    <style>
+    /* =========================================================
+       ABOUT — "Meet the Player"  (scoped: .ab- / .pc- / .gb-)
+    ========================================================= */
+    :root{
+        --cream:#E8EBE0; --tile:#F0EBDD; --mint:#CFDEC0; --mint-deep:#A9C292;
+        --green:#6B8B57; --peach:#E0915E; --peach-soft:#ECC9B2;
+        --coral:#C9663C; --pink:#E9D9CC; --ink:#2C2E26; --line:#D2CEBE;
+        --isoX:56deg; --isoZ:45deg;   /* board tilt — tweak these two to taste */
+    }
+    body{ background:#E8EBE0; }   /* soft sage page */
+    .ab-scope, .ab-scope *{ box-sizing:border-box; }
+    .ab-scope{ font-family:'Poppins',system-ui,sans-serif; color:var(--ink); overflow:hidden; }
+    .ab-wrap{ max-width:1200px; margin:0 auto; padding:0 clamp(18px,5vw,64px); }
+    .ab-mono{ font-family:'Space Mono',monospace; }
+
+    /* reveal */
+    .ab-rise{ opacity:0; transform:translateY(30px); transition:opacity .8s cubic-bezier(.22,1,.36,1), transform .8s cubic-bezier(.22,1,.36,1); }
+    .ab-rise.in{ opacity:1; transform:none; }
+    @media (prefers-reduced-motion:reduce){ .ab-rise{opacity:1!important;transform:none!important;} }
+
+    /* ---------- HERO ---------- */
+    .ab-hero{ padding:clamp(96px,16vh,170px) 0 clamp(40px,7vh,90px); position:relative; }
+    .ab-hero-grid{ position:relative; z-index:1; display:grid; grid-template-columns:0.92fr 1.08fr; gap:clamp(28px,5vw,72px); align-items:center; }
+    @media (max-width:880px){ .ab-hero-grid{ grid-template-columns:1fr; gap:46px; } }
+
+    /* player card (photo) */
+    .pc-stage{ display:flex; justify-content:center; perspective:1000px; }
+    .pc-card{ position:relative; width:min(360px,82vw); background:#fff; border:3px solid var(--ink);
+        border-radius:22px; padding:14px 14px 18px; box-shadow:-12px 16px 0 rgba(43,38,32,.16);
+        transform:rotate(-4deg); transition:transform .5s cubic-bezier(.34,1.56,.64,1), box-shadow .5s; }
+    .pc-card:hover{ transform:rotate(0) translateY(-6px); box-shadow:-16px 22px 0 rgba(43,38,32,.2); }
+    .pc-tape{ position:absolute; top:-16px; width:96px; height:30px; background:rgba(202,226,200,.85);
+        border:1.5px dashed rgba(43,38,32,.35); transform:rotate(-7deg); }
+    .pc-tape.r{ right:24px; transform:rotate(8deg); background:rgba(253,175,126,.8); }
+    .pc-tape.l{ left:24px; }
+    .pc-badge{ position:absolute; top:24px; left:-12px; z-index:3; font-family:'Fredoka',sans-serif; font-weight:700;
+        font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:#fff; background:var(--coral);
+        border:2.5px solid var(--ink); border-radius:100px; padding:6px 14px; box-shadow:-3px 4px 0 rgba(43,38,32,.85);
+        animation:pcWobble 4s ease-in-out infinite; }
+    @keyframes pcWobble{ 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(2deg)} }
+    .pc-photo{ position:relative; border:2.5px solid var(--ink); border-radius:14px; overflow:hidden; aspect-ratio:3/3.4; background:var(--mint); }
+    .pc-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease; }
+    .pc-card:hover .pc-photo img{ transform:scale(1.04); }
+    .pc-cap{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-top:12px; padding:0 4px; }
+    .pc-name2{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:20px; }
+    .pc-class{ font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.08em; color:var(--green); }
+    .pc-spark{ position:absolute; font-size:24px; z-index:3; animation:pcTwinkle 2.4s ease-in-out infinite; }
+    .pc-spark.s1{ top:-22px; right:-10px; } .pc-spark.s2{ bottom:18px; right:-20px; animation-delay:.8s; font-size:18px; }
+    .pc-spark.s3{ bottom:-18px; left:-8px; animation-delay:1.4s; font-size:20px; }
+    @keyframes pcTwinkle{ 0%,100%{transform:scale(.7) rotate(0);opacity:.5} 50%{transform:scale(1.1) rotate(20deg);opacity:1} }
+
+    /* hero content */
+    .ab-hello{ font-family:'Space Mono',monospace; font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--green); margin:14px 0 14px; }
+    .sc-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:8px; }
+    .sc-tile{ position:relative; width:clamp(52px,9vw,76px); height:clamp(52px,9vw,76px); background:var(--tile);
+        border:2.5px solid var(--ink); border-radius:10px; box-shadow:-4px 5px 0 rgba(43,38,32,.85);
+        display:flex; align-items:center; justify-content:center; font-family:'Fredoka',sans-serif; font-weight:700;
+        font-size:clamp(28px,5vw,46px); color:var(--ink); transition:transform .25s cubic-bezier(.34,1.56,.64,1), background-color .25s; cursor:default; }
+    .sc-tile:hover{ transform:translateY(-6px) rotate(-3deg); background:var(--mint); }
+    .sc-tile small{ position:absolute; right:6px; bottom:3px; font-size:11px; font-weight:600; }
+    .ab-role{ font-family:'Poppins',sans-serif; font-weight:400; font-size:clamp(15px,1.5vw,19px); letter-spacing:.005em; color:#4A4D3F; margin:16px 0 16px; }
+    .ab-role b{ color:var(--ink); font-weight:600; }
+    .ab-bio{ font-size:clamp(15px,1.3vw,18px); line-height:1.7; max-width:560px; color:#4A4D3F; }
+    .ab-bio .pop{ background:var(--mint); padding:0 6px; border-radius:6px; font-weight:600; color:var(--ink); }
+
+    /* ---------- STATS ---------- */
+    .ab-stats{ margin-top:clamp(40px,6vh,72px); background:#fff; border:3px solid var(--ink); border-radius:22px;
+        padding:clamp(22px,3vw,34px); box-shadow:-10px 14px 0 rgba(43,38,32,.14); }
+    .ab-stats-h{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:20px; }
+    .ab-stats-h h3{ font-family:'Fredoka',sans-serif; font-weight:700; font-size:clamp(20px,2.4vw,28px); }
+    .ab-stats-h .lvl{ font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.1em; color:var(--green);
+        background:var(--mint); border:2px solid var(--ink); border-radius:100px; padding:5px 13px; }
+    .ab-stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px 34px; }
+    @media (max-width:680px){ .ab-stat-grid{ grid-template-columns:1fr; } }
+    .ab-stat-top{ display:flex; justify-content:space-between; font-family:'Fredoka',sans-serif; font-weight:500; font-size:14px; margin-bottom:6px; }
+    .ab-stat-top em{ font-style:normal; font-family:'Space Mono',monospace; color:var(--coral); font-weight:700; }
+    .ab-bar{ height:15px; background:var(--cream); border:2px solid var(--ink); border-radius:100px; overflow:hidden; }
+    .ab-bar i{ display:block; height:100%; width:0; border-radius:100px;
+        background:repeating-linear-gradient(45deg,var(--coral),var(--coral) 8px,#E0915E 8px,#E0915E 16px);
+        transition:width 1.1s cubic-bezier(.22,1,.36,1); animation:abBarFlow 1.1s linear infinite; }
+    @keyframes abBarFlow{ from{background-position:0 0} to{background-position:32px 32px} }
+    .ab-stat:nth-child(2) .ab-bar i{ background:repeating-linear-gradient(45deg,var(--green),var(--green) 8px,#5a995a 8px,#5a995a 16px); }
+    .ab-stat:nth-child(3) .ab-bar i{ background:repeating-linear-gradient(45deg,var(--peach),var(--peach) 8px,#ffc59a 8px,#ffc59a 16px); }
+    .ab-stat:nth-child(4) .ab-bar i{ background:repeating-linear-gradient(45deg,#caa24e,#caa24e 8px,#e0bd6e 8px,#e0bd6e 16px); }
+    .ab-stat:nth-child(5) .ab-bar i{ background:repeating-linear-gradient(45deg,#b06ab0,#b06ab0 8px,#c98ec9 8px,#c98ec9 16px); }
+
+    /* ---------- LORE ---------- */
+    .ab-section{ padding:clamp(56px,9vh,120px) 0; }
+    .ab-h2{ font-family:afteris,'Fredoka',sans-serif; font-size:clamp(38px,6vw,86px); line-height:1; margin:14px 0 0; }
+    .ab-h2 em{ font-style:normal; color:#5E8C3F; }
+    .ab-lore-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:clamp(28px,5vw,64px); align-items:start; margin-top:clamp(28px,4vh,48px); }
+    @media (max-width:880px){ .ab-lore-grid{ grid-template-columns:1fr; gap:34px; } }
+    .ab-lore-p{ font-size:clamp(16px,1.4vw,19px); line-height:1.75; color:#4A4D3F; }
+    .ab-lore-p + .ab-lore-p{ margin-top:18px; }
+    .ab-lore-p b{ color:var(--ink); }
+    .ab-facts{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width:480px){ .ab-facts{ grid-template-columns:1fr; } }
+    .ab-fact{ background:var(--tile); border:2.5px solid var(--ink); border-radius:16px; padding:16px 16px 18px;
+        box-shadow:-4px 6px 0 rgba(43,38,32,.85); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .ab-fact:nth-child(2n){ background:var(--mint); } .ab-fact:nth-child(3n){ background:var(--peach-soft); }
+    .ab-fact:hover{ transform:translateY(-5px) rotate(-1.5deg); }
+    .ab-fact .ic{ width:38px; height:38px; border-radius:11px; background:#fff; border:2px solid var(--ink);
+        display:flex; align-items:center; justify-content:center; box-shadow:-2px 3px 0 rgba(43,38,32,.6); }
+    .ab-fact .ic svg{ width:21px; height:21px; fill:none; stroke:var(--coral); stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+    .ab-fact .k{ font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); margin:8px 0 3px; }
+    .ab-fact .v{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:16px; line-height:1.25; }
+
+    /* ---------- GAME BOARD ---------- */
+    .ab-board-sec{ padding:clamp(34px,5vh,68px) 0 clamp(56px,8vh,108px); }
+    .gb-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+    .gb-instr{ font-family:'Fredoka',sans-serif; font-size:clamp(14px,1.4vw,17px); color:#4A4D3F; max-width:360px; margin-top:8px; }
+
+    .gb-board{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(8px,1.4vw,14px);
+        background:#fff; border:3px solid var(--ink); border-radius:24px; padding:clamp(10px,1.8vw,18px);
+        box-shadow:-12px 16px 0 rgba(43,38,32,.16); }
+    .gb-tile{ position:relative; aspect-ratio:1; border:2.5px solid var(--ink); border-radius:14px; background:var(--tile);
+        display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer;
+        font-family:'Fredoka',sans-serif; color:var(--ink); padding:4px; text-align:center; overflow:hidden;
+        transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s, background-color .25s; }
+    .gb-tile:nth-child(3n){ background:var(--mint); } .gb-tile:nth-child(3n+1){ background:var(--peach-soft); }
+    .gb-tile.k-start{ background:var(--green); color:#fff; } .gb-tile.k-finish{ background:var(--coral); color:#fff; }
+    .gb-tile:hover{ transform:translateY(-4px); box-shadow:-4px 7px 0 rgba(43,38,32,.5); }
+    .gb-tile:focus-visible{ outline:3px solid var(--coral); outline-offset:2px; }
+    .gb-tile.is-active{ transform:translateY(-4px) scale(1.03); box-shadow:0 0 0 3px var(--ink), -4px 8px 0 rgba(43,38,32,.5); }
+    .gb-tile.pop{ animation:gbPop .45s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes gbPop{ 0%{transform:scale(1)} 40%{transform:scale(1.14) rotate(-3deg)} 100%{transform:translateY(-4px) scale(1.03)} }
+
+    /* pawn token */
+    .gb-token{ position:absolute; top:0; left:0; width:clamp(30px,5.5vw,40px); z-index:40; pointer-events:none;
+        filter:drop-shadow(0 6px 3px rgba(43,38,32,.35)); will-change:transform; }
+    .gb-token svg{ width:100%; height:auto; display:block; }
+
+    /* reveal card */
+    .gb-card{ background:#fff; border:3px solid var(--ink); border-radius:22px; padding:clamp(22px,3vw,34px);
+        box-shadow:-10px 14px 0 rgba(43,38,32,.14); min-height:220px; position:relative; overflow:hidden; }
+    .gb-card::after{ content:""; position:absolute; right:-30px; bottom:-30px; width:120px; height:120px; border-radius:50%;
+        background:radial-gradient(circle at 30% 30%, var(--mint), transparent 70%); opacity:.6; }
+    .gb-card-ic{ width:clamp(44px,7vw,58px); height:clamp(44px,7vw,58px); }
+    .gb-card-ic svg{ width:100%; height:100%; fill:none; stroke:var(--coral); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+    .gb-card-k{ font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--green); margin:14px 0 4px; }
+    .gb-card-t{ font-family:'Fredoka',sans-serif; font-weight:700; font-size:clamp(24px,3vw,34px); }
+    .gb-card-d{ font-size:clamp(15px,1.4vw,18px); line-height:1.65; color:#4A4D3F; margin-top:10px; max-width:420px; position:relative; z-index:1; }
+    .gb-card.show{ animation:gbCard .5s cubic-bezier(.22,1,.36,1); }
+    @keyframes gbCard{ 0%{opacity:0; transform:translateY(16px) rotate(-1.2deg) scale(.97)} 100%{opacity:1; transform:none} }
+
+    /* dice */
+    .gb-die{ width:60px; height:60px; background:#fff; border:3px solid var(--ink); border-radius:14px;
+        display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(3,1fr); gap:2px; padding:9px;
+        box-shadow:-4px 6px 0 rgba(43,38,32,.85); cursor:pointer; transition:transform .2s; }
+    .gb-die:hover{ transform:translateY(-3px) rotate(-4deg); }
+    .gb-die.rolling{ animation:gbRoll .5s ease; }
+    @keyframes gbRoll{ 0%{transform:rotate(0)} 25%{transform:rotate(-18deg) scale(1.08)} 50%{transform:rotate(16deg)} 75%{transform:rotate(-8deg)} 100%{transform:rotate(0)} }
+    .gb-die .pip{ width:100%; height:100%; border-radius:50%; background:transparent; align-self:center; justify-self:center; }
+    .gb-die .pip.on{ background:var(--coral); }
+    .gb-roll-label{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:14px; color:var(--green); }
+
+    @media (max-width:560px){
+        .ab-stats{ padding:20px; }
+    }
+
+    /* ===== ISO BOARD — clean rebuild (screen-space labels) ===== */
+    /* playfield: board on the left, reveal card on the right; dice floats in the board's corner */
+    .gb-playfield{ display:grid; grid-template-columns:minmax(0,2.05fr) minmax(264px,1fr); gap:clamp(14px,2vw,30px);
+        align-items:center; margin-top:clamp(14px,2.2vh,26px); }
+    .gb-iso-wrap{ position:relative; width:100%; min-height:clamp(440px,50vw,640px);
+        display:flex; align-items:center; justify-content:center; perspective:2000px; perspective-origin:50% 44%; }
+    .gb-side{ display:flex; flex-direction:column; gap:clamp(14px,2vh,22px); align-self:center; }
+    .gb-controls{ position:relative; align-self:flex-start; display:inline-flex; flex-direction:row; align-items:center; gap:13px;
+        background:var(--mint); border:2.5px solid var(--ink); border-radius:16px; padding:10px 18px 10px 12px;
+        box-shadow:-4px 6px 0 var(--ink); }
+    .gb-controls::before{ content:'Roll!'; position:absolute; top:-13px; right:-11px; z-index:1;
+        background:var(--coral); color:#fff; font-family:'Fredoka',sans-serif; font-weight:700; font-size:11px;
+        letter-spacing:.03em; padding:3px 10px; border-radius:100px; border:2px solid var(--ink); transform:rotate(8deg); }
+    .gb-die{ width:74px; height:74px; cursor:pointer; }
+    .gb-die:hover{ transform:translateY(-3px) rotate(-4deg); }
+    .gb-roll-label{ font-size:13px; font-weight:600; max-width:110px; text-align:center; color:var(--ink); font-family:'Fredoka',sans-serif; }
+
+    /* 4×3 grid rotated 45° → diamond spans ~1.24× this width; 82% keeps it just inside the wrap */
+    .gb-board{ position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(16px,2.6vw,32px);
+        width:82%; margin:0 auto; background:transparent; border:0; padding:0; box-shadow:none;
+        transform-style:preserve-3d; transform:translateY(-5%) rotateX(var(--isoX)) rotateZ(calc(-1 * var(--isoZ))); transform-origin:center center; }
+    .gb-tile{ position:relative; aspect-ratio:1; border:2.5px solid var(--ink); border-radius:12px; overflow:visible; z-index:2;
+        transform-style:preserve-3d; transform:translateZ(0); backface-visibility:hidden;
+        transition:transform .28s cubic-bezier(.34,1.56,.64,1), box-shadow .28s ease, filter .2s ease;
+        box-shadow:-1px 1px 0 #D8C6A8,-2px 2px 0 #CFBC9C,-3px 3px 0 #C6B290,-4px 4px 0 #BDA884,-5px 5px 0 #B49E78,-6px 6px 0 #AB946C,-7px 7px 0 #A28A60,-8px 8px 0 #998055; }
+    /* Hover lifts via a deeper shadow + brightness only — NOT a transform.
+       A translateZ here shifted the tile's projected hit-box off the cursor,
+       which made hover flicker on/off and (with the bouncy easing) shake violently. */
+    .gb-tile:hover{ filter:brightness(1.04);
+        box-shadow:-1px 1px 0 #D8C6A8,-2px 2px 0 #CFBC9C,-3px 3px 0 #C6B290,-4px 4px 0 #BDA884,-5px 5px 0 #B49E78,-6px 6px 0 #AB946C,-7px 7px 0 #A28A60,-8px 8px 0 #998055,-9px 9px 0 #8f7649,-10px 10px 0 #877040,-11px 11px 0 #7e6738,-12px 12px 0 #756030; }
+    .gb-tile.is-active{ transform:translateZ(14px);
+        box-shadow:0 0 0 3px var(--ink),-1px 1px 0 #D8C6A8,-2px 2px 0 #CFBC9C,-3px 3px 0 #C6B290,-4px 4px 0 #BDA884,-5px 5px 0 #B49E78,-6px 6px 0 #AB946C,-7px 7px 0 #A28A60,-8px 8px 0 #998055; }
+    .gb-tile.pop{ animation:gbPopIso .5s cubic-bezier(.34,1.56,.64,1); }
+    @keyframes gbPopIso{ 0%{transform:translateZ(0)} 45%{transform:translateZ(30px)} 100%{transform:translateZ(14px)} }
+
+    /* route line drawn in the board plane */
+    .gb-path{ position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; overflow:visible; }
+    .gb-path polyline{ fill:none; stroke:rgba(44,46,38,.55); stroke-width:6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:2 16; }
+
+    /* screen-space labels — always upright & readable, never clipped */
+    .gb-labels{ position:absolute; inset:0; z-index:50; pointer-events:none; }
+    .gb-label{ position:absolute; left:0; top:0; transform:translate(-50%,-55%);
+        display:inline-flex; flex-direction:row; align-items:center; gap:7px; transition:opacity .25s ease;
+        background:rgba(255,255,255,.96); border:2px solid var(--ink); border-radius:100px; padding:4px 12px 4px 8px;
+        box-shadow:-2px 3px 0 rgba(43,38,32,.55); white-space:nowrap; }
+    .gb-label .gl-i{ width:19px; height:19px; flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; }
+    .gb-label .gl-i svg{ width:100%; height:100%; fill:none; stroke:var(--coral); stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+    .gb-label .gl-n{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:clamp(10px,1.3vw,12.5px); color:var(--ink); line-height:1; }
+    .gb-label.is-active{ opacity:.12; }
+
+    .gb-token{ z-index:60; }
+
+    /* reveal card — sits under the dice, beside the board */
+    .gb-card{ min-height:0; }
+
+    @media (max-width:1000px){
+        .gb-playfield{ grid-template-columns:1fr; gap:20px; }
+        .gb-iso-wrap{ min-height:clamp(320px,80vw,500px); }
+        .gb-side{ max-width:680px; width:100%; margin:0 auto; }
+        .gb-card{ max-width:none; }
+        /* tablet: dice sits beside the board copy in the header (JS relocates it here) */
+        .gb-head{ flex-wrap:nowrap; align-items:center; gap:18px; }
+        .gb-head > div{ min-width:0; }
+        .gb-controls{ flex:0 0 auto; align-self:center; }
+    }
+
+    /* ===== PHONES: keep the isometric board, just drop the floating name pills
+       (they overlap & overflow at phone width). The diamond is shrunk to fit;
+       tap a tile to reveal its name in the card below. ===== */
+    @media (max-width:600px){
+        .gb-iso-wrap{ min-height:clamp(280px,76vw,370px); }
+        .gb-board{ width:74%; gap:clamp(12px,3.4vw,22px); }
+        .gb-token{ width:clamp(26px,7.5vw,34px); }
+        /* tiles get a small upright icon "symbol" (the wide name pills overlap) */
+        .gb-label{ background:transparent; border:0; box-shadow:none; padding:0; transform:translate(-50%,-50%); }
+        .gb-label .gl-n{ display:none; }
+        .gb-label .gl-i{ width:27px; height:27px; background:#fff; border:2px solid var(--ink); border-radius:50%; padding:5px; box-shadow:-1.5px 2px 0 rgba(43,38,32,.5); }
+        .gb-label.is-active{ opacity:1; }
+        .gb-label.is-active .gl-i{ background:var(--coral); }
+        .gb-label.is-active .gl-i svg{ stroke:#fff; }
+
+        /* dice → small, sitting beside the copy above the board (JS moves it into .gb-head) */
+        .gb-head{ flex-wrap:nowrap; align-items:center; gap:12px; }
+        .gb-head > div{ min-width:0; }
+        .gb-controls{ flex:0 0 auto; align-self:center; padding:8px 12px 8px 10px; gap:0; }
+        .gb-die{ width:46px; height:46px; padding:6px; animation:none; }
+        .gb-roll-label{ display:none; }
+    }
+
+    /* ===== SHARED SITE FOOTER (footer2) ===== */
+    .footer2{ position:relative; background:#292623; color:#F6F6E7; padding:64px 60px 0; overflow:hidden; }
+    .footer2 a{ color:inherit; text-decoration:none; }
+    .footer2-now{ display:flex; justify-content:center; gap:20px; flex-wrap:wrap; padding-bottom:48px; }
+    .now-card{ display:flex; flex-direction:column; gap:16px; width:300px; max-width:100%; padding:18px 22px; border-radius:18px; background:rgba(246,246,231,0.05); border:1px solid rgba(246,246,231,0.15); transition:transform .45s cubic-bezier(.22,1,.36,1), background-color .3s, border-color .3s; }
+    .now-card:hover{ transform:translateY(-7px); background:rgba(246,246,231,0.09); border-color:rgba(255,147,203,0.5); }
+    .now-label{ align-self:flex-end; display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(246,246,231,0.6); }
+    .now-dot{ width:6px; height:6px; border-radius:50%; background:#FF93CB; animation:footPulse 2.2s ease-in-out infinite; }
+    .now-body{ display:flex; align-items:center; gap:16px; }
+    .now-icon{ flex:0 0 auto; width:52px; height:52px; border-radius:13px; display:inline-flex; align-items:center; justify-content:center; font-size:24px; color:#1B1814; }
+    .now-icon--music{ background:#C9B6E4; } .now-icon--book{ background:#A8D0A0; } .now-icon--build{ background:#F0B89B; }
+    .now-text{ display:flex; flex-direction:column; gap:2px; text-align:left; }
+    .now-title{ font-family:'Newsreader',serif; font-size:19px; font-weight:500; color:#F6F6E7; line-height:1.1; }
+    .now-sub{ font-family:'JetBrains Mono',monospace; font-size:12px; color:rgba(246,246,231,0.6); }
+    .now-meta{ display:inline-flex; align-items:center; gap:8px; margin-top:3px; font-family:'JetBrains Mono',monospace; font-size:11px; color:rgba(246,246,231,0.55); }
+    .eq{ display:inline-flex; align-items:flex-end; gap:2px; height:14px; }
+    .eq i{ width:3px; height:5px; background:#FF93CB; border-radius:1px; animation:eqBar .9s ease-in-out infinite; }
+    .eq i:nth-child(2){animation-delay:.18s} .eq i:nth-child(3){animation-delay:.36s} .eq i:nth-child(4){animation-delay:.54s}
+    @keyframes eqBar{ 0%,100%{height:4px} 50%{height:14px} }
+    .footer2-main{ display:flex; flex-direction:column; align-items:center; text-align:center; padding-bottom:44px; }
+    .footer2-eyebrow{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:#FF93CB; margin:0 0 22px; display:flex; align-items:center; gap:10px; }
+    @keyframes footPulse{ 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.5} }
+    .footer2-heading{ font-family:afteris,'Newsreader',serif; font-weight:400; font-size:clamp(34px,5vw,76px); line-height:1.05; color:#F6F6E7; margin:0 0 16px; }
+    .footer2-heading em{ font-style:normal; color:#FF93CB; display:inline-block; animation:footWiggle 5s ease-in-out infinite; transform-origin:center bottom; }
+    @keyframes footWiggle{ 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+    .footer2-touch{ font-family:adrin,adriana,cursive; font-size:clamp(26px,2.6vw,40px); color:#FF93CB; display:inline-flex; align-items:center; gap:10px; margin-bottom:18px; }
+    .footer2-touch-arrow{ display:inline-block; font-family:'Newsreader',serif; animation:footTouchBob 1.5s ease-in-out infinite; }
+    @keyframes footTouchBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+    .footer2-socials{ display:flex; gap:22px; }
+    .fsoc{ width:64px; height:64px; border-radius:50%; border:1.5px solid rgba(246,246,231,0.45); display:inline-flex; align-items:center; justify-content:center; color:#F6F6E7; transition:transform .45s cubic-bezier(.34,1.56,.64,1), background-color .3s, border-color .3s, color .3s; }
+    .fsoc svg{ width:24px; height:24px; fill:currentColor; }
+    .fsoc:hover{ background:#FF93CB; border-color:#FF93CB; color:#1B1814; transform:translateY(-9px) rotate(8deg); }
+    .footer2-bottom{ display:flex; justify-content:space-between; align-items:center; gap:16px; padding:24px 0 32px; border-top:1px solid rgba(246,246,231,0.18); font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:rgba(246,246,231,0.6); }
+    .footer2-bottom a{ border-bottom:1px solid transparent; transition:border-color .3s; }
+    .footer2-bottom a:hover{ border-color:rgba(246,246,231,0.7); }
+    @media (max-width:768px){
+        .footer2{ padding:56px 18px 0; }
+        .footer2-now{ gap:8px; flex-wrap:nowrap; padding-bottom:40px; }
+        .now-card{ flex:1 1 0; min-width:0; width:auto; padding:12px 10px; gap:8px; border-radius:14px; }
+        .now-label{ font-size:8px; letter-spacing:.08em; gap:5px; }
+        .now-body{ flex-direction:column; align-items:flex-start; gap:8px; }
+        .now-icon{ width:36px; height:36px; font-size:17px; border-radius:9px; }
+        .now-text{ min-width:0; width:100%; }
+        .now-title{ font-size:12.5px; line-height:1.14; white-space:normal; overflow-wrap:break-word; word-break:break-word; } .now-sub{ font-size:9px; white-space:normal; overflow-wrap:break-word; word-break:break-word; } .now-meta{ font-size:8px; gap:5px; } .eq{ height:9px; }
+        .footer2-heading{ font-size:clamp(30px,8vw,54px); }
+        .fsoc{ width:54px; height:54px; }
+        .footer2-bottom{ flex-direction:column; gap:8px; text-align:center; }
+    }
+    </style>
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ab-scope">
+
+<!-- Nav -->
+<div class="nav-container">
+    <a href="index.html"><div class="logo"><img src="images/logo3.png" alt="Website Logo"></div></a>
+    <div class="menu"><img src="images/menu3.png" alt="Menu Icon" id="menu-icon"></div>
+</div>
+
+<!-- Full-Screen Menu -->
+<div class="fullscreen-menu" id="fullscreen-menu">
+    <span class="close-btn" id="close-btn">&times;</span>
+    <ul>
+        <li><a href="index.html"><span>H</span><span>O</span><span>M</span><span>E</span></a></li>
+        <li><a href="work.html"><span>W</span><span>O</span><span>R</span><span>K</span></a></li>
+        <li><a href="aboutMe.html"><span>A</span><span>B</span><span>O</span><span>U</span><span>T</span></a></li>
+        <li><a href="contact.html"><span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span></a></li>
+    </ul>
+</div>
+
+<!-- ===== HERO — MEET THE PLAYER ===== -->
+<section class="ab-hero">
+    <div class="ab-wrap ab-hero-grid">
+        <!-- player card -->
+        <div class="pc-stage ab-rise">
+            <div class="pc-card">
+                <span class="pc-tape l"></span><span class="pc-tape r"></span>
+                <span class="pc-badge">Player 01</span>
+                <span class="pc-spark s1">&#10024;</span>
+                <span class="pc-spark s2">&#10022;</span>
+                <span class="pc-spark s3">&#10024;</span>
+                <div class="pc-photo"><img src="images/munia-about.jpg" alt="Munia"></div>
+                <div class="pc-cap">
+                    <span class="pc-name2">Munia</span>
+                    <span class="pc-class">DESIGNER&middot;DEV</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- content -->
+        <div>
+            <p class="ab-hello ab-rise">&#9654; New game &middot; meet the player</p>
+            <div class="sc-row ab-rise" aria-label="Munia">
+                <div class="sc-tile">M<small>3</small></div>
+                <div class="sc-tile">U<small>1</small></div>
+                <div class="sc-tile">N<small>1</small></div>
+                <div class="sc-tile">I<small>1</small></div>
+                <div class="sc-tile">A<small>1</small></div>
+            </div>
+            <p class="ab-role ab-rise">Class: <b>UI/UX Designer</b> &times; <b>Researcher</b> &middot; learning Frontend &amp; ML</p>
+            <p class="ab-bio ab-rise">I'm a <span class="pop">UI/UX designer</span>, but the research is the part I genuinely
+                love: figuring out how people think and what they actually need before a single pixel gets pretty. I'm learning
+                frontend so I can build the things I design instead of just handing them over, and I'm a little too deep into
+                machine learning and computer vision, training tiny models just to watch them figure things out.</p>
+        </div>
+    </div>
+
+    <!-- character stats -->
+    <div class="ab-wrap">
+        <div class="ab-stats ab-rise" id="abStats">
+            <div class="ab-stats-h">
+                <h3>&#127918; Character stats</h3>
+                <span class="lvl ab-mono">XP &middot; always grinding</span>
+            </div>
+            <div class="ab-stat-grid">
+                <div class="ab-stat"><div class="ab-stat-top"><span>Hard work &amp; grit</span><em>100</em></div><div class="ab-bar"><i data-val="100"></i></div></div>
+                <div class="ab-stat"><div class="ab-stat-top"><span>Curiosity</span><em>99</em></div><div class="ab-bar"><i data-val="99"></i></div></div>
+                <div class="ab-stat"><div class="ab-stat-top"><span>Attention to detail</span><em>94</em></div><div class="ab-bar"><i data-val="94"></i></div></div>
+                <div class="ab-stat"><div class="ab-stat-top"><span>Team play</span><em>92</em></div><div class="ab-bar"><i data-val="92"></i></div></div>
+                <div class="ab-stat"><div class="ab-stat-top"><span>Communication</span><em>90</em></div><div class="ab-bar"><i data-val="90"></i></div></div>
+                <div class="ab-stat"><div class="ab-stat-top"><span>Adaptability</span><em>88</em></div><div class="ab-bar"><i data-val="88"></i></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== LORE ===== -->
+<section class="ab-section">
+    <div class="ab-wrap">
+        <h2 class="ab-h2 ab-rise">A bit more <em>lore</em></h2>
+        <div class="ab-lore-grid">
+            <div>
+                <p class="ab-lore-p ab-rise">I'm <b>Munia</b>, but you can call me <b>Muns</b>. I'm a designer who's equal parts
+                    curious and stubborn, most at home in <b>UI/UX and the research</b> behind it: getting to know people, asking
+                    the <i>why</i> a few too many times, and shaping something that genuinely fits them.</p>
+                <p class="ab-lore-p ab-rise">I like building what I design, so I'm picking up <b>frontend</b>, and I'm deep into
+                    <b>machine learning &amp; deep learning</b> on the side, computer vision most of all. I can't claim I've
+                    mastered any of it, because there's always something more to learn, and honestly that's my favourite part.</p>
+                <p class="ab-lore-p ab-rise">Off the clock I'm cooking something new, lost in an anime or K-drama, and losing a
+                    ranked game in League of Legends. If you've got an idea worth chasing, let's build something meaningful (and
+                    a little fun) together.</p>
+            </div>
+            <div class="ab-facts">
+                <div class="ab-fact ab-rise"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l2.3 5.8L20 9.4l-4.6 3.8L17 19l-5-3.3L7 19l1.6-5.8L4 9.4l5.7-.6z"/></svg></div><div class="k">Focus</div><div class="v">UI/UX &amp; Research</div></div>
+                <div class="ab-fact ab-rise"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h6v16H6a2 2 0 0 0-2 2z"/><path d="M20 5a2 2 0 0 0-2-2h-6v16h6a2 2 0 0 1 2 2z"/></svg></div><div class="k">Learning</div><div class="v">Frontend &middot; ML / DL</div></div>
+                <div class="ab-fact ab-rise"><div class="ic"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="k">Curious about</div><div class="v">Computer Vision</div></div>
+                <div class="ab-fact ab-rise"><div class="ic"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div><div class="k">Superpower</div><div class="v">Relentless hard work</div></div>
+                <div class="ab-fact ab-rise"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="5.5"/><path d="M8 11v3M6.5 12.5h3"/><circle cx="16" cy="11.5" r="1"/><circle cx="18.5" cy="14" r="1"/></svg></div><div class="k">Off-duty</div><div class="v">Cooking, anime, League</div></div>
+                <div class="ab-fact ab-rise"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6M6 19l6-6 6 6"/></svg></div><div class="k">Mindset</div><div class="v">Always leveling up</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== HOBBY GAME BOARD ===== -->
+<section class="ab-board-sec">
+    <div class="ab-wrap">
+        <div class="gb-head">
+            <div>
+                <h2 class="ab-h2 ab-rise">The hobby <em>board</em></h2>
+                <p class="gb-instr ab-rise">Tap a tile or roll the dice. Every square is something I love.</p>
+            </div>
+        </div>
+
+        <div class="gb-playfield ab-rise">
+            <div class="gb-iso-wrap" id="gbWrap">
+                <div class="gb-board" id="gbBoard"><!-- tiles injected by JS --></div>
+                <div class="gb-labels" id="gbLabels"><!-- labels injected by JS --></div>
+                <div class="gb-token" id="gbToken" aria-hidden="true">
+                    <svg viewBox="0 0 44 56"><g fill="#C9663C" stroke="#2C2E26" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+                        <circle cx="22" cy="13" r="10"/>
+                        <path d="M11 49 C11 33 16 27 22 27 C28 27 33 33 33 49 Z"/>
+                        <rect x="7.5" y="46" width="29" height="8.5" rx="4.2"/>
+                    </g><ellipse cx="18" cy="10" rx="3" ry="2.4" fill="#fff" opacity=".55"/></svg>
+                </div>
+            </div>
+
+            <div class="gb-side">
+                <div class="gb-controls">
+                    <div class="gb-die" id="gbDie" role="button" tabindex="0" aria-label="Roll the dice">
+                        <span class="pip"></span><span class="pip"></span><span class="pip"></span>
+                        <span class="pip"></span><span class="pip"></span><span class="pip"></span>
+                        <span class="pip"></span><span class="pip"></span><span class="pip"></span>
+                    </div>
+                    <span class="gb-roll-label" id="gbRollLabel">Roll the dice</span>
+                </div>
+
+                <div class="gb-card" id="gbCard">
+                    <div class="gb-card-ic" id="gbIc"></div>
+                    <div class="gb-card-k" id="gbK">Square 00 &middot; Start</div>
+                    <div class="gb-card-t" id="gbT">Press start</div>
+                    <div class="gb-card-d" id="gbD">This is me: designer, researcher, and forever learner. Tap a tile or roll the dice to see what I get up to off the clock.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- FOOTER (shared site footer) -->
+<footer class="footer2">
+    <div class="footer2-now">
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body"><span class="now-icon now-icon--music">&#9834;</span><div class="now-text"><span class="now-title">Loner</span><span class="now-sub">Teflon Sega</span><span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body"><span class="now-icon now-icon--book">&#182;</span><div class="now-text"><span class="now-title">The Correspondent</span><span class="now-sub">Virginia Evans</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body"><span class="now-icon now-icon--build">&#9874;&#65038;</span><div class="now-text"><span class="now-title">Fullstack Bus App</span><span class="now-sub">Web &middot; in progress</span></div></div>
+        </div>
+    </div>
+    <div class="footer2-main">
+        <h2 class="footer2-heading">You have an idea?<br>I got the <em>vision.</em></h2>
+        <span class="footer2-touch">get in touch</span>
+        <div class="footer2-socials">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg></a>
+        </div>
+    </div>
+    <div class="footer2-bottom">
+        <span>&copy; Munia &middot; 2025</span>
+        <span>Local time &mdash; <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top &uarr;</a>
+    </div>
+</footer>
+
+</div><!-- /.ab-scope -->
+
+<script>
+/* ---- Menu ---- */
+(function(){
+    const mi=document.getElementById('menu-icon'), menu=document.getElementById('fullscreen-menu'), cb=document.getElementById('close-btn');
+    mi&&mi.addEventListener('click',()=>menu.classList.add('active'));
+    cb&&cb.addEventListener('click',()=>menu.classList.remove('active'));
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape') menu.classList.remove('active'); });
+})();
+
+/* ---- Reveal on scroll ---- */
+(function(){
+    const els=document.querySelectorAll('.ab-rise');
+    if(!('IntersectionObserver' in window)){ els.forEach(e=>e.classList.add('in')); return; }
+    const io=new IntersectionObserver((en)=>{en.forEach((x,k)=>{ if(x.isIntersecting){ setTimeout(()=>x.target.classList.add('in'), (x.target.dataset.d||0)); io.unobserve(x.target);} });},{threshold:.14});
+    els.forEach((e,i)=>{ e.dataset.d=(i%6)*70; io.observe(e); });
+})();
+
+/* ---- Stat bars ---- */
+(function(){
+    const wrap=document.getElementById('abStats'); if(!wrap) return;
+    const fill=()=>wrap.querySelectorAll('.ab-bar i').forEach(b=>{ b.style.width=b.dataset.val+'%'; });
+    if(!('IntersectionObserver' in window)){ fill(); return; }
+    const io=new IntersectionObserver((en)=>{en.forEach(x=>{ if(x.isIntersecting){ fill(); io.disconnect(); } });},{threshold:.3});
+    io.observe(wrap);
+})();
+
+/* ---- HOBBY GAME BOARD ---- */
+(function(){
+    const board=document.getElementById('gbBoard');
+    const wrap=document.getElementById('gbWrap');
+    const token=document.getElementById('gbToken');
+    const labels=document.getElementById('gbLabels');
+    if(!board||!token||!wrap||!labels) return;
+
+    const SV=s=>'<svg viewBox="0 0 24 24">'+s+'</svg>';
+    const TILES=[
+        {kind:'start',  svg:SV('<path d="M8 5l11 7-11 7z"/>'), name:'Start', blurb:'This is me: designer, researcher, and forever learner. Tap a tile or roll the dice to see what I get up to off the clock.'},
+        {kind:'hobby',  svg:SV('<circle cx="10" cy="13.5" r="5.5"/><path d="M15.5 13.5h6.5"/><path d="M7.6 9c-.6-1 .4-1.8 0-2.9M10.6 9c-.6-1 .4-1.8 0-2.9"/>'), name:'Cooking', blurb:'I cook my way through new dishes constantly. The weirder and more unfamiliar the recipe, the happier I am.'},
+        {kind:'hobby',  svg:SV('<path d="M6 11l1.3 8h9.4L18 11"/><path d="M5 11h14"/><path d="M6.5 11a5.5 4 0 0 1 11 0"/>'), name:'Baking', blurb:'Baking is my reset button. Cookies are an ongoing, very serious experiment in my kitchen.'},
+        {kind:'hobby',  svg:SV('<path d="M3 11.5h18a9 9 0 0 1-18 0z"/><path d="M8.5 7.5c-.6-1 .4-1.8 0-2.9M13 7.5c-.6-1 .4-1.8 0-2.9"/>'), name:'Cuisines', blurb:'I love exploring different cuisines. Every culture has a food rabbit hole and I happily fall into all of them.'},
+        {kind:'hobby',  svg:SV('<rect x="3" y="10" width="18" height="10" rx="1.5"/><path d="M3 10l3-3.4 3.2 1-3 3.4M9.3 7.6l3.2 1-3 3.4M14.6 8.6l3.2 1-3 3.4"/>'), name:'K-Dramas', blurb:'Saranghae~ I am a sucker for cheesy K-dramas. Give me the wrist grabs, the slow-mo first snow, and a dramatic "otoke?!" at 2am.'},
+        {kind:'hobby',  svg:SV('<path d="M12 3l1.9 6.1L20 11l-6.1 1.9L12 19l-1.9-6.1L4 11l6.1-1.9z"/>'), name:'Anime', blurb:'Nani?! Yep, certified anime nerd. But sadly I have lost my ability to binge a whole season in one sitting :('},
+        {kind:'hobby',  svg:SV('<path d="M4 4l8 8M20 4l-8 8"/><path d="M12 12l3.6 3.6M12 12l-3.6 3.6"/><path d="M14.2 17.6l3-3M9.8 17.6l-3-3"/>'), name:'League of Legends', lbl:'League', blurb:'10 years in and I still do not know why I play this game.'},
+        {kind:'hobby',  svg:SV('<rect x="2" y="8" width="20" height="9" rx="4.5"/><path d="M7 11v3M5.5 12.5h3"/><circle cx="16" cy="11.5" r="1"/><circle cx="18.5" cy="14" r="1"/>'), name:'Gaming', blurb:'I love single player games, Valorant, and honestly any game you put in front of me.'},
+        {kind:'hobby',  svg:SV('<path d="M12 6c-2.2-1.4-5.2-1.4-8 0v12c2.8-1.4 5.8-1.4 8 0 2.2-1.4 5.2-1.4 8 0V6c-2.8-1.4-5.8-1.4-8 0z"/><path d="M12 6v12"/>'), name:'Reading', blurb:'A good book every now and then keeps my brain healthy and happy (and off the screen for a bit).'},
+        {kind:'hobby',  svg:SV('<path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'), name:'Computer Vision', lbl:'Vision', blurb:'I teach myself computer vision and deep learning. Getting machines to actually "see" never stops fascinating me.'},
+        {kind:'hobby',  svg:SV('<path d="M8 9l-3.5 3L8 15M16 9l3.5 3L16 15M13.5 6l-3 12"/>'), name:'Frontend', blurb:'I am leveling up my frontend so I can build the things I design instead of just mocking them up.'},
+        {kind:'finish', svg:SV('<path d="M5 3v18"/><path d="M5 4.5h13l-2.6 3.75 2.6 3.75H5z"/><path d="M5 8.25h13M11.5 4.5v7.5"/>'), name:'Finish?', blurb:'To be continued. Got a project in mind? Let us team up and build something worth finishing.'}
+    ];
+    const COLS=4;
+
+    // filled snake (boustrophedon) grid
+    TILES.forEach((t,i)=>{
+        const row=Math.floor(i/COLS), inRow=i%COLS;
+        const col=(row%2===0)?inRow:(COLS-1-inRow);
+        const el=document.createElement('button');
+        el.type='button';
+        el.className='gb-tile'+(t.kind==='start'?' k-start':'')+(t.kind==='finish'?' k-finish':'');
+        el.style.gridColumn=(col+1); el.style.gridRow=(row+1);
+        el.setAttribute('aria-label',t.name);
+        el.addEventListener('click',()=>moveTo(i));
+        t.el=el; board.appendChild(el);
+        const lab=document.createElement('div');
+        lab.className='gb-label';
+        lab.innerHTML='<span class="gl-i">'+t.svg+'</span><span class="gl-n">'+(t.lbl||t.name)+'</span>';
+        t.label=lab; labels.appendChild(lab);
+    });
+
+    // snaking route line through tile centres, drawn in the board's own (iso) plane
+    let pathSvg;
+    function buildPath(){
+        const W=board.offsetWidth, H=board.offsetHeight; if(!W||!H) return;
+        const pts=TILES.map(t=>(t.el.offsetLeft+t.el.offsetWidth/2)+','+(t.el.offsetTop+t.el.offsetHeight/2)).join(' ');
+        if(!pathSvg){
+            pathSvg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+            pathSvg.setAttribute('class','gb-path'); pathSvg.setAttribute('preserveAspectRatio','none');
+            pathSvg.appendChild(document.createElementNS('http://www.w3.org/2000/svg','polyline'));
+            board.insertBefore(pathSvg, board.firstChild);
+        }
+        pathSvg.setAttribute('viewBox','0 0 '+W+' '+H);
+        pathSvg.firstChild.setAttribute('points',pts);
+    }
+
+    // place each label over its tile's projected centre (screen-space, upright)
+    function positionLabels(){
+        TILES.forEach((t,i)=>{ const c=centerOf(i); t.label.style.left=c.x+'px'; t.label.style.top=c.y+'px'; });
+    }
+
+    const card={ic:document.getElementById('gbIc'),k:document.getElementById('gbK'),t:document.getElementById('gbT'),d:document.getElementById('gbD'),el:document.getElementById('gbCard')};
+    let cur=0, moving=false, last={x:0,y:0};
+
+    function tokenSize(){ const r=token.getBoundingClientRect(); return {w:r.width,h:r.height}; }
+    function centerOf(i){
+        const br=wrap.getBoundingClientRect(), tr=TILES[i].el.getBoundingClientRect();
+        return { x: tr.left-br.left+tr.width/2, y: tr.top-br.top+tr.height/2 };
+    }
+    function dest(i){ const c=centerOf(i), s=tokenSize(); return { x:c.x-s.w/2, y:c.y-s.h+s.h*0.18 }; }
+    function setInstant(i){ const d=dest(i); token.style.transform='translate('+d.x+'px,'+d.y+'px)'; last=d; }
+
+    function hop(i){
+        return new Promise(res=>{
+            const d=dest(i);
+            const midx=(last.x+d.x)/2, midy=Math.min(last.y,d.y)-34;
+            const anim=token.animate([
+                {transform:'translate('+last.x+'px,'+last.y+'px)'},
+                {transform:'translate('+midx+'px,'+midy+'px) scale(1.07)', offset:.5},
+                {transform:'translate('+d.x+'px,'+d.y+'px)'}
+            ],{duration:200, easing:'cubic-bezier(.34,1.56,.64,1)'});
+            anim.onfinish=()=>{ token.style.transform='translate('+d.x+'px,'+d.y+'px)'; last=d; res(); };
+            anim.oncancel=()=>{ token.style.transform='translate('+d.x+'px,'+d.y+'px)'; last=d; res(); };
+        });
+    }
+
+    function reveal(i){
+        const t=TILES[i];
+        card.ic.innerHTML=t.svg;
+        card.k.textContent='Square '+String(i).padStart(2,'0')+' · '+(t.kind==='hobby'?'Hobby':t.name);
+        card.t.textContent=t.name;
+        card.d.textContent=t.blurb;
+        TILES.forEach(x=>{ x.el.classList.remove('is-active'); x.label.classList.remove('is-active'); });
+        t.el.classList.add('is-active','pop'); t.label.classList.add('is-active');
+        setTimeout(()=>t.el.classList.remove('pop'),460);
+        card.el.classList.remove('show'); void card.el.offsetWidth; card.el.classList.add('show');
+    }
+
+    async function runSteps(list,target){
+        moving=true;
+        for(const s of list){ await hop(s); }
+        cur=target; reveal(target); moving=false;
+    }
+    function moveTo(target){
+        if(moving||target===cur){ if(target===cur) reveal(target); return; }
+        const list=[]; const dir=target>cur?1:-1;
+        for(let i=cur+dir; ; i+=dir){ list.push(i); if(i===target) break; }
+        runSteps(list,target);
+    }
+
+    /* dice */
+    const die=document.getElementById('gbDie'), rollLabel=document.getElementById('gbRollLabel');
+    const FACES={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+    const pips=die?die.querySelectorAll('.pip'):[];
+    function showFace(n){ pips.forEach((p,idx)=>p.classList.toggle('on',FACES[n].includes(idx))); }
+    showFace(1);
+    function roll(){
+        if(moving||!die) return;
+        die.classList.remove('rolling'); void die.offsetWidth; die.classList.add('rolling');
+        const n=1+Math.floor(Math.random()*6);
+        let flick=0; const iv=setInterval(()=>{ showFace(1+Math.floor(Math.random()*6)); if(++flick>5){ clearInterval(iv); showFace(n); }},70);
+        setTimeout(()=>{
+            rollLabel.textContent='You rolled '+n+'!';
+            const list=[]; let t=cur;
+            for(let s=0;s<n;s++){ t=(t+1)%TILES.length; list.push(t); }
+            runSteps(list,t);
+        },500);
+    }
+    if(die){ die.addEventListener('click',roll); die.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); roll(); } }); }
+
+    /* on tablet & phones the dice moves up beside the copy (in the header), above the board */
+    const gbHead=document.querySelector('.gb-head'), controls=document.querySelector('.gb-controls'), sideEl=document.querySelector('.gb-side');
+    function placeControls(){
+        if(!gbHead||!controls||!sideEl) return;
+        if(window.matchMedia('(max-width:1000px)').matches){
+            if(controls.parentElement!==gbHead) gbHead.appendChild(controls);
+        } else if(controls.parentElement!==sideEl){ sideEl.insertBefore(controls, card.el); }
+    }
+
+    function init(){ placeControls(); buildPath(); positionLabels(); setInstant(cur); reveal(cur); }
+    if(document.readyState==='complete') init(); else window.addEventListener('load',init);
+    requestAnimationFrame(init);
+    let rt; window.addEventListener('resize',()=>{ clearTimeout(rt); rt=setTimeout(()=>{ placeControls(); buildPath(); positionLabels(); setInstant(cur); },120); });
+})();
+
+/* ---- Footer clock + back to top ---- */
+(function(){
+    const c=document.getElementById('footClock');
+    if(c){ const tk=()=>c.textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}); tk(); setInterval(tk,1000); }
+    const tp=document.getElementById('footTop');
+    tp&&tp.addEventListener('click',e=>{ e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); });
+})();
+</script>
+
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>AOS.init({ once:true, duration:800 });</script>
+
+<script src="cursor.js"></script>
+
+</body>
+</html>

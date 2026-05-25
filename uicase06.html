@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Posters | Munia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cursor.css">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        :root { --bg: #F6F6E7; --ink: #1B1814; --muted: #56514a; --sage: #7D9179; --green: #A8C4A2; --line: rgba(27,24,20,0.16); }
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+        html, body { overflow-x: clip; }
+        body { background: var(--bg); color: var(--ink); font-family: 'Newsreader', Georgia, serif; }
+
+        @font-face { font-family: gofak;   src: url(fonts/GofakClassyRegular-lxB1y.otf); }
+        @font-face { font-family: afteris; src: url(fonts/afteris.otf); }
+        @font-face { font-family: adriana; src: url(fonts/AdrianagabrielleRegular-5yXXG.otf); }
+
+        /* nav */
+        .nav-container { position: fixed; top: 0; left: 0; right: 0; z-index: 500; display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; background: transparent; transition: transform .45s cubic-bezier(.4,0,.2,1), background-color .3s ease, box-shadow .3s ease, backdrop-filter .3s ease; will-change: transform; }
+        .nav-container.nav-hidden { transform: translateY(-100%); }
+        .nav-container.nav-float { background: rgba(246,246,231,0.82); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); box-shadow: 0 1px 0 rgba(27,24,20,0.08), 0 8px 24px rgba(27,24,20,0.06); }
+        .logo img { max-height: 72px; width: auto; }
+        .menu img { max-height: 48px; cursor: pointer; }
+        @media (max-width: 1024px) { .logo img { max-height: 60px; } .menu img { max-height: 40px; } }
+        @media (max-width: 768px)  { .nav-container { padding: 10px 16px; } }
+        .fullscreen-menu { position: fixed; inset: 0; background: #1B1814; color: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none; transition: background-color .6s ease, opacity .4s ease; z-index: 1000; font-family: afteris; }
+        .fullscreen-menu.active { background: #dfd1a2; opacity: 1; pointer-events: auto; }
+        .fullscreen-menu ul { list-style: none; text-align: center; opacity: 0; transform: scale(.95); transition: opacity .5s ease .2s, transform .5s ease .2s; }
+        .fullscreen-menu.active ul { opacity: 1; transform: scale(1); }
+        .fullscreen-menu li { font-size: clamp(2.6rem, 7vw, 4.5rem); margin: 18px 0; cursor: pointer; display: flex; justify-content: center; }
+        .fullscreen-menu li span { display: inline-block; transition: transform .2s ease, color .2s ease; transform-origin: bottom left; }
+        .fullscreen-menu li:hover span { animation: dominoTilt .5s forwards; }
+        .fullscreen-menu li span:nth-child(1){animation-delay:0s} .fullscreen-menu li span:nth-child(2){animation-delay:.05s} .fullscreen-menu li span:nth-child(3){animation-delay:.1s} .fullscreen-menu li span:nth-child(4){animation-delay:.15s} .fullscreen-menu li span:nth-child(5){animation-delay:.2s} .fullscreen-menu li span:nth-child(6){animation-delay:.25s} .fullscreen-menu li span:nth-child(7){animation-delay:.3s}
+        @keyframes dominoTilt { 0%{transform:rotate(0)} 25%{transform:rotate(10deg)} 50%{transform:rotate(20deg)} 100%{transform:rotate(0)} }
+        .fullscreen-menu li a:hover { color: #7d9179; }
+        .close-btn { font-size: 3rem; cursor: pointer; color: #fff; z-index: 1001; transition: transform .3s ease; margin-bottom: 14px; }
+        .close-btn:hover { transform: scale(1.15); }
+
+        /* shared */
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 70px); }
+        .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--sage); }
+        .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: #FF93CB; }
+        .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+        .reveal.in-view { opacity: 1; transform: none; }
+        @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; } }
+
+        /* hero (light) */
+        .vp-hero { padding: clamp(130px, 17vh, 200px) 0 clamp(20px, 4vh, 40px); }
+        .vp-title { font-family: gofak, serif; font-size: clamp(46px, 8.5vw, 120px); line-height: 0.98; letter-spacing: -0.01em; margin: 18px 0 16px; }
+        .vp-tag { font-style: italic; font-size: clamp(19px, 2vw, 28px); max-width: 660px; line-height: 1.35; color: var(--muted); }
+        .vp-meta { margin-top: 24px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--sage); }
+
+        /* poster grid */
+        .posters { padding: clamp(20px,4vh,40px) 0 clamp(64px,9vh,120px); }
+        .poster-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 40px); }
+        @media (max-width: 760px) { .poster-grid { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; } }
+        .poster { border: 1.6px solid var(--ink); border-radius: 20px; overflow: hidden; background: #e9e8d4; box-shadow: -12px 16px 0 rgba(27,24,20,0.12); transition: transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s cubic-bezier(.22,1,.36,1); }
+        .poster:hover { transform: translateY(-6px); box-shadow: -16px 22px 0 rgba(27,24,20,0.16); }
+        .poster img { width: 100%; height: auto; }
+        .poster-cap { margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--sage); }
+
+        /* back link */
+        .vp-back { border-top: 1.5px solid var(--line); }
+        .vp-back-inner { display: flex; justify-content: space-between; align-items: center; gap: 30px; flex-wrap: wrap; padding: clamp(44px,6vh,80px) 0; }
+        .next-eye { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--sage); }
+        .next-title { font-family: gofak, serif; font-size: clamp(40px,6vw,92px); line-height: 1; margin-top: 10px; transition: color .3s ease; }
+        .next-link:hover .next-title { color: var(--sage); }
+        .cta { display: inline-flex; align-items: center; gap: 16px; }
+        .oval-btn { position: relative; display: inline-block; width: 172px; height: 60px; color: var(--ink); font-family: 'Roboto', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; text-align: center; line-height: 60px; background: var(--green); border-radius: 50%; white-space: nowrap; transition: background-color .3s ease; }
+        .oval-btn::before, .oval-btn::after { content:""; position:absolute; inset:0; border:1.5px solid currentColor; border-radius:50%; transition: transform .3s ease; }
+        .oval-btn::before { transform: rotate(5deg); } .oval-btn::after { transform: rotate(-5deg); }
+        .oval-btn:hover { background: #93b88c; }
+        .oval-btn:hover::before, .oval-btn:hover::after { transform: rotate(0); }
+        .cta-arrow { width: 56px; transition: transform .4s cubic-bezier(.22,1,.36,1); }
+        .cta:hover .cta-arrow { transform: translateX(8px); }
+        .cta-arrow svg { width: 100%; height: 22px; }
+        .cta-arrow path { fill:none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* footer */
+        .footer2 { position: relative; background: #292623; color: #F6F6E7; padding: 64px 60px 0; overflow: hidden; }
+        .footer2 a { color: inherit; }
+        .footer2-now { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding-bottom: 48px; }
+        .now-card { display: flex; flex-direction: column; gap: 16px; width: 300px; max-width: 100%; padding: 18px 22px; border-radius: 18px; background: rgba(246,246,231,0.05); border: 1px solid rgba(246,246,231,0.15); transition: transform .45s cubic-bezier(.22,1,.36,1), background-color .3s, border-color .3s; }
+        .now-card:hover { transform: translateY(-7px); background: rgba(246,246,231,0.09); border-color: rgba(255,147,203,0.5); }
+        .now-label { align-self: flex-end; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .now-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF93CB; animation: footPulse 2.2s ease-in-out infinite; }
+        .now-body { display: flex; align-items: center; gap: 16px; }
+        .now-icon { flex: 0 0 auto; width: 52px; height: 52px; border-radius: 13px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; color: #1B1814; }
+        .now-icon--music { background: #C9B6E4; } .now-icon--book { background: #A8D0A0; } .now-icon--build { background: #F0B89B; }
+        .now-text { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .now-title { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 500; color: #F6F6E7; line-height: 1.1; }
+        .now-sub { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(246,246,231,0.6); }
+        .now-meta { display: inline-flex; align-items: center; gap: 8px; margin-top: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(246,246,231,0.55); }
+        .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+        .eq i { width: 3px; height: 5px; background: #FF93CB; border-radius: 1px; animation: eqBar .9s ease-in-out infinite; }
+        .eq i:nth-child(2){animation-delay:.18s} .eq i:nth-child(3){animation-delay:.36s} .eq i:nth-child(4){animation-delay:.54s}
+        @keyframes eqBar { 0%,100%{height:4px} 50%{height:14px} }
+        .footer2-main { display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 44px; }
+        .footer2-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: #FF93CB; margin: 0 0 22px; display: flex; align-items: center; gap: 10px; }
+        @keyframes footPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.5} }
+        .footer2-heading { font-family: afteris, 'Newsreader', serif; font-weight: 400; font-size: clamp(34px, 5vw, 76px); line-height: 1.05; color: #F6F6E7; margin: 0 0 16px; }
+        .footer2-heading em { font-style: normal; color: #FF93CB; display: inline-block; animation: footWiggle 5s ease-in-out infinite; transform-origin: center bottom; }
+        @keyframes footWiggle { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+        .footer2-touch { font-family: adriana, cursive; font-size: clamp(26px, 2.6vw, 40px); color: #FF93CB; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .footer2-touch-arrow { display: inline-block; font-family: 'Newsreader', serif; animation: footTouchBob 1.5s ease-in-out infinite; }
+        @keyframes footTouchBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+        .footer2-socials { display: flex; gap: 22px; }
+        .fsoc { width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid rgba(246,246,231,0.45); display: inline-flex; align-items: center; justify-content: center; color: #F6F6E7; transition: transform .45s cubic-bezier(.34,1.56,.64,1), background-color .3s, border-color .3s, color .3s; }
+        .fsoc svg { width: 24px; height: 24px; fill: currentColor; }
+        .fsoc:hover { background: #FF93CB; border-color: #FF93CB; color: #1B1814; transform: translateY(-9px) rotate(8deg); }
+        .footer2-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 24px 0 32px; border-top: 1px solid rgba(246,246,231,0.18); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .footer2-bottom a { border-bottom: 1px solid transparent; transition: border-color .3s; }
+        .footer2-bottom a:hover { border-color: rgba(246,246,231,0.7); }
+        @media (max-width: 768px) {
+            .footer2 { padding: 56px 18px 0; }
+            .footer2-now { gap: 8px; flex-wrap: nowrap; padding-bottom: 40px; }
+            .now-card { flex: 1 1 0; min-width: 0; width: auto; padding: 12px 10px; gap: 8px; border-radius: 14px; }
+            .now-label { font-size: 8px; letter-spacing: .08em; gap: 5px; }
+            .now-body { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .now-icon { width: 36px; height: 36px; font-size: 17px; border-radius: 9px; }
+            .now-text { min-width: 0; width: 100%; } .now-title { font-size: 12.5px; line-height: 1.14; white-space: normal; overflow-wrap: break-word; word-break: break-word; } .now-sub { font-size: 9px; white-space: normal; overflow-wrap: break-word; word-break: break-word; } .now-meta { font-size: 8px; gap: 5px; } .eq { height: 9px; }
+            .footer2-heading { font-size: clamp(30px, 8vw, 54px); }
+            .fsoc { width: 54px; height: 54px; }
+            .footer2-bottom { flex-direction: column; gap: 8px; text-align: center; }
+        }
+    </style>
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<header class="nav-container">
+    <a href="index.html"><div class="logo"><img src="images/logo2.png" alt="Munia logo"></div></a>
+    <div class="menu"><img src="images/menu3.png" alt="Open menu" id="menu-icon"></div>
+</header>
+<div class="fullscreen-menu" id="fullscreen-menu">
+    <span class="close-btn" id="close-btn">&times;</span>
+    <ul>
+        <li><a href="index.html"><span>H</span><span>O</span><span>M</span><span>E</span></a></li>
+        <li><a href="work.html"><span>W</span><span>O</span><span>R</span><span>K</span></a></li>
+        <li><a href="aboutMe.html"><span>A</span><span>B</span><span>O</span><span>U</span><span>T</span></a></li>
+        <li><a href="contact.html"><span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span></a></li>
+    </ul>
+</div>
+
+<!-- HERO (light) -->
+<section class="vp-hero">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> Visual &mdash; Print &amp; Web &middot; 06 / 08</span>
+        <h1 class="vp-title reveal">Poster &amp; Banner</h1>
+        <p class="vp-tag reveal">A poster and banner I designed to promote a live website &mdash; commissioned by a friend, who printed and displayed them across his IUB campus.</p>
+        <p class="vp-tag reveal" style="font-style:normal; font-size:clamp(16px,1.3vw,19px); margin-top:16px;">The same visual identity carried from the site straight onto physical signage &mdash; bridging digital design and real-world print.</p>
+        <div class="vp-meta reveal">Friend commission &middot; Design only &middot; Figma &amp; Illustrator</div>
+    </div>
+</section>
+
+<!-- POSTERS -->
+<section class="posters">
+    <div class="wrap">
+        <div class="poster-grid">
+            <div class="reveal">
+                <figure class="poster"><img src="images/visual-poster-01.svg" alt="Promotional banner"></figure>
+                <div class="poster-cap">Banner &middot; designed for an IUB campus rollout</div>
+            </div>
+            <div class="reveal">
+                <figure class="poster"><img src="images/visual-poster-02.svg" alt="Promotional poster"></figure>
+                <div class="poster-cap">Poster &middot; designed for an IUB campus rollout</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BACK -->
+<section class="vp-back">
+    <div class="wrap vp-back-inner">
+        <a class="next-link" href="uicase07.html">
+            <div class="next-eye">Next case study</div>
+            <div class="next-title">Edu Club App &rarr;</div>
+        </a>
+        <a class="cta" href="uiuxcollection.html">
+            <span class="oval-btn">All Projects</span>
+            <span class="cta-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer2">
+    <div class="footer2-now">
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body"><span class="now-icon now-icon--music">&#9834;</span><div class="now-text"><span class="now-title">Loner</span><span class="now-sub">Teflon Sega</span><span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body"><span class="now-icon now-icon--book">&#182;</span><div class="now-text"><span class="now-title">The Correspondent</span><span class="now-sub">Virginia Evans</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body"><span class="now-icon now-icon--build">&#9874;&#65038;</span><div class="now-text"><span class="now-title">Fullstack Bus App</span><span class="now-sub">Web · in progress</span></div></div>
+        </div>
+    </div>
+    <div class="footer2-main">
+        <h2 class="footer2-heading">You have an idea?<br>I got the <em>vision.</em></h2>
+        <span class="footer2-touch">get in touch</span>
+        <div class="footer2-socials">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg></a>
+        </div>
+    </div>
+    <div class="footer2-bottom">
+        <span>© Munia · 2025</span>
+        <span>Local time — <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top ↑</a>
+    </div>
+</footer>
+
+<script>
+(function () {
+    const mi = document.getElementById('menu-icon'), menu = document.getElementById('fullscreen-menu'), cb = document.getElementById('close-btn');
+    mi && mi.addEventListener('click', () => menu.classList.add('active'));
+    cb && cb.addEventListener('click', () => menu.classList.remove('active'));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.classList.remove('active'); });
+})();
+(function () {
+    const nav = document.querySelector('.nav-container');
+    if (!nav) return;
+    const menu = document.getElementById('fullscreen-menu');
+    let last = window.pageYOffset || 0, ticking = false;
+    function update() {
+        const y = window.pageYOffset || 0;
+        nav.classList.toggle('nav-float', y > 40);
+        if (menu && menu.classList.contains('active')) nav.classList.remove('nav-hidden');
+        else if (y > last && y > 140) nav.classList.add('nav-hidden');
+        else if (y < last - 4) nav.classList.remove('nav-hidden');
+        last = y;
+        ticking = false;
+    }
+    addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } }, { passive: true });
+    update();
+})();
+(function () {
+    const els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in-view')); return; }
+    const io = new IntersectionObserver((en) => { en.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in-view'); io.unobserve(x.target); } }); }, { threshold: 0.12 });
+    els.forEach(e => io.observe(e));
+})();
+(function () {
+    const c = document.getElementById('footClock');
+    if (c) { const tk = () => c.textContent = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }); tk(); setInterval(tk, 1000); }
+    const tp = document.getElementById('footTop');
+    tp && tp.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+
+<script src="cursor.js"></script>
+</body>
+</html>

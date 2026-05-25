@@ -1,0 +1,587 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Collection | Munia</title>
+    <link rel="stylesheet" href="CSS/bootstrap.css">
+    <link rel="stylesheet" href="uiuxcollec.css">
+
+    <!-- Fonts used by the homepage nav + footer -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cursor.css">
+
+    <style>
+        @font-face { font-family: adriana; src: url(fonts/AdrianagabrielleRegular-5yXXG.otf); }
+
+        /* =============================================
+           NAV — match the homepage (transparent overlay)
+        ============================================= */
+        .nav-container {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 500;
+            padding: 14px 28px;
+            background-color: transparent;
+        }
+        .logo img { max-height: 72px; width: auto; }
+        .menu img { max-height: 48px; cursor: pointer; }
+        @media (max-width: 1024px) {
+            .logo img { max-height: 60px; }
+            .menu img { max-height: 40px; }
+        }
+        @media (max-width: 768px) {
+            .nav-container { padding: 10px 16px; }
+        }
+        /* clearance so the hero clears the overlay nav */
+        .hero { padding-top: 110px; }
+
+        /* =============================================
+           FOOTER v2 — dark close (from homepage)
+        ============================================= */
+        .footer2 {
+            position: relative;
+            background: #292623;          /* soft black, not pitch black */
+            color: #F6F6E7;
+            padding: 64px 60px 0;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .footer2 * { box-sizing: border-box; }
+        .footer2 a { color: inherit; }
+        .footer2-now { position: relative; z-index: 1; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding-bottom: 48px; }
+        .now-card {
+            display: flex; flex-direction: column; gap: 16px;
+            width: 300px; max-width: 100%;
+            padding: 18px 22px; border-radius: 18px;
+            background: rgba(246,246,231,0.05);
+            border: 1px solid rgba(246,246,231,0.15);
+            transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .now-card:hover { transform: translateY(-7px); background: rgba(246,246,231,0.09); border-color: rgba(255,147,203,0.5); }
+        .now-label { align-self: flex-end; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .now-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF93CB; animation: footPulse 2.2s ease-in-out infinite; }
+        .now-body { display: flex; align-items: center; gap: 16px; }
+        .now-icon { flex: 0 0 auto; width: 52px; height: 52px; border-radius: 13px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; color: #1B1814; }
+        .now-icon--music { background: #C9B6E4; }
+        .now-icon--book  { background: #A8D0A0; }
+        .now-icon--build { background: #F0B89B; }
+        .now-text { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .now-title { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 500; color: #F6F6E7; line-height: 1.1; }
+        .now-sub { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(246,246,231,0.6); }
+        .now-meta { display: inline-flex; align-items: center; gap: 8px; margin-top: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(246,246,231,0.55); }
+        .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+        .eq i { width: 3px; height: 5px; background: #FF93CB; border-radius: 1px; animation: eqBar 0.9s ease-in-out infinite; }
+        .eq i:nth-child(2) { animation-delay: 0.18s; }
+        .eq i:nth-child(3) { animation-delay: 0.36s; }
+        .eq i:nth-child(4) { animation-delay: 0.54s; }
+        @keyframes eqBar { 0%,100% { height: 4px; } 50% { height: 14px; } }
+
+        .footer2-main { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 44px; }
+        .footer2-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #FF93CB; margin: 0 0 22px; display: flex; align-items: center; gap: 10px; }
+        @keyframes footPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.5} }
+        .footer2-heading { font-family: afteris, 'Newsreader', serif; font-weight: 400; font-size: clamp(34px, 5vw, 76px); line-height: 1.05; color: #F6F6E7; margin: 0 0 16px; }
+        .footer2-heading em { font-style: normal; color: #FF93CB; display: inline-block; animation: footWiggle 5s ease-in-out infinite; transform-origin: center bottom; }
+        @keyframes footWiggle { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+        .footer2-touch { font-family: adriana, cursive; font-size: clamp(26px, 2.6vw, 40px); color: #FF93CB; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .footer2-touch-arrow { display: inline-block; font-family: 'Newsreader', serif; animation: footTouchBob 1.5s ease-in-out infinite; }
+        @keyframes footTouchBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+        .footer2-socials { display: flex; gap: 22px; }
+        .fsoc {
+            width: 64px; height: 64px; border-radius: 50%;
+            border: 1.5px solid rgba(246,246,231,0.45);
+            display: inline-flex; align-items: center; justify-content: center;
+            color: #F6F6E7; background: transparent;
+            transition: transform 0.45s cubic-bezier(0.34,1.56,0.64,1), background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            will-change: transform;
+        }
+        .fsoc svg { width: 24px; height: 24px; fill: currentColor; }
+        .fsoc:hover { background: #FF93CB; border-color: #FF93CB; color: #1B1814; transform: translateY(-9px) rotate(8deg); }
+        .footer2-bottom { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 24px 0 32px; border-top: 1px solid rgba(246,246,231,0.18); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .footer2-bottom a { border-bottom: 1px solid transparent; transition: border-color 0.3s; }
+        .footer2-bottom a:hover { border-color: rgba(246,246,231,0.7); }
+
+        @media (max-width: 768px) {
+            .footer2 { padding: 56px 18px 0; }
+            .footer2-main { padding-bottom: 40px; }
+            .footer2-now { gap: 8px; flex-wrap: nowrap; padding-bottom: 40px; }
+            .now-card { flex: 1 1 0; min-width: 0; width: auto; max-width: none; padding: 12px 10px; gap: 8px; border-radius: 14px; overflow: hidden; }
+            .now-label { font-size: 8px; letter-spacing: 0.08em; gap: 5px; }
+            .now-body { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .now-icon { width: 36px; height: 36px; font-size: 17px; border-radius: 9px; }
+            .now-text { min-width: 0; width: 100%; }
+            .now-title { font-size: 12.5px; line-height: 1.14; white-space: normal; word-break: break-word; }
+            .now-sub { font-size: 9px; white-space: normal; word-break: break-word; }
+            .now-meta { font-size: 8px; gap: 5px; }
+            .eq { height: 9px; }
+            .footer2-heading { font-size: clamp(30px, 8vw, 54px); }
+            .fsoc { width: 54px; height: 54px; }
+            .footer2-bottom { flex-direction: column; gap: 8px; text-align: center; }
+        }
+
+        /* =============================================
+           EXPANDING PANELS — project showcase
+        ============================================= */
+        .panels {
+            display: flex;
+            gap: 14px;
+            padding: 10px clamp(20px, 5vw, 70px) 70px;
+            height: clamp(440px, 72vh, 740px);
+        }
+        .panel {
+            position: relative;
+            flex: 1 1 0;
+            min-width: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1.6px solid #1B1814;
+            background: #d9dec9;
+            cursor: pointer;
+            text-decoration: none;
+            transition: flex 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .panel-img {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .panel-shade {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top,
+                        rgba(20,17,13,0.72) 0%,
+                        rgba(20,17,13,0.18) 42%,
+                        rgba(20,17,13,0) 72%);
+            z-index: 1;
+        }
+        .panel-index {
+            position: absolute;
+            top: 16px; left: 16px;
+            z-index: 2;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 0.2em;
+            color: #F6F6E7;
+            /* dark pill so the number stays readable over light thumbnails too */
+            background: rgba(20,17,13,0.55);
+            padding: 5px 8px 5px 11px;
+            border-radius: 100px;
+            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(2px);
+        }
+        .panel-foot {
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            z-index: 2;
+            padding: 22px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: #F6F6E7;
+        }
+        .panel-name {
+            font-family: gofak, serif;
+            font-size: clamp(22px, 2.4vw, 40px);
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .panel-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .panel-cta svg { width: 24px; height: 12px; }
+        .panel-cta path {
+            fill: none; stroke: currentColor; stroke-width: 1.6;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        .panel:hover .panel-img { transform: scale(1.07); }
+        .panels:hover .panel { flex: 0.72 1 0; }     /* others shrink */
+        .panels .panel:hover { flex: 2.6 1 0; }       /* hovered expands */
+        .panels .panel:hover .panel-cta { opacity: 1; transform: none; }
+
+        /* ---- entrance: card 1 leads, slides left, 2 & 3 fan in ---- */
+        /* fill-mode "backwards" only: during the run the keyframes drive it;
+           once finished it reverts to the base flex:1 (= final frame), so hover
+           keeps working (no forwards lock). */
+        .panel:nth-child(1) { animation: panelLead   1.5s cubic-bezier(0.22,1,0.36,1) backwards; }
+        .panel:nth-child(2) { animation: panelFollow 1.5s cubic-bezier(0.22,1,0.36,1) 0.12s backwards; }
+        .panel:nth-child(3) { animation: panelFollow 1.5s cubic-bezier(0.22,1,0.36,1) 0.26s backwards; }
+
+        @keyframes panelLead {
+            0%   { flex-grow: 8; opacity: 0; transform: scale(0.96); }
+            16%  { flex-grow: 8; opacity: 1; transform: scale(1); }   /* card alone, full width */
+            100% { flex-grow: 1; opacity: 1; transform: scale(1); }   /* yields to the others */
+        }
+        @keyframes panelFollow {
+            0%   { flex-grow: 0.0001; opacity: 0; transform: translateX(34px); }
+            32%  { flex-grow: 0.0001; opacity: 0; transform: translateX(34px); } /* wait for the lead */
+            100% { flex-grow: 1; opacity: 1; transform: translateX(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .panel { animation: none !important; }
+        }
+
+        @media (max-width: 768px) {
+            .panels {
+                flex-direction: column;
+                height: auto;
+                gap: 12px;
+                padding: 10px 16px 50px;
+            }
+            .panel { flex: none; height: 210px; animation: none; }
+            .panels:hover .panel,
+            .panels .panel:hover { flex: none; }      /* no expand on touch */
+            .panel-cta { opacity: 1; transform: none; }
+        }
+
+        /* placeholder panels (projects not built yet) */
+        .panel--soon { background: linear-gradient(135deg, #cdd3c0, #bcc4ad); cursor: default; }
+        .panel-soonmark {
+            position: absolute; inset: 0; z-index: 2;
+            display: flex; align-items: center; justify-content: center;
+            font-family: gofak, serif;
+            font-size: clamp(42px, 6vw, 92px);
+            color: rgba(27,24,20,0.2);
+        }
+
+        /* prev / next buttons below the panels */
+        .panels-nav {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            padding: 2px clamp(20px, 5vw, 70px) 60px;
+        }
+        .pnav-btn {
+            width: 56px; height: 56px;
+            border-radius: 50%;
+            border: 1.6px solid #1B1814;
+            background: transparent;
+            color: #1B1814;
+            display: inline-flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, opacity 0.3s ease;
+        }
+        .pnav-btn:hover { background: #1B1814; color: #F6F6E7; }
+        .pnav-btn:active { transform: scale(0.92); }
+        .pnav-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+        .pnav-btn svg { width: 24px; height: 14px; }
+        .pnav-btn path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav-container">
+  <a href="index.html"> 
+    <div class="logo">
+    <img src="images/logo2.png" alt="Website Logo">
+</div>
+</a>
+  <div class="menu">
+      <img src="images/menu3.png" alt="Menu Icon" id="menu-icon">
+  </div>
+</div>
+
+<!-- Full-Screen Menu -->
+<div class="fullscreen-menu" id="fullscreen-menu">
+  <span class="close-btn" id="close-btn">&times;</span>
+  <ul>
+      <li>
+          <a href="index.html">
+              <span>H</span><span>O</span><span>M</span><span>E</span>
+          </a>
+      </li>
+      <li>
+          <a href="work.html">
+              <span>W</span><span>O</span><span>R</span><span>K</span>
+          </a>
+      </li>
+      <li>
+          <a href="aboutMe.html">
+              <span>A</span><span>B</span><span>O</span><span>U</span><span>T</span>
+          </a>
+      </li>
+      <li>
+          <a href="contact.html">
+              <span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span>
+          </a>
+      </li>
+  </ul>
+</div>
+
+
+
+
+
+     
+    <!--hero typo-->
+
+    <section class="hero">
+
+        <div class="hero-typo">
+            
+          <div class="typo1">
+            <div class="box22">UI/UX</div>
+            <div class="box33">Design</div>
+          </div>
+
+          <div class="typo2">
+
+              <div class="box44">
+                <img class="startline1" src="images/startline.png">
+              </div>
+              <div class="box5">Collection</div>
+              <div class="box6">
+                <img class="startline2" src="images/startline.png">
+              </div>
+
+
+          </div>
+
+
+
+        </div>
+    </section>
+ 
+
+    <!-- showcase — expanding panels -->
+      <section class="panels" id="panelStage">
+
+        <a class="panel" href="uicase01.html">
+            <img class="panel-img" src="images/guidex03-explore.png" alt="Guide/X case study">
+            <span class="panel-shade"></span>
+            <span class="panel-index">01</span>
+            <span class="panel-foot">
+                <span class="panel-name">Guide/X</span>
+                <span class="panel-cta">View case study
+                    <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6 H22 M22 6 L15 1 M22 6 L15 11"/></svg>
+                </span>
+            </span>
+        </a>
+
+        <a class="panel" href="uicase02.html">
+            <img class="panel-img" src="images/nasir01-hero.png" alt="Nasir Enterprise case study">
+            <span class="panel-shade"></span>
+            <span class="panel-index">02</span>
+            <span class="panel-foot">
+                <span class="panel-name">Nasir Enterprise</span>
+                <span class="panel-cta">View case study
+                    <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6 H22 M22 6 L15 1 M22 6 L15 11"/></svg>
+                </span>
+            </span>
+        </a>
+
+        <a class="panel" href="uicase03.html">
+            <img class="panel-img" src="images/bus-cover.png" alt="BusTrack case study">
+            <span class="panel-shade"></span>
+            <span class="panel-index">03</span>
+            <span class="panel-foot">
+                <span class="panel-name">BusTrack</span>
+                <span class="panel-cta">View case study
+                    <svg viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6 H22 M22 6 L15 1 M22 6 L15 11"/></svg>
+                </span>
+            </span>
+        </a>
+
+      </section>
+
+      <!-- prev / next: swap between pages of projects -->
+      <div class="panels-nav">
+          <button class="pnav-btn" id="panelPrev" aria-label="Previous projects" disabled>
+              <svg viewBox="0 0 24 14" aria-hidden="true"><path d="M24 7 H2 M2 7 L9 1 M2 7 L9 13"/></svg>
+          </button>
+          <button class="pnav-btn" id="panelNext" aria-label="More projects">
+              <svg viewBox="0 0 24 14" aria-hidden="true"><path d="M0 7 H22 M22 7 L15 1 M22 7 L15 13"/></svg>
+          </button>
+      </div>
+
+    <!-- FOOTER (shared with homepage) -->
+
+<footer class="footer2">
+
+    <div class="footer2-now">
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--music">&#9834;</span>
+                <div class="now-text">
+                    <span class="now-title">Loner</span>
+                    <span class="now-sub">Teflon Sega</span>
+                    <span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span>
+                </div>
+            </div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--book">&#182;</span>
+                <div class="now-text">
+                    <span class="now-title">The Correspondent</span>
+                    <span class="now-sub">Virginia Evans</span>
+                </div>
+            </div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body">
+                <span class="now-icon now-icon--build">&#9874;&#65038;</span>
+                <div class="now-text">
+                    <span class="now-title">Fullstack Bus App</span>
+                    <span class="now-sub">Web · in progress</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer2-main">
+        <h2 class="footer2-heading">You have an idea?<br>I got the <em>vision.</em></h2>
+        <span class="footer2-touch">get in touch</span>
+        <div class="footer2-socials">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc" aria-label="Email">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc" aria-label="GitHub">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer2-bottom">
+        <span>© Munia · 2025</span>
+        <span class="footer2-clock">Local time — <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top ↑</a>
+    </div>
+
+</footer><!-- /.footer2 -->
+
+  
+  
+  <script>
+    // Menu toggle logic
+const menuIcon = document.getElementById("menu-icon");
+const fullscreenMenu = document.getElementById("fullscreen-menu");
+const closeBtn = document.getElementById("close-btn");
+
+// Open the fullscreen menu
+menuIcon.addEventListener("click", () => {
+    fullscreenMenu.classList.add("active");
+});
+
+// Close the fullscreen menu
+closeBtn.addEventListener("click", () => {
+    fullscreenMenu.classList.remove("active");
+});
+
+// Project panels — paged prev/next (replays the fan-in entrance)
+(function () {
+    const stage = document.getElementById('panelStage');
+    const prev  = document.getElementById('panelPrev');
+    const next  = document.getElementById('panelNext');
+    if (!stage || !prev || !next) return;
+
+    const ARROW = '<svg viewBox="0 0 24 12" aria-hidden="true"><path d="M0 6 H22 M22 6 L15 1 M22 6 L15 11"/></svg>';
+
+    // page 0 = built case studies · page 1 = placeholders (pages not made yet)
+    const PAGES = [
+        [
+            { i: '01', name: 'Guide/X',          href: 'uicase01.html',   img: 'images/guidex03-explore.png' },
+            { i: '02', name: 'Nasir Enterprise', href: 'uicase02.html',   img: 'images/nasir01-hero.png' },
+            { i: '03', name: 'BusTrack',         href: 'uicase03.html',   img: 'images/bus-cover.png' },
+        ],
+        [
+            { i: '04', name: 'Craving',          href: 'uicase04.html',   img: 'images/craving-cover.png' },
+            { i: '05', name: 'Landing Page',     href: 'uicase05.html',   img: 'images/landing-cover.png' },
+            { i: '06', name: 'Poster & Banner',  href: 'uicase06.html',   img: 'images/visual-poster-01.svg' },
+        ],
+        [
+            { i: '07', name: 'Edu Club App',     href: 'uicase07.html',   img: 'images/educlub-cover.png' },
+            { i: '08', name: 'Digital Marketing Firm', href: 'uicase08.html', img: 'images/digitalmkt-cover.png' },
+        ],
+    ];
+
+    function realCard(p) {
+        return '<a class="panel" href="' + p.href + '">' +
+            '<img class="panel-img" src="' + p.img + '" alt="' + p.name + ' case study">' +
+            '<span class="panel-shade"></span>' +
+            '<span class="panel-index">' + p.i + '</span>' +
+            '<span class="panel-foot"><span class="panel-name">' + p.name + '</span>' +
+            '<span class="panel-cta">View case study ' + ARROW + '</span></span></a>';
+    }
+    function soonCard(p) {
+        return '<div class="panel panel--soon">' +
+            '<span class="panel-shade"></span>' +
+            '<span class="panel-index">' + p.i + '</span>' +
+            '<span class="panel-soonmark">&#10022;</span>' +
+            '<span class="panel-foot"><span class="panel-name">Coming Soon</span></span></div>';
+    }
+
+    let page = 0;
+    function render() {
+        stage.innerHTML = PAGES[page].map((p) => p.soon ? soonCard(p) : realCard(p)).join('');
+        prev.disabled = page === 0;
+        next.disabled = page === PAGES.length - 1;
+    }
+    prev.addEventListener('click', () => { if (page > 0) { page--; render(); } });
+    next.addEventListener('click', () => { if (page < PAGES.length - 1) { page++; render(); } });
+})();
+
+// Footer live clock + back-to-top
+(function () {
+    const clock = document.getElementById('footClock');
+    if (clock) {
+        const tick = () => {
+            clock.textContent = new Date().toLocaleTimeString([], {
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            });
+        };
+        tick();
+        setInterval(tick, 1000);
+    }
+    const top = document.getElementById('footTop');
+    if (top) {
+        top.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+})();
+
+  </script>
+<script src="cursor.js"></script>
+
+</body>
+
+</html>

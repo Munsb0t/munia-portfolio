@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusTrack — Case Study | Munia</title>
+
+    <!--  NOTE: in-progress full-stack product Munia is building WITH a friend;
+          Munia leads UI/UX, front-end & user flow. A low-cost university bus tracker
+          for low-infrastructure campuses (e.g. Bangladesh) where buses have no GPS and
+          drivers may not use smartphones. Core idea: CHECKPOINT-BASED tracking via a
+          USSD gateway instead of live GPS.
+          Kept honest — concept + design + an in-progress build, no invented metrics.
+          Accent = royal blue (#2945E0) for its own identity vs GuideX orange / Craving coral. -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cursor.css">
+
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        :root {
+            --bg: #F6F6E7; --ink: #1B1814; --muted: #56514a;
+            --sage: #7D9179; --green: #A8C4A2; --peach: #F0B89B; --yellow: #F8F39C; --pink: #FF93CB;
+            --accent: #2945E0; --accent-deep: #1E33B8; --accent-tint: #ECEFFE;
+            --go: #1FA255; --amber: #E8930C; --red: #E23B3B;
+            --line: rgba(27,24,20,0.16); --card: #efead8;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { display: block; max-width: 100%; }
+        button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+        html, body { overflow-x: clip; }
+        body { background: var(--bg); color: var(--ink); font-family: 'Newsreader', Georgia, serif; }
+
+        @font-face { font-family: gofak;   src: url(fonts/GofakClassyRegular-lxB1y.otf); }
+        @font-face { font-family: afteris; src: url(fonts/afteris.otf); }
+        @font-face { font-family: adriana; src: url(fonts/AdrianagabrielleRegular-5yXXG.otf); }
+
+        /* nav */
+        .nav-container { position: fixed; top: 0; left: 0; right: 0; z-index: 500; display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; background: transparent; transition: transform .45s cubic-bezier(.4,0,.2,1), background-color .3s ease, box-shadow .3s ease, backdrop-filter .3s ease; will-change: transform; }
+        .nav-container.nav-hidden { transform: translateY(-100%); }
+        .nav-container.nav-float { background: rgba(246,246,231,0.82); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); box-shadow: 0 1px 0 rgba(27,24,20,0.08), 0 8px 24px rgba(27,24,20,0.06); }
+        .logo img { max-height: 72px; width: auto; }
+        .menu img { max-height: 48px; cursor: pointer; }
+        @media (max-width: 1024px) { .logo img { max-height: 60px; } .menu img { max-height: 40px; } }
+        @media (max-width: 768px)  { .nav-container { padding: 10px 16px; } }
+        .fullscreen-menu { position: fixed; inset: 0; background: #1B1814; color: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column; opacity: 0; pointer-events: none; transition: background-color .6s ease, opacity .4s ease; z-index: 1000; font-family: afteris; }
+        .fullscreen-menu.active { background: #dfd1a2; opacity: 1; pointer-events: auto; }
+        .fullscreen-menu ul { list-style: none; text-align: center; opacity: 0; transform: scale(.95); transition: opacity .5s ease .2s, transform .5s ease .2s; }
+        .fullscreen-menu.active ul { opacity: 1; transform: scale(1); }
+        .fullscreen-menu li { font-size: clamp(2.6rem, 7vw, 4.5rem); margin: 18px 0; cursor: pointer; display: flex; justify-content: center; }
+        .fullscreen-menu li a:hover { color: #7d9179; }
+        .fullscreen-menu li span { display: inline-block; transition: transform .2s ease, color .2s ease; transform-origin: bottom left; }
+        .fullscreen-menu li:hover span { animation: dominoTilt .5s forwards; }
+        .fullscreen-menu li span:nth-child(1){animation-delay:0s} .fullscreen-menu li span:nth-child(2){animation-delay:.05s} .fullscreen-menu li span:nth-child(3){animation-delay:.1s} .fullscreen-menu li span:nth-child(4){animation-delay:.15s} .fullscreen-menu li span:nth-child(5){animation-delay:.2s} .fullscreen-menu li span:nth-child(6){animation-delay:.25s} .fullscreen-menu li span:nth-child(7){animation-delay:.3s}
+        @keyframes dominoTilt { 0%{transform:rotate(0)} 25%{transform:rotate(10deg)} 50%{transform:rotate(20deg)} 100%{transform:rotate(0)} }
+        .close-btn { font-size: 3rem; cursor: pointer; color: #fff; z-index: 1001; transition: transform .3s ease; margin-bottom: 14px; }
+        .close-btn:hover { transform: scale(1.15); }
+
+        /* shared */
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 70px); }
+        .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--sage); }
+        .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+        .h-sec { font-family: gofak, serif; font-size: clamp(32px, 4.6vw, 64px); line-height: 1.02; margin: 16px 0 0; }
+        .lead { font-size: clamp(18px, 1.7vw, 23px); line-height: 1.55; color: var(--muted); }
+        .body-t { font-size: clamp(16px, 1.2vw, 19px); line-height: 1.62; color: var(--muted); }
+        .section { padding: clamp(58px, 8vh, 120px) 0; }
+        .section--alt { background: #eceadb; }
+        .mt-sm { margin-top: 22px; } .mt-md { margin-top: clamp(28px, 4vh, 48px); }
+
+        .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1); }
+        .reveal.in-view { opacity: 1; transform: none; }
+        @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; } }
+
+        /* pills / chips */
+        .pill { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink); background: var(--green); border: 1.5px solid var(--ink); border-radius: 100px; padding: 7px 16px; box-shadow: -3px 4px 0 rgba(27,24,20,0.8); }
+        .pill--peach { background: var(--peach); } .pill--yellow { background: var(--yellow); }
+        .pill--accent { background: var(--accent); color:#fff; }
+        .pill-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        /* cta button */
+        .cta { display: inline-flex; align-items: center; gap: 16px; }
+        .dgm { width: 100%; height: auto; display: block; border: 1.6px solid var(--ink); border-radius: 18px; background: #efead8; padding: 20px; }
+        .dgm .box { fill: #f7f4e6; stroke: var(--ink); stroke-width: 1.6; }
+        .dgm .box--accent { fill: var(--green); }
+        .dgm .lnk, .dgm .arrow { stroke: var(--ink); stroke-width: 1.5; fill: none; }
+        .dgm text { font-family: 'JetBrains Mono', monospace; font-size: 13px; fill: var(--ink); }
+        .dgm text.t-sm { font-size: 10px; fill: var(--muted); }
+        .diagram { margin-top: clamp(26px,4vh,44px); }
+        .diagram .cap { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--sage); margin-top: 12px; }
+        .oval-btn { position: relative; display: inline-block; width: 184px; height: 60px; color: var(--ink); font-family: 'Roboto', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; text-align: center; line-height: 60px; background: var(--green); border-radius: 50%; white-space: nowrap; transition: background-color .3s ease; }
+        .oval-btn::before, .oval-btn::after { content:""; position:absolute; inset:0; border:1.5px solid currentColor; border-radius:50%; transition: transform .3s ease; }
+        .oval-btn::before { transform: rotate(5deg); } .oval-btn::after { transform: rotate(-5deg); }
+        .oval-btn:hover { background: #93b88c; }
+        .oval-btn:hover::before, .oval-btn:hover::after { transform: rotate(0); }
+        .cta-arrow { width: 56px; transition: transform .4s cubic-bezier(.22,1,.36,1); }
+        .cta:hover .cta-arrow { transform: translateX(8px); }
+        .cta-arrow svg { width: 100%; height: 22px; }
+        .cta-arrow path { fill:none; stroke: var(--ink); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* HERO */
+        .cs-hero { padding: clamp(130px, 17vh, 200px) 0 clamp(24px, 4vh, 44px); }
+        .cs-hero-title { font-family: gofak, serif; font-size: clamp(46px, 8.5vw, 128px); line-height: 0.98; letter-spacing: -0.01em; margin: 18px 0 18px; }
+        .cs-hero-title em { font-style: normal; color: var(--accent); }
+        .cs-hero-tag { font-style: italic; font-size: clamp(20px, 2.2vw, 32px); max-width: 820px; line-height: 1.3; }
+        .cs-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: clamp(34px, 5vh, 56px); padding-top: 28px; border-top: 1.5px solid var(--line); }
+        .cs-meta-k { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--sage); margin-bottom: 8px; }
+        .cs-meta-v { font-size: clamp(15px, 1.2vw, 18px); line-height: 1.4; }
+        .cs-hero-cta { margin-top: clamp(30px, 4vh, 44px); }
+        @media (max-width: 760px) { .cs-meta { grid-template-columns: repeat(2, 1fr); gap: 22px; } }
+
+        /* COVER — floating phone cluster */
+        .cover { padding: clamp(6px,2vh,22px) 0 clamp(40px,7vh,90px); }
+        .cover-row { display: flex; align-items: flex-end; justify-content: center; gap: clamp(8px, 2vw, 30px); }
+        .cover-phone { flex: 0 0 auto; width: clamp(150px, 22vw, 244px); filter: drop-shadow(-12px 16px 0 rgba(27,24,20,.07)) drop-shadow(0 26px 48px rgba(27,24,20,.24)); }
+        .cover-phone--mid { width: clamp(176px, 26vw, 286px); margin-bottom: clamp(14px, 3vh, 38px); position: relative; z-index: 2; }
+        @media (max-width: 720px) {
+            .cover-row { overflow-x: auto; justify-content: flex-start; padding: 4px 16px 12px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+            .cover-row::-webkit-scrollbar { display: none; }
+            .cover-phone { scroll-snap-align: center; width: 62vw; }
+            .cover-phone--mid { width: 70vw; margin-bottom: 18px; }
+        }
+
+        /* two-col head */
+        .split { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 5vw, 72px); align-items: center; }
+        .split--rev { grid-template-columns: 0.95fr 1.05fr; }
+        @media (max-width: 900px) { .split, .split--rev { grid-template-columns: 1fr; gap: 40px; } .split--rev .shot { order: -1; } }
+
+        /* phone shot */
+        .shot { max-width: 304px; margin: 0 auto; }
+        .shot img { width: 100%; height: auto; filter: drop-shadow(-12px 16px 0 rgba(27,24,20,.07)) drop-shadow(0 24px 44px rgba(27,24,20,.22)); }
+        .shot-cap { text-align: center; margin-top: 18px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--sage); }
+
+        /* problem question list */
+        .qlist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: clamp(28px, 4vh, 46px); }
+        @media (max-width: 680px) { .qlist { grid-template-columns: 1fr; } }
+        .qitem { display: flex; align-items: center; gap: 16px; padding: 20px 22px; border: 1.5px solid var(--ink); border-radius: 16px; background: var(--card); transition: transform .4s cubic-bezier(.22,1,.36,1); }
+        .qitem:hover { transform: translateY(-5px); }
+        .qmark { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); color: #fff; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-family: gofak, serif; font-size: 19px; }
+        .qitem p { font-size: clamp(15px, 1.2vw, 17px); line-height: 1.45; color: var(--ink); }
+
+        /* constraints */
+        .cons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: clamp(28px, 4vh, 46px); }
+        @media (max-width: 760px) { .cons { grid-template-columns: 1fr; } }
+        .ccard { padding: 26px 24px; border: 1.5px solid var(--ink); border-radius: 18px; background: var(--bg); }
+        .cic { width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid var(--ink); background: var(--ink); color: #F6F6E7; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+        .ccard h3 { font-family: gofak, serif; font-weight: 400; font-size: clamp(20px, 2vw, 26px); margin: 16px 0 8px; }
+        .ccard p { font-size: 15px; line-height: 1.55; color: var(--muted); }
+
+        /* GPS vs checkpoint */
+        .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: clamp(30px, 4vh, 50px); align-items: stretch; }
+        @media (max-width: 800px) { .vs { grid-template-columns: 1fr; } }
+        .vcard { padding: 30px 28px; border: 1.5px solid var(--ink); border-radius: 22px; background: var(--card); display: flex; flex-direction: column; }
+        .vcard--new { background: var(--accent-tint); box-shadow: -7px 9px 0 var(--accent); }
+        .vk { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--sage); }
+        .vcard--new .vk { color: var(--accent-deep); }
+        .vcard h3 { font-family: gofak, serif; font-weight: 400; font-size: clamp(23px, 2.4vw, 32px); margin: 10px 0 16px; }
+        .vsay { font-style: italic; font-size: clamp(16px,1.4vw,18px); line-height: 1.5; color: var(--ink); padding: 16px 18px; border-radius: 14px; background: rgba(27,24,20,.045); border-left: 3px solid var(--line); margin-bottom: 18px; }
+        .vcard--new .vsay { background: rgba(41,69,224,.08); border-left-color: var(--accent); }
+        .vlist { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-top: auto; }
+        .vlist li { font-size: 14.5px; line-height: 1.45; color: var(--muted); padding-left: 24px; position: relative; }
+        .vlist li::before { content: ""; position: absolute; left: 2px; top: 7px; width: 8px; height: 8px; border-radius: 50%; }
+        .vcard--old .vlist li::before { background: var(--amber); }
+        .vcard--new .vlist li::before { background: var(--go); }
+
+        /* status line ticker */
+        .statusline { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: clamp(26px, 3.5vh, 42px); padding: 18px 24px; border: 1.5px solid var(--ink); border-radius: 16px; background: var(--ink); color: #E9E7DC; font-family: 'JetBrains Mono', monospace; font-size: clamp(12px, 1.1vw, 14px); box-shadow: -5px 7px 0 rgba(27,24,20,.18); }
+        .statusline .sdot { width: 9px; height: 9px; border-radius: 50%; background: var(--go); box-shadow: 0 0 0 0 rgba(31,162,85,.6); animation: livedot 1.8s ease-out infinite; }
+        @keyframes livedot { 0%{box-shadow:0 0 0 0 rgba(31,162,85,.6)} 70%{box-shadow:0 0 0 9px rgba(31,162,85,0)} 100%{box-shadow:0 0 0 0 rgba(31,162,85,0)} }
+        .statusline b { color: #fff; } .statusline .arr { color: var(--amber); font-weight: 700; }
+
+        /* key features */
+        .feat { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: clamp(30px,4vh,48px); }
+        @media (max-width: 760px) { .feat { grid-template-columns: 1fr; } }
+        .feat-card { padding: 30px 26px; border: 1.5px solid var(--ink); border-radius: 20px; background: var(--card); transition: transform .4s cubic-bezier(.22,1,.36,1); }
+        .feat-card:hover { transform: translateY(-6px); }
+        .feat-ic { width: 48px; height: 48px; border-radius: 13px; background: var(--accent); color:#fff; border: 1.5px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 23px; }
+        .feat-card:nth-child(2) .feat-ic { background: var(--ink); } .feat-card:nth-child(3) .feat-ic { background: var(--yellow); color: var(--ink); } .feat-card:nth-child(4) .feat-ic { background: var(--peach); color: var(--ink); }
+        .feat-card h3 { font-family: gofak, serif; font-weight: 400; font-size: clamp(22px,2.2vw,30px); margin: 18px 0 8px; }
+        .feat-card p { font-size: 15px; line-height: 1.55; color: var(--muted); }
+
+        /* screens gallery (phones) */
+        .screens-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+        .screens { display: flex; justify-content: safe center; gap: clamp(14px,2vw,26px); margin-top: clamp(30px,4vh,50px); padding: 8px clamp(20px,5vw,70px) 22px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; cursor: grab; }
+        .screens::-webkit-scrollbar { display: none; }
+        .screens.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+        .screen { flex: 0 0 clamp(204px, 56vw, 258px); scroll-snap-align: center; text-align: center; }
+        .screen img { width: 100%; height: auto; pointer-events: none; filter: drop-shadow(-10px 14px 0 rgba(27,24,20,.06)) drop-shadow(0 22px 40px rgba(27,24,20,.20)); }
+        .screen figcaption { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--sage); margin-top: 16px; }
+
+        /* takeaways */
+        .take { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: clamp(28px,4vh,44px); }
+        @media (max-width: 820px) { .take { grid-template-columns: 1fr; } }
+        .take div { padding: 24px; border-radius: 18px; border: 1.5px solid var(--ink); background: var(--bg); }
+        .take h4 { font-family: 'Roboto', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .03em; text-transform: uppercase; margin-bottom: 10px; }
+        .take p { font-size: 15px; line-height: 1.55; color: var(--muted); }
+
+        /* next project */
+        .next { border-top: 1.5px solid var(--line); }
+        .next-inner { display: flex; justify-content: space-between; align-items: center; gap: 30px; flex-wrap: wrap; padding: clamp(50px,7vh,90px) 0; }
+        .next-eye { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--sage); }
+        .next-title { font-family: gofak, serif; font-size: clamp(40px,6vw,92px); line-height: 1; margin-top: 10px; transition: color .3s ease; }
+        .next-link:hover .next-title { color: var(--accent); }
+
+        /* footer */
+        .footer2 { position: relative; background: #292623; color: #F6F6E7; padding: 64px 60px 0; overflow: hidden; }
+        .footer2 a { color: inherit; }
+        .footer2-now { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding-bottom: 48px; }
+        .now-card { display: flex; flex-direction: column; gap: 16px; width: 300px; max-width: 100%; padding: 18px 22px; border-radius: 18px; background: rgba(246,246,231,0.05); border: 1px solid rgba(246,246,231,0.15); transition: transform .45s cubic-bezier(.22,1,.36,1), background-color .3s, border-color .3s; }
+        .now-card:hover { transform: translateY(-7px); background: rgba(246,246,231,0.09); border-color: rgba(255,147,203,0.5); }
+        .now-label { align-self: flex-end; display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .now-dot { width: 6px; height: 6px; border-radius: 50%; background: #FF93CB; animation: footPulse 2.2s ease-in-out infinite; }
+        .now-body { display: flex; align-items: center; gap: 16px; }
+        .now-icon { flex: 0 0 auto; width: 52px; height: 52px; border-radius: 13px; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; color: #1B1814; }
+        .now-icon--music { background: #C9B6E4; } .now-icon--book { background: #A8D0A0; } .now-icon--build { background: #F0B89B; }
+        .now-text { display: flex; flex-direction: column; gap: 2px; text-align: left; }
+        .now-title { font-family: 'Newsreader', serif; font-size: 19px; font-weight: 500; color: #F6F6E7; line-height: 1.1; }
+        .now-sub { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: rgba(246,246,231,0.6); }
+        .now-meta { display: inline-flex; align-items: center; gap: 8px; margin-top: 3px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(246,246,231,0.55); }
+        .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; }
+        .eq i { width: 3px; height: 5px; background: #FF93CB; border-radius: 1px; animation: eqBar .9s ease-in-out infinite; }
+        .eq i:nth-child(2){animation-delay:.18s} .eq i:nth-child(3){animation-delay:.36s} .eq i:nth-child(4){animation-delay:.54s}
+        @keyframes eqBar { 0%,100%{height:4px} 50%{height:14px} }
+        .footer2-main { display: flex; flex-direction: column; align-items: center; text-align: center; padding-bottom: 44px; }
+        .footer2-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: #FF93CB; margin: 0 0 22px; display: flex; align-items: center; gap: 10px; }
+        @keyframes footPulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.7);opacity:.5} }
+        .footer2-heading { font-family: afteris, 'Newsreader', serif; font-weight: 400; font-size: clamp(34px, 5vw, 76px); line-height: 1.05; color: #F6F6E7; margin: 0 0 16px; }
+        .footer2-heading em { font-style: normal; color: #FF93CB; display: inline-block; animation: footWiggle 5s ease-in-out infinite; transform-origin: center bottom; }
+        @keyframes footWiggle { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+        .footer2-touch { font-family: adriana, cursive; font-size: clamp(26px, 2.6vw, 40px); color: #FF93CB; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+        .footer2-touch-arrow { display: inline-block; font-family: 'Newsreader', serif; animation: footTouchBob 1.5s ease-in-out infinite; }
+        @keyframes footTouchBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+        .footer2-socials { display: flex; gap: 22px; }
+        .fsoc { width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid rgba(246,246,231,0.45); display: inline-flex; align-items: center; justify-content: center; color: #F6F6E7; transition: transform .45s cubic-bezier(.34,1.56,.64,1), background-color .3s, border-color .3s, color .3s; }
+        .fsoc svg { width: 24px; height: 24px; fill: currentColor; }
+        .fsoc:hover { background: #FF93CB; border-color: #FF93CB; color: #1B1814; transform: translateY(-9px) rotate(8deg); }
+        .footer2-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 24px 0 32px; border-top: 1px solid rgba(246,246,231,0.18); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(246,246,231,0.6); }
+        .footer2-bottom a { border-bottom: 1px solid transparent; transition: border-color .3s; }
+        .footer2-bottom a:hover { border-color: rgba(246,246,231,0.7); }
+        @media (max-width: 768px) {
+            .footer2 { padding: 56px 18px 0; }
+            .footer2-now { gap: 8px; flex-wrap: nowrap; padding-bottom: 40px; }
+            .now-card { flex: 1 1 0; min-width: 0; width: auto; padding: 12px 10px; gap: 8px; border-radius: 14px; }
+            .now-label { font-size: 8px; letter-spacing: .08em; gap: 5px; }
+            .now-body { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .now-icon { width: 36px; height: 36px; font-size: 17px; border-radius: 9px; }
+            .now-text { min-width: 0; width: 100%; } .now-title { font-size: 12.5px; line-height: 1.14; white-space: normal; overflow-wrap: break-word; word-break: break-word; } .now-sub { font-size: 9px; white-space: normal; overflow-wrap: break-word; word-break: break-word; } .now-meta { font-size: 8px; gap: 5px; } .eq { height: 9px; }
+            .footer2-heading { font-size: clamp(30px, 8vw, 54px); }
+            .fsoc { width: 54px; height: 54px; }
+            .footer2-bottom { flex-direction: column; gap: 8px; text-align: center; }
+        }
+    </style>
+<style id="footer-mobileS">
+/* Mobile S/M/L: stack the footer "now" cards full-width so long titles
+   (e.g. "The Correspondent") fit instead of overflowing the cramped row */
+@media (max-width:430px){
+  .footer2-now{ flex-direction:column; flex-wrap:wrap; gap:10px; padding-bottom:36px; }
+  .now-card{ flex:0 0 auto; width:100%; max-width:340px; margin:0 auto; padding:14px 16px; gap:10px; border-radius:16px; }
+  .now-label{ align-self:flex-end; font-size:9px; letter-spacing:.12em; gap:6px; }
+  .now-body{ flex-direction:row; align-items:center; gap:14px; }
+  .now-icon{ width:46px; height:46px; font-size:20px; border-radius:12px; }
+  .now-text{ min-width:0; width:auto; }
+  .now-title{ font-size:16px; line-height:1.15; white-space:normal; overflow-wrap:break-word; word-break:normal; }
+  .now-sub{ font-size:11px; white-space:normal; }
+  .now-meta{ font-size:9px; gap:6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<header class="nav-container">
+    <a href="index.html"><div class="logo"><img src="images/logo2.png" alt="Munia logo"></div></a>
+    <div class="menu"><img src="images/menu3.png" alt="Open menu" id="menu-icon"></div>
+</header>
+<div class="fullscreen-menu" id="fullscreen-menu">
+    <span class="close-btn" id="close-btn">&times;</span>
+    <ul>
+        <li><a href="index.html"><span>H</span><span>O</span><span>M</span><span>E</span></a></li>
+        <li><a href="work.html"><span>W</span><span>O</span><span>R</span><span>K</span></a></li>
+        <li><a href="aboutMe.html"><span>A</span><span>B</span><span>O</span><span>U</span><span>T</span></a></li>
+        <li><a href="contact.html"><span>C</span><span>O</span><span>N</span><span>T</span><span>A</span><span>C</span><span>T</span></a></li>
+    </ul>
+</div>
+
+<!-- HERO -->
+<section class="cs-hero">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> UI/UX &amp; Front-End &mdash; Team project &middot; 03 / 08</span>
+        <h1 class="cs-hero-title reveal">Bus<em>Track</em></h1>
+        <p class="cs-hero-tag reveal">Knowing where your campus bus is &mdash; built for places where the buses have no GPS and the drivers don&rsquo;t carry smartphones.</p>
+        <div class="cs-meta reveal">
+            <div><div class="cs-meta-k">Role</div><div class="cs-meta-v">UI/UX, Front-End &amp; user flow</div></div>
+            <div><div class="cs-meta-k">Team</div><div class="cs-meta-v">Full-stack build with a friend</div></div>
+            <div><div class="cs-meta-k">Type</div><div class="cs-meta-v">Mobile app &middot; campus transit</div></div>
+            <div><div class="cs-meta-k">Approach</div><div class="cs-meta-v">Checkpoint-based tracking</div></div>
+            <div><div class="cs-meta-k">Status</div><div class="cs-meta-v">2026 &middot; in progress</div></div>
+        </div>
+        <div class="cs-hero-cta reveal">
+            <a class="cta" href="https://www.figma.com/proto/CKV0hGnQGtnDINTuji0CFx/Untitled?node-id=6-2273&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+                <span class="oval-btn">View Prototype</span>
+                <span class="cta-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- COVER — phone cluster -->
+<section class="cover">
+    <div class="wrap">
+        <div class="cover-row reveal">
+            <div class="cover-phone"><img src="images/bus03-status.svg" alt="BusTrack — bus status with checkpoint map"></div>
+            <div class="cover-phone cover-phone--mid"><img src="images/bus02-home.svg" alt="BusTrack — find your bus home screen"></div>
+            <div class="cover-phone"><img src="images/bus04-allbuses.svg" alt="BusTrack — all buses list"></div>
+        </div>
+    </div>
+</section>
+
+<!-- 01 · THE PROBLEM -->
+<section class="section section--alt" id="problem">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 01 &mdash; The Problem</span>
+        <h2 class="h-sec reveal">Will the bus come &mdash; and when?</h2>
+        <p class="lead reveal mt-sm" style="max-width:780px;">For students who depend on the university bus, the day starts with the same blind guess. There&rsquo;s no signal, no screen, no way to see what the bus is doing &mdash; so you stand at the stop and hope.</p>
+        <div class="qlist">
+            <div class="qitem reveal"><span class="qmark">?</span><p>Has the bus even started today?</p></div>
+            <div class="qitem reveal"><span class="qmark">?</span><p>Where is it right now?</p></div>
+            <div class="qitem reveal"><span class="qmark">?</span><p>Did it already pass my stop?</p></div>
+            <div class="qitem reveal"><span class="qmark">?</span><p>Is it running late?</p></div>
+            <div class="qitem reveal"><span class="qmark">?</span><p>Should I wait &mdash; or find another ride?</p></div>
+            <div class="qitem reveal"><span class="qmark">?</span><p>Is the trip cancelled today?</p></div>
+        </div>
+        <p class="body-t reveal" style="margin-top:26px; max-width:780px;">Today the only &ldquo;tracking system&rdquo; is a phone call &mdash; to a friend already on the bus, the driver, or a helper. Most mornings you just wait, and guess.</p>
+    </div>
+</section>
+
+<!-- 02 · THE CONSTRAINT -->
+<section class="section" id="constraint">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 02 &mdash; The Real Constraint</span>
+        <h2 class="h-sec reveal">The catch: no GPS, no smartphones</h2>
+        <p class="lead reveal mt-sm" style="max-width:800px;">The obvious fix is live GPS tracking. But BusTrack is built for universities in places like Bangladesh, where most drivers don&rsquo;t carry smartphones or keep steady internet on their phones. So a map with a moving dot quietly falls apart before it even starts.</p>
+        <div class="cons">
+            <div class="ccard reveal"><div class="cic">&#128268;</div><h3>No GPS hardware</h3><p>Most buses simply don&rsquo;t have a tracking device fitted, and retrofitting the whole fleet is expensive.</p></div>
+            <div class="ccard reveal"><div class="cic">&#128241;</div><h3>No driver smartphones</h3><p>Drivers may not carry a smartphone, or use one reliably enough to run a live-location app all day.</p></div>
+            <div class="ccard reveal"><div class="cic">&#128246;</div><h3>Patchy data &amp; signal</h3><p>Mobile data and coverage can&rsquo;t be counted on for a steady stream of GPS pings along the route.</p></div>
+            <div class="ccard reveal"><div class="cic">&#128176;</div><h3>Low cost is the point</h3><p>The solution has to be cheap to build and cheap to run &mdash; or it never reaches the students who need it.</p></div>
+        </div>
+        <p class="body-t reveal" style="margin-top:26px; max-width:800px;">A GPS-first app would look perfect in a demo and fail on the road. So the design had to start from what actually exists.</p>
+    </div>
+</section>
+
+<!-- 03 · THE IDEA -->
+<section class="section section--alt" id="idea">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 03 &mdash; The Idea</span>
+        <h2 class="h-sec reveal">So I flipped the question</h2>
+        <p class="lead reveal mt-sm" style="max-width:820px;">Instead of asking <em>where exactly is the bus</em>, BusTrack asks something cheaper and more honest: <em>where was it last seen?</em> Every trip the bus passes the same known points (2&nbsp;No&nbsp;Gate, Bayezid, University&nbsp;Gate). As the bus reaches each one, the driver reports it with a quick USSD code on any basic phone, and the whole live status is built from that, no GPS or internet required.</p>
+        <p class="body-t reveal" style="margin-top:18px; max-width:820px;">The backend that makes this work is a <b>USSD Gateway-Based Bus Location Update System</b>. USSD runs on the plain mobile network, so it needs no smartphone, no internet and almost nothing to operate, which is exactly what these campuses can afford. The trade-off is that true live tracking isn&rsquo;t possible, so on the front end my job was to make the <em>last-seen</em> information feel clear and reassuring, so a student always understands where their bus is even without a moving dot on a map.</p>
+
+        <div class="vs">
+            <div class="vcard vcard--old reveal">
+                <span class="vk">The GPS way</span>
+                <h3>&ldquo;The bus is exactly here.&rdquo;</h3>
+                <p class="vsay">A dot sliding along a map, updated every few seconds.</p>
+                <ul class="vlist">
+                    <li>Needs a GPS device in every bus</li>
+                    <li>Needs a driver&rsquo;s phone &amp; constant data</li>
+                    <li>Expensive &mdash; often just not possible</li>
+                </ul>
+            </div>
+            <div class="vcard vcard--new reveal">
+                <span class="vk">The checkpoint way</span>
+                <h3>&ldquo;The bus last reached 2&nbsp;No&nbsp;Gate.&rdquo;</h3>
+                <p class="vsay">&ldquo;Reached 2&nbsp;No&nbsp;Gate 5&nbsp;min ago. Next stop Bayezid. ~30&nbsp;min to Campus.&rdquo;</p>
+                <ul class="vlist">
+                    <li>Works with no GPS, no smartphone, almost no data</li>
+                    <li>The driver reports each stop with a USSD code</li>
+                    <li>Cheap to build, realistic to run</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="statusline reveal">
+            <span class="sdot" aria-hidden="true"></span>
+            <span>Bus&nbsp;01 &middot; last reached <b>2 No Gate</b> &mdash; 5 min ago</span>
+            <span class="arr">&rarr;</span>
+            <span>next: <b>Bayezid</b></span>
+            <span class="arr">&middot;</span>
+            <span>ETA Campus <b>~30 min</b></span>
+        </div>
+    </div>
+</section>
+
+<!-- 04 · HONEST STATUS -->
+<section class="section" id="status">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 04 &mdash; Designing Honest Status</span>
+        <div class="split mt-md">
+            <div>
+                <h2 class="h-sec reveal">Approximate &mdash; and never pretending otherwise</h2>
+                <p class="body-t reveal" style="margin-top:18px;">The hardest part wasn&rsquo;t the map &mdash; it was making an estimate feel trustworthy instead of fake. So the bus-status screen is built to be upfront about what it knows.</p>
+                <p class="body-t reveal" style="margin-top:14px;">It labels itself <b>&ldquo;Checkpoint-based &middot; not live GPS&rdquo;</b>, stamps every update with <b>how long ago</b> the last stop was confirmed, and turns the route into three plain states &mdash; <b>reached</b>, <b>next</b>, and <b>upcoming</b> &mdash; so a glance answers &ldquo;did it pass me yet?&rdquo; A short note even explains where the position comes from. The student always knows it&rsquo;s an estimate, and exactly how fresh it is.</p>
+                <div class="pill-row reveal mt-md">
+                    <span class="pill pill--accent">Checkpoint map</span>
+                    <span class="pill">Last-updated stamp</span>
+                    <span class="pill pill--yellow">Reached / Next / Upcoming</span>
+                </div>
+            </div>
+            <div class="reveal">
+                <figure class="shot">
+                    <img src="images/bus03-status.svg" alt="BusTrack bus-status screen — checkpoint map, ETA, and last-updated note">
+                    <figcaption class="shot-cap">Bus status &mdash; checkpoint map &amp; honest ETA</figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 05 · FEATURES -->
+<section class="section section--alt" id="features">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 05 &mdash; What It Gives A Student</span>
+        <h2 class="h-sec reveal">A simple, live-ish bus status</h2>
+        <p class="lead reveal mt-sm" style="max-width:760px;">Everything in the app answers one of the morning&rsquo;s questions &mdash; quickly, and without needing a perfect signal.</p>
+        <div class="feat">
+            <div class="feat-card reveal"><div class="feat-ic">&#128652;</div><h3>Track your bus</h3><p>A checkpoint progress bar, the next stop, and an estimated arrival to campus &mdash; the closest thing to live, without GPS.</p></div>
+            <div class="feat-card reveal"><div class="feat-ic">&#9776;</div><h3>The fleet at a glance</h3><p>See how many buses are active, delayed, or cancelled, and browse every route with quick filters to find the one you need.</p></div>
+            <div class="feat-card reveal"><div class="feat-ic">&#128276;</div><h3>Notices &amp; emergencies</h3><p>Rain advisories, cancellations and extra exam-week buses surface right on the bus, so no one waits on a trip that isn&rsquo;t running.</p></div>
+            <div class="feat-card reveal"><div class="feat-ic">&#9889;</div><h3>Runs on almost nothing</h3><p>No GPS, low data, light to operate &mdash; designed so a real university could actually afford to switch it on.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- 06 · USER FLOW -->
+<section class="section" id="flow">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 06 &mdash; User Flow</span>
+        <h2 class="h-sec reveal">How a student finds their bus</h2>
+        <p class="lead reveal mt-sm" style="max-width:760px;">BusTrack isn&rsquo;t a live GPS map. Instead it shows every bus&rsquo;s status at a glance, so a student can spot theirs fast, follow it checkpoint by checkpoint, and get a heads-up if anything unusual happens on that route.</p>
+        <div class="diagram reveal">
+            <svg class="dgm" viewBox="0 0 880 116" role="img" aria-label="BusTrack user flow: login to tracking and notifications">
+                <defs><marker id="btah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6" fill="none" stroke="#1B1814" stroke-width="1.5"/></marker></defs>
+                <path class="arrow" marker-end="url(#btah)" d="M162 58 H188"/>
+                <path class="arrow" marker-end="url(#btah)" d="M338 58 H364"/>
+                <path class="arrow" marker-end="url(#btah)" d="M514 58 H540"/>
+                <path class="arrow" marker-end="url(#btah)" d="M690 58 H716"/>
+                <rect class="box" x="14"  y="34" width="148" height="48" rx="24"/><text x="88"  y="63" text-anchor="middle">Log in</text>
+                <rect class="box" x="190" y="34" width="148" height="48" rx="24"/><text x="264" y="63" text-anchor="middle">Home</text>
+                <rect class="box" x="366" y="34" width="148" height="48" rx="24"/><text x="440" y="63" text-anchor="middle">Find bus</text>
+                <rect class="box box--accent" x="542" y="34" width="148" height="48" rx="24"/><text x="616" y="63" text-anchor="middle">Track bus</text>
+                <rect class="box" x="718" y="34" width="148" height="48" rx="24"/><text x="792" y="63" text-anchor="middle" font-size="12">Notifications</text>
+                <text x="88"  y="100" text-anchor="middle" class="t-sm" font-size="10" fill="#56514a">student ID</text>
+                <text x="264" y="100" text-anchor="middle" class="t-sm" font-size="10" fill="#56514a">all buses &middot; delayed</text>
+                <text x="440" y="100" text-anchor="middle" class="t-sm" font-size="10" fill="#56514a">search / status card</text>
+                <text x="616" y="100" text-anchor="middle" class="t-sm" font-size="10" fill="#56514a">checkpoints &middot; smart UI</text>
+                <text x="792" y="100" text-anchor="middle" class="t-sm" font-size="10" fill="#56514a">unusual updates</text>
+            </svg>
+            <div class="cap">Core user flow &mdash; status at a glance to checkpoint tracking</div>
+        </div>
+    </div>
+</section>
+
+<!-- 07 · SCREENS -->
+<section class="section" id="screens-sec">
+    <div class="wrap">
+        <div class="screens-head">
+            <div>
+                <span class="eyebrow reveal"><span class="dot"></span> 07 &mdash; The Screens</span>
+                <h2 class="h-sec reveal">Six screens, one calm flow</h2>
+            </div>
+            <a class="cta reveal" href="https://www.figma.com/proto/CKV0hGnQGtnDINTuji0CFx/Untitled?node-id=6-2273&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+                <span class="oval-btn">Open Prototype</span>
+                <span class="cta-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+            </a>
+        </div>
+    </div>
+    <div class="screens" id="screens">
+        <figure class="screen"><img src="images/bus01-login.svg" alt="Login screen"><figcaption>Log in &mdash; student email or ID</figcaption></figure>
+        <figure class="screen"><img src="images/bus02-home.svg" alt="Home — find your bus"><figcaption>Home &mdash; find your bus</figcaption></figure>
+        <figure class="screen"><img src="images/bus03-status.svg" alt="Bus status — checkpoint tracking"><figcaption>Status &mdash; checkpoint tracking</figcaption></figure>
+        <figure class="screen"><img src="images/bus04-allbuses.svg" alt="All buses list"><figcaption>All buses &mdash; browse &amp; search</figcaption></figure>
+        <figure class="screen"><img src="images/bus06-active.svg" alt="All buses filtered by active"><figcaption>Filters &mdash; active, delayed, cancelled</figcaption></figure>
+        <figure class="screen"><img src="images/bus05-notices.svg" alt="Notices and emergency alerts"><figcaption>Notices &mdash; alerts &amp; emergencies</figcaption></figure>
+    </div>
+</section>
+
+<!-- 07 · WHERE IT'S AT -->
+<section class="section section--alt" id="outcome">
+    <div class="wrap">
+        <span class="eyebrow reveal"><span class="dot"></span> 08 &mdash; Where It&rsquo;s At</span>
+        <h2 class="h-sec reveal">Designing and building it myself</h2>
+        <p class="lead reveal mt-md" style="max-width:800px;">BusTrack is a self-initiated project I&rsquo;m taking from idea to working product on my own &mdash; the UI, the front-end, and the checkpoint logic behind it. It&rsquo;s in progress, not a finished retrospective, and the design keeps sharpening as I build it out.</p>
+        <div class="take">
+            <div class="reveal"><h4>Design for the place</h4><p>Starting from the real constraints &mdash; no GPS, no smartphones, little data &mdash; led to a product that could actually ship, not just demo.</p></div>
+            <div class="reveal"><h4>Honesty over precision</h4><p>Showing an approximate position, clearly labelled and time-stamped, beats a confident dot that&rsquo;s quietly wrong.</p></div>
+            <div class="reveal"><h4>One person, full stack</h4><p>Owning both the design and the build keeps the gap between what I intend and what ships close to zero.</p></div>
+        </div>
+        <div class="reveal" style="margin-top:clamp(34px,5vh,54px);">
+            <a class="cta" href="https://www.figma.com/proto/CKV0hGnQGtnDINTuji0CFx/Untitled?node-id=6-2273&p=f&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1" target="_blank" rel="noopener">
+                <span class="oval-btn">View Prototype</span>
+                <span class="cta-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- NEXT PROJECT -->
+<section class="next">
+    <div class="wrap next-inner">
+        <a class="next-link" href="uicase04.html">
+            <div class="next-eye">Next case study</div>
+            <div class="next-title">Craving &rarr;</div>
+        </a>
+        <a class="cta" href="uiuxcollection.html">
+            <span class="oval-btn">All Projects</span>
+            <span class="cta-arrow" aria-hidden="true"><svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg></span>
+        </a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer2">
+    <div class="footer2-now">
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Playing</span>
+            <div class="now-body"><span class="now-icon now-icon--music">&#9834;</span><div class="now-text"><span class="now-title">Loner</span><span class="now-sub">Teflon Sega</span><span class="now-meta"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span> on loop</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Reading</span>
+            <div class="now-body"><span class="now-icon now-icon--book">&#182;</span><div class="now-text"><span class="now-title">The Correspondent</span><span class="now-sub">Virginia Evans</span></div></div>
+        </div>
+        <div class="now-card">
+            <span class="now-label"><span class="now-dot"></span> Now Building</span>
+            <div class="now-body"><span class="now-icon now-icon--build">&#128652;</span><div class="now-text"><span class="now-title">BusTrack</span><span class="now-sub">University bus tracker · in progress</span></div></div>
+        </div>
+    </div>
+    <div class="footer2-main">
+        <h2 class="footer2-heading">You have an idea?<br>I got the <em>vision.</em></h2>
+        <span class="footer2-touch">get in touch</span>
+        <div class="footer2-socials">
+            <a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=tanhaamuniaa@gmail.com" target="_blank" rel="noopener" class="fsoc" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+            <a href="https://github.com/Munsb0t" target="_blank" rel="noopener" class="fsoc" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.6 18 4.9 18 4.9c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+            <a href="https://www.linkedin.com/in/rukhsat-tanha-munia-216839232/" target="_blank" rel="noopener" class="fsoc" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm6 0h3.8v1.7h.1c.5-1 1.8-2 3.7-2 4 0 4.7 2.6 4.7 6V21h-4v-5.3c0-1.3 0-2.9-1.8-2.9s-2 1.4-2 2.8V21H9V9z"/></svg></a>
+        </div>
+    </div>
+    <div class="footer2-bottom">
+        <span>© Munia · 2025</span>
+        <span>Local time — <b id="footClock">--:--:--</b></span>
+        <a href="#top" id="footTop">Back to top ↑</a>
+    </div>
+</footer>
+
+<script>
+// Menu
+(function () {
+    const mi = document.getElementById('menu-icon'), menu = document.getElementById('fullscreen-menu'), cb = document.getElementById('close-btn');
+    mi && mi.addEventListener('click', () => menu.classList.add('active'));
+    cb && cb.addEventListener('click', () => menu.classList.remove('active'));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu.classList.remove('active'); });
+})();
+// Reveal-on-scroll-up nav
+(function () {
+    const nav = document.querySelector('.nav-container');
+    if (!nav) return;
+    const menu = document.getElementById('fullscreen-menu');
+    let last = window.pageYOffset || 0, ticking = false;
+    function update() {
+        const y = window.pageYOffset || 0;
+        nav.classList.toggle('nav-float', y > 40);
+        if (menu && menu.classList.contains('active')) nav.classList.remove('nav-hidden');
+        else if (y > last && y > 140) nav.classList.add('nav-hidden');
+        else if (y < last - 4) nav.classList.remove('nav-hidden');
+        last = y;
+        ticking = false;
+    }
+    addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(update); ticking = true; } }, { passive: true });
+    update();
+})();
+// Reveal on scroll
+(function () {
+    const els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in-view')); return; }
+    const io = new IntersectionObserver((en) => { en.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in-view'); io.unobserve(x.target); } }); }, { threshold: 0.15 });
+    els.forEach(e => io.observe(e));
+})();
+// Screens drag-to-scroll
+(function () {
+    const t = document.getElementById('screens'); if (!t) return;
+    let down = false, sx = 0, sl = 0, moved = false;
+    t.addEventListener('pointerdown', (e) => { down = true; moved = false; sx = e.clientX; sl = t.scrollLeft; t.classList.add('is-dragging'); try { t.setPointerCapture(e.pointerId); } catch(_){} });
+    t.addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) moved = true; t.scrollLeft = sl - dx; });
+    function end(e) { if (!down) return; down = false; t.classList.remove('is-dragging'); try { t.releasePointerCapture(e.pointerId); } catch(_){} }
+    t.addEventListener('pointerup', end); t.addEventListener('pointercancel', end);
+    t.addEventListener('click', (e) => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+})();
+// Footer clock + back to top
+(function () {
+    const c = document.getElementById('footClock');
+    if (c) { const tk = () => c.textContent = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false }); tk(); setInterval(tk, 1000); }
+    const tp = document.getElementById('footTop');
+    tp && tp.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+})();
+</script>
+
+<script src="cursor.js"></script>
+</body>
+</html>

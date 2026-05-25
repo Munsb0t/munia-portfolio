@@ -1,0 +1,292 @@
+body
+{
+    margin: 0 0;
+    padding: 0 0;
+    background-color: #DAEDEC;
+    font-family: gofak;
+    overflow-x: hidden;
+}
+
+@font-face {
+    font-family: gofak;
+    src: url(fonts/GofakClassyRegular-lxB1y.otf);
+}
+
+@font-face {
+    font-family: role;
+    src: url(fonts/role.otf);
+}
+@font-face {
+    font-family: afteris;
+    src: url(fonts/afteris.otf);
+}
+
+
+/* Navigation Bar */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+
+
+    box-sizing: border-box;
+}
+
+.logo img {
+    max-height: 80px;
+}
+
+.menu img {
+    max-height: 50px;
+    cursor: pointer;
+}
+
+/* Reset link styles */
+.fullscreen-menu ul li a {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit color from parent (e.g., li or span) */
+    display: inline-block; /* Ensure proper layout for spans inside */
+}
+
+/* Optional: Hover effect */
+.fullscreen-menu ul li a:hover {
+    color: #7d9179; /* Change to your desired hover color */
+    transition: color 0.3s ease; /* Smooth transition effect */
+}
+
+
+/* Full-Screen Menu */
+.fullscreen-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black; /* Initial dark background */
+    color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0; /* Initially hidden */
+    pointer-events: none; /* Prevent interaction when hidden */
+    transition: background-color 0.6s ease, opacity 0.4s ease; /* Smooth fade-in */
+    z-index: 1000;
+    font-family: afteris;
+}
+
+.fullscreen-menu.active {
+    background-color: #dfd1a2; /* Matte yellow */
+    opacity: 1; /* Fade in */
+    pointer-events: auto; /* Allow interaction */
+    
+}
+
+.fullscreen-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    opacity: 0; /* Hidden initially */
+    transform: scale(0.95); /* Shrink slightly */
+    transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s; /* Smooth fade-in for list */
+}
+
+.fullscreen-menu.active ul {
+    opacity: 1; /* Fade in menu items */
+    transform: scale(1); /* Return to normal size */
+}
+
+.fullscreen-menu li {
+    font-size: 4.5rem;
+    margin: 20px 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.fullscreen-menu li span {
+    display: inline-block; /* Wrap each letter */
+    transition: transform 0.2s ease, color 0.2s ease;
+    transform-origin: bottom left;
+}
+
+/* Domino Tilt Animation */
+.fullscreen-menu li:hover span {
+    animation: dominoTilt 0.5s forwards;
+}
+
+.fullscreen-menu li span:nth-child(1) { animation-delay: 0s; }
+.fullscreen-menu li span:nth-child(2) { animation-delay: 0.05s; }
+.fullscreen-menu li span:nth-child(3) { animation-delay: 0.1s; }
+.fullscreen-menu li span:nth-child(4) { animation-delay: 0.15s; }
+.fullscreen-menu li span:nth-child(5) { animation-delay: 0.2s; }
+
+/* Keyframes for Domino Tilt */
+@keyframes dominoTilt {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(20deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Close Button */
+.close-btn {
+   
+     margin: 0 auto;
+    transform: translateX(-50%);
+    font-size: 4rem; /* Bigger 'X' */
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    z-index: 1001;
+    transition: transform 0.3s ease;
+}
+
+.close-btn:hover {
+    transform: translateX(-50%) scale(1.2); /* Subtle hover effect */
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .logo img {
+        max-height: 60px;
+    }
+
+    .menu img {
+        max-height: 40px;
+    }
+
+    .nav-container {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
+
+    .fullscreen-menu li {
+        font-size: 3.7rem;
+    }
+}
+
+
+/* work type */
+
+.main-box
+{
+    height:90vh;
+    min-height: 70vh;
+    width: 90vw;
+    background-color: #DAEDEC;
+    margin-top: 20px;
+    display: flex;
+
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.work-type {
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    justify-content: space-between;
+    transition: border-right 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.work-type:hover {
+    animation: trampoline-bounce 0.6s ease-out; /* Keyframe triggers here */
+}
+
+@keyframes trampoline-bounce {
+    0% {
+        transform: translateY(0); /* Start at original position */
+    }
+    30% {
+        transform: translateY(-15px); /* Move up slightly */
+    }
+    50% {
+        transform: translateY(0); /* Return to original position */
+    }
+    70% {
+        transform: translateY(-8px); /* Smaller bounce up */
+    }
+    100% {
+        transform: translateY(0); /* End at original position */
+    }
+}
+
+
+
+.title
+{
+    font-size: clamp(2rem, 6vw, 9rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0.9em;
+    text-align: center;
+   
+    
+}
+  .title-info
+  {
+        font-family: role;
+
+        font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+        padding-top: 2em;
+        padding-left: 1em;
+        padding-right: 1em;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        /* cap the line length so every column's copy wraps to the same number
+           of lines (the short UI/UX line otherwise stays single on wide screens
+           and looks higher than the other two) */
+        max-width: 13em;
+        margin-left: auto;
+        margin-right: auto;
+  }
+
+
+
+
+
+
+    /* GLOBAL BUTTON */
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centering on the screen */
+}
+
+
+
+@media (max-width: 768px) {
+    .main-box {
+        flex-direction: row; 
+        flex-wrap: wrap;
+        width: 90vw; 
+        height:auto;
+
+    }
+
+    .work-type {
+        width:100%;
+        border-bottom: 1px solid black;
+        border-right: none;
+
+    }
+
+.title{
+    font-size: 2.7rem;
+}
+
+
+}
