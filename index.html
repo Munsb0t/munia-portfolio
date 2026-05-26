@@ -1580,7 +1580,7 @@
         .retro-pill--peach  { --pc: #F0B89B; }
         .retro-pill--yellow { --pc: #F0DC8A; }
 
-        @media (max-width: 1000px) {
+        @media (max-width: 1024px) {
             .hero2-top { grid-template-columns: 1fr; gap: 24px; padding: 70px 22px 0; }
             .hero2-word { font-size: 16vw; }
             .hero2-right { margin: 0 auto; }
@@ -1588,7 +1588,14 @@
             .munia { font-size: 34vw; }
             .hero2-scroll { display: none; }
             .munia-stamp { width: 84px; height: 84px; }
-            .retro-pills { display: none; }
+            /* hide pills + retro-pill buttons inside hero2-word so the first
+               pill ("ui/ux designer") cannot overflow & clip on iPad Pro
+               12.9" portrait (1024px) or iPad landscape sizes */
+            .retro-pills,
+            .hero2-word .retro-pill { display: none; }
+            /* hero bracket images were never shipped — make sure the broken
+               <img> placeholders never show on tablet (already hidden ≤768) */
+            .hero2-arc { display: none; }
         }
 
 
@@ -2669,11 +2676,8 @@
             <span class="hero2-word">Exploring<button class="retro-pill retro-pill--yellow" data-rot="-6" data-speed="0.6" style="top: 40%; left: 70%;">curious about AI</button></span>
         </div>
 
-        <!-- Right: bio + button, framed by thin arcs -->
+        <!-- Right: bio + button -->
         <div class="hero2-right">
-            <span class="hero2-arc hero2-arc--tl" aria-hidden="true">
-                <img src="portfolio/hero brack left.svg" alt="">
-            </span>
             <p class="hero2-bio">I design and code experiences with curiosity and an unhealthy amount of attention to tiny details.</p>
             <p class="hero2-bio">Beyond frontend and UI, I&rsquo;m exploring the world of ML/DL &mdash; probably with a cup of coffee nearby and too many tabs open.</p>
             <div class="w3-viewall hero2-cta">
@@ -2683,9 +2687,6 @@
                     <svg viewBox="0 0 56 22"><path d="M2 11 H50 M50 11 L40 3 M50 11 L40 19"/></svg>
                 </span>
             </div>
-            <span class="hero2-arc hero2-arc--br" aria-hidden="true">
-                <img src="portfolio/hero bracket right.svg" alt="">
-            </span>
         </div>
 
     </div><!-- /.hero2-top -->
@@ -2803,7 +2804,7 @@
                 </svg>
                 <span class="w3-num-frac">/ 04</span>
             </span>
-            <a href="uicase01.html" class="w3-name">Guide<em>/X</em><span class="w3-arrow">↗</span></a>
+            <a href="uicase01.html" class="w3-name">Guide<em>/X</em><span class="w3-arrow">↗&#xFE0E;</span></a>
             <span class="w3-tags">UI/UX · Web</span>
         </li>
 
@@ -2815,7 +2816,7 @@
                 </svg>
                 <span class="w3-num-frac">/ 04</span>
             </span>
-            <a href="uicase02.html" class="w3-name">Nasir <em>Enterprise</em><span class="w3-arrow">↗</span></a>
+            <a href="uicase02.html" class="w3-name">Nasir <em>Enterprise</em><span class="w3-arrow">↗&#xFE0E;</span></a>
             <span class="w3-tags">UI/UX · Web</span>
         </li>
 
@@ -2827,7 +2828,7 @@
                 </svg>
                 <span class="w3-num-frac">/ 04</span>
             </span>
-            <a href="uicase04.html" class="w3-name"><em>Craving</em><span class="w3-arrow">↗</span></a>
+            <a href="uicase04.html" class="w3-name"><em>Craving</em><span class="w3-arrow">↗&#xFE0E;</span></a>
             <span class="w3-tags">Front-End · Mobile</span>
         </li>
 
@@ -2839,7 +2840,7 @@
                 </svg>
                 <span class="w3-num-frac">/ 04</span>
             </span>
-            <a href="uicase06.html" class="w3-name">Poster <em>&amp; Banner</em><span class="w3-arrow">↗</span></a>
+            <a href="uicase06.html" class="w3-name">Poster <em>&amp; Banner</em><span class="w3-arrow">↗&#xFE0E;</span></a>
             <span class="w3-tags">Print · Visual</span>
         </li>
 
@@ -2847,7 +2848,7 @@
 
     <!-- Bottom CTA -->
     <div class="w3-footer reveal-up">
-        <a href="work.html" class="w3-cta magnetic">View the full archive ↗</a>
+        <a href="work.html" class="w3-cta magnetic">View the full archive ↗&#xFE0E;</a>
     </div>
 
     </div><!-- /.w3-body -->
