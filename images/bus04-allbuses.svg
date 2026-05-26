@@ -1,5 +1,5 @@
 <svg width="498" height="952" viewBox="0 0 498 952" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="40" y="10" width="418" height="872" rx="54.4" fill="#0B0B10"/>
+<rect x="40" y="10" width="418" height="872" rx="54.4" fill="#000000"/>
 <g>
 <rect x="40" y="10" width="418" height="872" rx="54.4" fill="white" fill-opacity="0.01" shape-rendering="crispEdges"/>
 </g>
@@ -244,9 +244,9 @@
 <path d="M399 96C400.841 96 402.333 94.5076 402.333 92.6666C402.333 90.8257 400.841 89.3333 399 89.3333C397.159 89.3333 395.667 90.8257 395.667 92.6666C395.667 94.5076 397.159 96 399 96Z" stroke="#334155" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M392.333 103.5C392.333 100.167 395.333 98.5 399 98.5C402.667 98.5 405.667 100.167 405.667 103.5" stroke="#334155" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
-<path d="M37 173C37 171.343 38.3431 170 40 170V234C38.3431 234 37 232.657 37 231V173Z" fill="#0B0B10"/>
-<path d="M37 253C37 251.343 38.3431 250 40 250V314C38.3431 314 37 312.657 37 311V253Z" fill="#0B0B10"/>
-<path d="M458 218C459.657 218 461 219.343 461 221V311C461 312.657 459.657 314 458 314V218Z" fill="#0B0B10"/>
+<path d="M37 173C37 171.343 38.3431 170 40 170V234C38.3431 234 37 232.657 37 231V173Z" fill="#000000"/>
+<path d="M37 253C37 251.343 38.3431 250 40 250V314C38.3431 314 37 312.657 37 311V253Z" fill="#000000"/>
+<path d="M458 218C459.657 218 461 219.343 461 221V311C461 312.657 459.657 314 458 314V218Z" fill="#000000"/>
 <defs>
 <filter id="filter0_di_6_1823" x="0" y="0" width="498" height="952" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
