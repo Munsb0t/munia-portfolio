@@ -208,14 +208,8 @@
         .feat-card h3 { font-family: gofak, serif; font-weight: 400; font-size: clamp(21px,2.1vw,28px); margin: 16px 0 8px; }
         .feat-card p { font-size: 15px; line-height: 1.55; color: var(--muted); }
 
-        /* screens gallery */
+        /* final-design header row (kept for the "View Prototype" CTA) */
         .screens-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
-        .screens { display: flex; gap: 22px; margin-top: clamp(30px,4vh,50px); padding: 6px clamp(20px,5vw,70px) 22px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; cursor: grab; }
-        .screens::-webkit-scrollbar { display: none; }
-        .screens.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
-        .screen { flex: 0 0 clamp(280px, 64vw, 760px); scroll-snap-align: center; border: 1.6px solid var(--ink); border-radius: 22px; overflow: hidden; background: #e9e8d4; }
-        .screen img { width: 100%; height: auto; pointer-events: none; }
-        .screens-hint { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--sage); padding: 0 clamp(20px,5vw,70px); }
 
         /* usability testing */
         .test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px,4vw,56px); margin-top: clamp(30px,4vh,48px); align-items: start; }
