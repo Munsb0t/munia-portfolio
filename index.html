@@ -1592,20 +1592,26 @@
                sizing handled by the smaller .retro-pill rules below */
         }
 
-        /* iPad-class viewports: the "Designing" word is wide enough at
-           15-16vw that the first pill (anchored at left:82% of the word)
-           gets clipped against the right edge. Pull all right-anchored
-           pills inward as the words grow. */
+        /* ≤1024px (iPad + mobile): the hero words go to 15-18vw which can
+           make them WIDER than the viewport. Pills were anchored inside
+           those overflowing word <span>s (position:relative), so their
+           left:82% etc landed off-screen and read as "missing".
+           Fix: at this breakpoint, re-anchor pills to .hero2-left
+           (which is constrained to the container width) and use
+           vw-based positions so each pill is guaranteed in viewport. */
         @media (max-width: 1024px) {
-            .hero2-word .retro-pill--green  { left: 58% !important; }
-            .hero2-word .retro-pill--yellow { left: 52% !important; }
-        }
-        /* Mobile: words go even wider (18vw), so pills at left:82%/70%
-           land off-screen. Move them well inside the visible word area. */
-        @media (max-width: 768px) {
-            .hero2-word .retro-pill--green  { left: 48% !important; top: 12% !important; }
-            .hero2-word .retro-pill--peach  { left: 10% !important; }
-            .hero2-word .retro-pill--yellow { left: 42% !important; }
+            .hero2-left { position: relative; min-height: 55vw; }
+            .hero2-word { position: static; }
+            .hero2-word .retro-pill {
+                position: absolute;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+            }
+            .hero2-word .retro-pill--green  { top: 2vw  !important; right: 5vw !important; }
+            .hero2-word .retro-pill--peach  { top: 22vw !important; left:  4vw !important; }
+            .hero2-word .retro-pill--yellow { top: 42vw !important; right: 7vw !important; }
         }
 
 
