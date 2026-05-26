@@ -1592,6 +1592,22 @@
                sizing handled by the smaller .retro-pill rules below */
         }
 
+        /* iPad-class viewports: the "Designing" word is wide enough at
+           15-16vw that the first pill (anchored at left:82% of the word)
+           gets clipped against the right edge. Pull all right-anchored
+           pills inward as the words grow. */
+        @media (max-width: 1024px) {
+            .hero2-word .retro-pill--green  { left: 58% !important; }
+            .hero2-word .retro-pill--yellow { left: 52% !important; }
+        }
+        /* Mobile: words go even wider (18vw), so pills at left:82%/70%
+           land off-screen. Move them well inside the visible word area. */
+        @media (max-width: 768px) {
+            .hero2-word .retro-pill--green  { left: 48% !important; top: 12% !important; }
+            .hero2-word .retro-pill--peach  { left: 10% !important; }
+            .hero2-word .retro-pill--yellow { left: 42% !important; }
+        }
+
 
         /* =================================================================
            STACK (what else I'm up to) — text copy instead of SVGs
