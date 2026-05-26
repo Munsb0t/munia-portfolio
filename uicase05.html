@@ -95,6 +95,14 @@
         .wf-card { flex: 1; border-radius: 8px; background: rgba(27,24,20,.07); border: 1px solid rgba(27,24,20,.14); }
         .wf-btn { width: 70px; height: 20px; border-radius: 20px; background: var(--green); border: 1.4px solid var(--ink); }
 
+        /* wireframe drag carousel */
+        .screens { display: flex; justify-content: safe center; gap: clamp(14px, 2vw, 26px); margin-top: clamp(30px, 4vh, 50px); padding: 8px clamp(20px, 5vw, 70px) 22px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; cursor: grab; }
+        .screens::-webkit-scrollbar { display: none; }
+        .screens.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
+        .screen { flex: 0 0 clamp(280px, 52vw, 460px); scroll-snap-align: center; text-align: center; }
+        .screen img { width: 100%; height: auto; pointer-events: none; border: 1.6px solid var(--ink); border-radius: 18px; background: #efead8; box-shadow: -10px 14px 0 rgba(27,24,20,.10); }
+        .screen figcaption { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--sage); margin-top: 14px; }
+
         /* pills / chips */
         .pill { display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--ink); background: var(--green); border: 1.5px solid var(--ink); border-radius: 100px; padding: 7px 16px; box-shadow: -3px 4px 0 rgba(27,24,20,0.8); }
         .pill--peach { background: var(--peach); } .pill--yellow { background: var(--yellow); }
@@ -335,7 +343,7 @@
 <!-- COVER -->
 <section class="cs-cover">
     <div class="cs-cover-inner reveal">
-        <div class="cs-frame"><img src="images/uipic03.svg" alt="Shopify tracking solution — final landing page"></div>
+        <div class="cs-frame"><img src="portfolio/landing%20page%20casse%20study%20thunmbnail.png" alt="Shopify tracking solution — landing page"></div>
     </div>
 </section>
 
@@ -498,26 +506,13 @@
         <span class="eyebrow reveal"><span class="dot"></span> 05 &mdash; Wireframes &amp; Ideation</span>
         <h2 class="h-sec reveal">From structure to screens</h2>
         <p class="lead reveal mt-sm" style="max-width:760px;">Low-fidelity layouts let me test the narrative order and CTA placement quickly &mdash; making sure the value lands first and the next step is always in reach.</p>
-        <div class="diagram reveal">
-            <div class="two">
-                <div>
-                    <div class="wf">
-                        <div class="wf-nav"><div class="wf-logo"></div><div class="wf-links"><span></span><span></span><span></span><span></span></div></div>
-                        <div class="wf-hero" style="flex:0 0 52%"><div class="wf-line m"></div><div class="wf-line s"></div><div class="wf-btn"></div></div>
-                        <div class="wf-row"><div class="wf-card"></div><div class="wf-card"></div><div class="wf-card"></div></div>
-                    </div>
-                    <div class="cap">Landing hero wireframe</div>
-                </div>
-                <div>
-                    <div class="wf">
-                        <div class="wf-hero" style="flex:0 0 24%"><div class="wf-line s"></div></div>
-                        <div class="wf-row"><div class="wf-card"></div><div class="wf-card"></div></div>
-                        <div class="wf-row" style="flex:0 0 26%"><div class="wf-card"></div><div class="wf-card"></div><div class="wf-card"></div></div>
-                    </div>
-                    <div class="cap">Features &amp; proof wireframe</div>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="screens reveal" id="screens">
+        <figure class="screen"><img src="portfolio/landing%20page%20hero%20wireframe.png" alt="Hero section — wireframe" loading="lazy"><figcaption>Hero wireframe</figcaption></figure>
+        <figure class="screen"><img src="portfolio/landing%20page%20service%20overview%20wireframe.png" alt="Service overview — wireframe" loading="lazy"><figcaption>Service overview wireframe</figcaption></figure>
+        <figure class="screen"><img src="portfolio/landing%20page%20trust%20wireframe.png" alt="Trust section — wireframe" loading="lazy"><figcaption>Trust section wireframe</figcaption></figure>
+        <figure class="screen"><img src="portfolio/landing%20page%20why%20choose%20us%20wireframe.png" alt="Why choose us — wireframe" loading="lazy"><figcaption>Why choose us wireframe</figcaption></figure>
+        <figure class="screen"><img src="portfolio/landing%20page%20faq%20and%20footer%20wireframe.png" alt="FAQ and footer — wireframe" loading="lazy"><figcaption>FAQ &amp; footer wireframe</figcaption></figure>
     </div>
 </section>
 
