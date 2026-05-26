@@ -81,6 +81,18 @@
     .ab-bio{ font-size:clamp(15px,1.3vw,18px); line-height:1.7; max-width:560px; color:#4A4D3F; }
     .ab-bio .pop{ background:var(--mint); padding:0 6px; border-radius:6px; font-weight:600; color:var(--ink); }
 
+    /* ---------- CV BUTTON (matches the .pc-card gaming aesthetic) ---------- */
+    .ab-cv{ display:inline-flex; align-items:center; gap:10px; margin-top:22px;
+        font-family:'Poppins',sans-serif; font-weight:600; font-size:13px;
+        letter-spacing:.08em; text-transform:uppercase; color:var(--ink);
+        background:var(--mint); border:2.5px solid var(--ink); border-radius:100px;
+        padding:11px 22px; box-shadow:-3px 4px 0 rgba(43,38,32,.85);
+        transition:transform .25s cubic-bezier(.34,1.56,.64,1),
+                   background-color .25s, box-shadow .25s; cursor:pointer; }
+    .ab-cv:hover{ background:var(--mint-deep); transform:translate(-2px,-3px); box-shadow:-5px 7px 0 rgba(43,38,32,.85); }
+    .ab-cv:active{ transform:translate(0,0); box-shadow:-2px 3px 0 rgba(43,38,32,.85); }
+    .ab-cv svg{ width:16px; height:16px; flex:0 0 auto; }
+
     /* ---------- STATS ---------- */
     .ab-stats{ margin-top:clamp(40px,6vh,72px); background:#fff; border:3px solid var(--ink); border-radius:22px;
         padding:clamp(22px,3vw,34px); box-shadow:-10px 14px 0 rgba(43,38,32,.14); }
@@ -385,6 +397,12 @@
                 love: figuring out how people think and what they actually need before a single pixel gets pretty. I'm learning
                 frontend so I can build the things I design instead of just handing them over, and I'm a little too deep into
                 machine learning and computer vision, training tiny models just to watch them figure things out.</p>
+            <a class="ab-cv ab-rise" href="portfolio/CV.pdf" download="Rukhsat-Tanha-Munia-CV.pdf">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 4v12"/><path d="M6 12l6 6 6-6"/><path d="M4 20h16"/>
+                </svg>
+                <span>Download CV</span>
+            </a>
         </div>
     </div>
 
