@@ -1580,7 +1580,7 @@
         .retro-pill--peach  { --pc: #F0B89B; }
         .retro-pill--yellow { --pc: #F0DC8A; }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 1000px) {
             .hero2-top { grid-template-columns: 1fr; gap: 24px; padding: 70px 22px 0; }
             .hero2-word { font-size: 16vw; }
             .hero2-right { margin: 0 auto; }
@@ -1588,14 +1588,8 @@
             .munia { font-size: 34vw; }
             .hero2-scroll { display: none; }
             .munia-stamp { width: 84px; height: 84px; }
-            /* hide pills + retro-pill buttons inside hero2-word so the first
-               pill ("ui/ux designer") cannot overflow & clip on iPad Pro
-               12.9" portrait (1024px) or iPad landscape sizes */
             .retro-pills,
             .hero2-word .retro-pill { display: none; }
-            /* hero bracket images were never shipped — make sure the broken
-               <img> placeholders never show on tablet (already hidden ≤768) */
-            .hero2-arc { display: none; }
         }
 
 
