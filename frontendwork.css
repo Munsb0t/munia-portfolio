@@ -131,7 +131,7 @@ html { scroll-behavior: smooth; overflow-x: clip; }
 }
 
 /* dome fills + a tinted shadow tone so the preview reads as lit by the same scene */
-.fw-d1 { background: #A6D4D4; --fw-shadow: rgba(40, 92, 92, .45); }    /* Guide/X — teal  */
+.fw-d1 { background: #A6D4D4; --fw-shadow: rgba(40, 92, 92, .45); }    /* Guidex: teal */
 .fw-d2 { background: #D7EFCB; --fw-shadow: rgba(78, 120, 66, .42); }   /* Nashir  — green */
 .fw-d3 { background: #F9BCC3; --fw-shadow: rgba(176, 92, 108, .40); }  /* Portfolio — pink */
 .fw-d4 { background: #9FC9E0; --fw-shadow: rgba(56, 108, 140, .42); }  /* Amazon  — sky   */

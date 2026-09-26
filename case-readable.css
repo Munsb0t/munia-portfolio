@@ -1,0 +1,60 @@
+/* ============================================================
+   Readability layer for the case study pages.
+   Loaded AFTER each page's inline <style>, so it wins on source order.
+   Brand moments keep the display font (hero titles, big stat numbers,
+   next-project title); everything people actually read gets a clear
+   serif/sans pairing: Newsreader for headings & body, Inter for small
+   headings and labels.
+   ============================================================ */
+:root { --read-text: #2c2823; --read-soft: #5b554d; }
+
+/* ---- section labels: number + name, with a rule that marks the section start */
+.eyebrow {
+    display: flex; width: 100%; align-items: center; gap: 10px;
+    font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
+    font-size: 13px; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--read-soft);
+}
+.eyebrow::after { content: ""; flex: 1; height: 1.5px; margin-left: 6px; background: var(--line, rgba(27,24,20,.16)); }
+.cs-hero .eyebrow::after { display: none; }
+
+/* ---- headings */
+.h-sec {
+    font-family: 'Newsreader', Georgia, serif; font-weight: 500;
+    font-size: clamp(32px, 3.6vw, 50px); line-height: 1.1; letter-spacing: -0.01em;
+    margin-top: 14px;
+}
+.h-sub { font-family: 'Newsreader', Georgia, serif; font-weight: 500; font-size: clamp(22px, 2vw, 28px); line-height: 1.2; }
+
+/* card / block headings: clean sans instead of the display face */
+.insight h4, .prin h4, .feat-card h3, .ship-copy h3, .evo-step h4,
+.persona-name, .ccard h3, .vcard h3, .pcard h3, .attempt h4 {
+    font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+    font-size: clamp(18px, 1.5vw, 21px); line-height: 1.3; letter-spacing: -0.005em;
+}
+.take h4 { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0; text-transform: none; }
+.insight .ix { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; font-size: 22px; }
+.hmw div { font-family: 'Newsreader', Georgia, serif; font-weight: 500; font-size: clamp(19px, 1.7vw, 23px); line-height: 1.35; }
+.quote p { font-family: 'Newsreader', Georgia, serif; font-weight: 500; line-height: 1.25; }
+
+/* ---- body text: bigger and darker than before */
+.cs-hero-tag { font-style: normal; font-size: clamp(19px, 1.8vw, 25px); line-height: 1.45; color: var(--read-text); }
+.lead { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.6; color: var(--read-text); }
+.body-t { font-size: clamp(17px, 1.2vw, 18.5px); line-height: 1.68; color: var(--read-text); }
+.prin p, .feat-card p, .take p, .ship-copy p, .ship-copy li, .evo-step p, .ba-note,
+.persona dd, .obj li, .stat .cap, .ccard p, .vcard p, .pcard p {
+    font-size: max(16px, 1em); line-height: 1.6; color: var(--read-text);
+}
+.cs-meta-v { color: var(--read-text); }
+
+/* ---- small labels: readable sans instead of tiny wide-spaced mono */
+.cs-meta-k, .persona-tag, .persona dt, .pt .n, .obj li b, .ship-k, .evo-when,
+.ba-screen-name, .diagram .cap, .screen figcaption, .next-eye, .src-note,
+.hmw div::before {
+    font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
+    font-size: 12px; letter-spacing: .06em; color: var(--read-soft);
+}
+.ba-tag { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; font-size: 12px; letter-spacing: .04em; }
+
+/* ---- the next-project block overrode .wrap side padding, so it touched the screen edges on phones */
+.next-inner { padding-inline: clamp(20px, 5vw, 70px); }
